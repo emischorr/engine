@@ -9,8 +9,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-//import de.micralon.portal.gameobjects.GameCharacter;
-
 public abstract class AbstractGameWorld<STATE extends GameState> {
 	public LightManager lightManager;
 	public World box2dWorld;
@@ -19,14 +17,14 @@ public abstract class AbstractGameWorld<STATE extends GameState> {
     private final static int VELOCITY_ITERS = 6;
     private final static int POSITION_ITERS = 2;
 	
-	private static final int VIEW_WIDTH = 18;
-	private static final int VIEW_HEIGHT = 12;
-	
-	private Rectangle cullingArea;
+    private Rectangle cullingArea;
+    
+    protected static final int VIEW_WIDTH = 18;
+	protected static final int VIEW_HEIGHT = 12;
 	
 	//TODO: calculate: map size * tile size
-	private static final int WORLD_WIDTH = 120;
-	private static final int WORLD_HEIGHT = 20;
+	protected static final int WORLD_WIDTH = 120;
+	protected static final int WORLD_HEIGHT = 20;
 	
 	public GameObject<?> focusObject;
 	private Vector2 camPos = new Vector2();
