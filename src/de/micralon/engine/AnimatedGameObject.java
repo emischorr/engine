@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 
 public abstract class AnimatedGameObject<STATE extends GameState<?>> extends GameObject<STATE> {
-	private Animation currentAnimation;
+	private transient Animation currentAnimation;
 	private float stateTime = 0;
 
 	public AnimatedGameObject(AbstractGameWorld<STATE> world, ObjectState state) {

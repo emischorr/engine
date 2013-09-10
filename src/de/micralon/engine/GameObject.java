@@ -12,8 +12,8 @@ import de.micralon.engine.builder.BodyBuilder;
 
 
 public abstract class GameObject<STATE extends GameState<?>> extends Image {
-	protected AbstractGameWorld<STATE> world;
-	private Body body;
+	protected transient AbstractGameWorld<STATE> world;
+	private transient Body body;
 	private final Scaling scaling;
 	protected float textureOffsetX = 0, textureOffsetY = 0;
 	public long lastTeleportTime = 0;

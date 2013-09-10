@@ -3,7 +3,7 @@ package de.micralon.engine;
 import com.badlogic.gdx.utils.Array;
 
 public class ObjectManager  {
-	private Array<GameObject<?>> objects = new Array<GameObject<?>>();
+	private transient Array<GameObject<?>> objects = new Array<GameObject<?>>();
 	private transient Array<GameObject<?>> deleteList = new Array<GameObject<?>>();
 
 	public void add(GameObject<?> obj) {
