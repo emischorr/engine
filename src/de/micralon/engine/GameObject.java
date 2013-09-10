@@ -18,9 +18,9 @@ public abstract class GameObject<STATE extends GameState<?>> extends Image {
 	protected float textureOffsetX = 0, textureOffsetY = 0;
 	public long lastTeleportTime = 0;
 	
-	protected ObjectState state;
+	public ObjectState state;
 	
-	protected GameObject(AbstractGameWorld<STATE> world, ObjectState state) {
+	public GameObject(AbstractGameWorld<STATE> world, ObjectState state) {
 		this(world, state, Scaling.stretch);
 	}
 	

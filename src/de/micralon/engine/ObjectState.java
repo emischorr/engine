@@ -13,6 +13,8 @@ public class ObjectState {
 	public float linearDamping = 0;  
     public float angularDamping = 0;
     
+    public ObjectState() {}
+    
     public ObjectState(ObjectState anotherState) {
     	this.position = anotherState.position;
     	this.rotation = anotherState.rotation;

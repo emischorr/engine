@@ -13,8 +13,8 @@ public class GameRenderer {
     private final RayHandler rayHandler;
     
     public boolean drawBackground = false;
-    public boolean drawWorld = true;
-    public boolean drawLight = true;
+    public boolean drawWorld = false;
+    public boolean drawLight = false;
     public boolean drawDebug = true;
     
     public boolean drawBodies = true;

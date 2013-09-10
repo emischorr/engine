@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import de.micralon.engine.AbstractGameWorld;
 
 public class Hud {
-	private Stage stage; // stage that holds the GUI. Pixel-exact size.
+	protected Stage stage; // stage that holds the GUI. Pixel-exact size.
 	private OrthographicCamera cam;
 	
 	private int SCREEN_WIDTH = Gdx.graphics.getWidth();
@@ -33,5 +33,13 @@ public class Hud {
 	
 	public void draw() {
 		stage.draw();
+	}
+	
+	protected int getScreenWidth() {
+		return SCREEN_WIDTH;
+	}
+	
+	protected int getScreenHeight() {
+		return SCREEN_HEIGHT;
 	}
 }

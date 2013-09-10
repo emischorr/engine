@@ -12,11 +12,11 @@ public abstract class AnimatedGameObject<STATE extends GameState<?>> extends Gam
 	private Animation currentAnimation;
 	private float stateTime = 0;
 
-	protected AnimatedGameObject(AbstractGameWorld<STATE> world, ObjectState state) {
+	public AnimatedGameObject(AbstractGameWorld<STATE> world, ObjectState state) {
 		super(world, state);
 	}
 	
-	protected AnimatedGameObject(AbstractGameWorld<STATE> world, ObjectState state, Scaling scaling) {
+	public AnimatedGameObject(AbstractGameWorld<STATE> world, ObjectState state, Scaling scaling) {
 		super(world, state, scaling);
 	}
 	
