@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class Player {
+	public int ID;
 	public String name;
 	public Color color;
 	

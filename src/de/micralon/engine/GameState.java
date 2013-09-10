@@ -31,7 +31,11 @@ public class GameState<WORLD extends AbstractGameWorld<?>> implements GameStateI
 	}
 	
 	@Override
+	/**
+	 * Only called by server
+	 */
 	public synchronized void addPlayer(Player player, boolean local) {
+		player.ID = players.size;
 		players.add(player);
 		// add player to local world
 		if (local) {
