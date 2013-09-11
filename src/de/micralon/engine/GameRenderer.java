@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 public class GameRenderer {
-	private AbstractGameWorld<?> world;
+	private GameWorld world;
     private OrthographicCamera camera;
     private Box2DDebugRenderer debugRenderer;
     
@@ -24,7 +24,7 @@ public class GameRenderer {
 	public boolean drawVelocities = false;
 	public boolean drawContacts = false;
     
-    public GameRenderer(AbstractGameWorld<?> world) {
+    public GameRenderer(GameWorld world) {
     	this.world = world;
         debugRenderer = new Box2DDebugRenderer(drawBodies, drawJoints, drawAAAB, drawInactiveBodies, drawVelocities, drawContacts);
       

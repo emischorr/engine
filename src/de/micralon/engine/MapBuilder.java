@@ -20,12 +20,10 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
 public class MapBuilder {
-	private AbstractGameWorld<?> world;
+	private GameWorld world;
 	private ObjectMap<String, FixtureDef> m_materials = new ObjectMap<String, FixtureDef>();
 	private float tileSize; // the size of a tile in world units (2m)
 	private int tilePixel = 128; // the size of a tile in Pixel (128)
-	
-	private final GameStateInterface worldState;
 	
 	// shared temp vars
 	private Image image;
@@ -33,7 +31,7 @@ public class MapBuilder {
 	private final float STOP_GAP = 0f;
 	private final String LOG_TAG = "MapBuilder";
 	
-	public MapBuilder(AbstractGameWorld<?> world, String materialsFile, float tileSize) {
+	public MapBuilder(GameWorld world, String materialsFile, float tileSize) {
 		this.world = world;
 		this.tileSize = tileSize;
 		
@@ -47,8 +45,6 @@ public class MapBuilder {
 		if (materialsFile != null) {
 			loadMaterialsFile(materialsFile);
 		}
-		
-		worldState = world.getState();
 	}
 
 	public void build(TiledMap map) {

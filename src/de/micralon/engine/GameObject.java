@@ -11,8 +11,8 @@ import com.badlogic.gdx.utils.Scaling;
 import de.micralon.engine.builder.BodyBuilder;
 
 
-public abstract class GameObject<STATE extends GameState<?>> extends Image {
-	protected transient AbstractGameWorld<STATE> world;
+public abstract class GameObject<WORLD extends GameWorld> extends Image {
+	protected transient WORLD world;
 	private transient Body body;
 	private final Scaling scaling;
 	protected float textureOffsetX = 0, textureOffsetY = 0;
@@ -20,11 +20,11 @@ public abstract class GameObject<STATE extends GameState<?>> extends Image {
 	
 	public ObjectState state;
 	
-	public GameObject(AbstractGameWorld<STATE> world, ObjectState state) {
+	public GameObject(WORLD world, ObjectState state) {
 		this(world, state, Scaling.stretch);
 	}
 	
-	protected GameObject(AbstractGameWorld<STATE> world, ObjectState state, Scaling scaling) {
+	protected GameObject(WORLD world, ObjectState state, Scaling scaling) {
 		super();
 		this.world = world;
 		this.state = state;

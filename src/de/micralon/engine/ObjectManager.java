@@ -15,6 +15,20 @@ public class ObjectManager  {
 		deleteList.add(obj);
 	}
 	
+	public Array<?> getObjectsByClass(Class<?> klass) {
+		Array<GameObject<?>> result = new Array<GameObject<?>>();
+		for (GameObject<?> obj : objects) {
+			if (klass.isInstance(obj)) {
+				result.add(obj);
+			}
+		}
+		return result;
+	}
+	
+	public Array<GameObject<?>> getObjects() {
+		return objects;
+	}
+	
 	public void update() {
 		// delete objects
 		for (GameObject<?> obj : deleteList) {

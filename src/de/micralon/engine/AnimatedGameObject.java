@@ -8,15 +8,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 
-public abstract class AnimatedGameObject<STATE extends GameState<?>> extends GameObject<STATE> {
+public abstract class AnimatedGameObject<WORLD extends GameWorld> extends GameObject<WORLD> {
 	private transient Animation currentAnimation;
 	private float stateTime = 0;
 
-	public AnimatedGameObject(AbstractGameWorld<STATE> world, ObjectState state) {
+	public AnimatedGameObject(WORLD world, ObjectState state) {
 		super(world, state);
 	}
 	
-	public AnimatedGameObject(AbstractGameWorld<STATE> world, ObjectState state, Scaling scaling) {
+	public AnimatedGameObject(WORLD world, ObjectState state, Scaling scaling) {
 		super(world, state, scaling);
 	}
 	

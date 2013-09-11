@@ -5,7 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import de.micralon.engine.AbstractGameWorld;
+import de.micralon.engine.GameWorld;
 
 public class Hud {
 	protected Stage stage; // stage that holds the GUI. Pixel-exact size.
@@ -14,7 +14,7 @@ public class Hud {
 	private int SCREEN_WIDTH = Gdx.graphics.getWidth();
 	private int SCREEN_HEIGHT = Gdx.graphics.getHeight();
 	
-	public Hud(AbstractGameWorld<?> world) {
+	public Hud(GameWorld world) {
 		stage = new Stage();
 		stage.setViewport(SCREEN_WIDTH, SCREEN_HEIGHT, false);
 		

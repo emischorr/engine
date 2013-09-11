@@ -34,7 +34,7 @@ public class Trigger {
 	
 	public void setActive(boolean active) {
 		this.active = active;
-		for (GameObject<?> obj : objects) {
+		for (GameObject obj : objects) {
 			if (active) {
 				triggerIn(obj);
 			} else {
@@ -43,14 +43,14 @@ public class Trigger {
 		}
 	}
 	
-	public void triggerIn(GameObject<?> obj) {
+	public void triggerIn(GameObject obj) {
 		objects.add(obj);
 		if (active) {
 			inAction.run();
 		}
 	}
 	
-	public void triggerOut(GameObject<?> obj) {
+	public void triggerOut(GameObject obj) {
 		objects.removeValue(obj, true);
 		if (active) {
 			outAction.run();

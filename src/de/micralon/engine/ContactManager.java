@@ -13,7 +13,7 @@ public class ContactManager implements ContactListener {
 	GameObject<?> a;
 	GameObject<?> b;
 	
-	public ContactManager(AbstractGameWorld<?> world) {
+	public ContactManager(GameWorld world) {
 		world.box2dWorld.setContactListener(this);
 	}
 	
