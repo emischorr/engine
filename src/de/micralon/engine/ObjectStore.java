@@ -32,6 +32,15 @@ public abstract class ObjectStore<T> {
 		}
 	}
 	
+	public Array<T> getObjects() {
+		return usedObjects;
+	}
+	
+	@Override
+	public String toString() {
+		return String.valueOf(freeObjects.size)+"/"+String.valueOf(usedObjects.size);
+	}
+	
 	public void clear() {
 		tempT = null;
 		usedObjects = null;
