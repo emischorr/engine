@@ -1,5 +1,6 @@
 package de.micralon.engine;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.badlogic.gdx.math.Rectangle;
@@ -8,7 +9,6 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 
 public abstract class GameWorld {
 	public LightManager lightManager;
@@ -45,7 +45,7 @@ public abstract class GameWorld {
 	public Player localPlayer;
 	
 	private ObjectManager objectManager;
-	public Array<Player> players = new Array<Player>();
+	public HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
 	
 	public GameWorld() {
@@ -77,12 +77,15 @@ public abstract class GameWorld {
 	 * Only called by server
 	 */
 	public synchronized void addPlayer(Player player, boolean local) {
-		player.ID = players.size;
-		players.add(player);
+		players.put(player.ID, player);
 		// add player to local world
 		if (local) {
 			localPlayer = player;
 		}
+	}
+	
+	public void removePlayer(int playerID) {
+		players.remove(playerID);
 	}
 	
 	public void addObject(GameObject<?> obj) {

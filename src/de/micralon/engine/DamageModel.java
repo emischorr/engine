@@ -29,6 +29,8 @@ public abstract class DamageModel {
         return health;
     }
     
+    public abstract void calculateDamage(Damage dmg);
+    
     /**
      * Collision force
      * @param force value of force in Box2D scale.
