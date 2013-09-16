@@ -30,9 +30,6 @@ public abstract class ObjectStore<T> {
 		} else {
 			Gdx.app.log("ObjectStore", "WARNING: Object ("+obj.getClass().toString()+") could not be freed");
 		}
-		if (usedObjects.size == 0) {
-			clear();
-		}
 	}
 	
 	public Array<T> getObjects() {
@@ -48,5 +45,6 @@ public abstract class ObjectStore<T> {
 		tempT = null;
 		usedObjects.clear();
 		freeObjects.clear();
+		Gdx.app.log("ObjectStore", "cleared store");
 	}
 }
