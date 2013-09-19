@@ -11,12 +11,11 @@ import com.badlogic.gdx.utils.Scaling;
 import de.micralon.engine.builder.BodyBuilder;
 
 
-public abstract class GameObject<WORLD extends GameWorld> extends Image {
+public abstract class GameObject<WORLD extends GameWorld> extends Image implements Reuseable {
 	protected transient WORLD world;
 	private transient Body body;
 	private final Scaling scaling;
 	protected float textureOffsetX = 0, textureOffsetY = 0;
-	public long lastTeleportTime = 0;
 	
 	public ObjectState state;
 	
@@ -32,17 +31,23 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image {
 		createBody();
 	}
 	
-	private void createBody() {
-		BodyBuilder bodyBuilder = new BodyBuilder(world.box2dWorld);
-		body = bodyBuilder
-				.type(state.type)
-				.linearDamping(state.linearDamping)
-				.angularDamping(state.angularDamping)
-				.position(state.position.x, state.position.y)
-				.userData(this)
-				.build();
-		
-		updateImage();
+	public final void createBody() {
+		createBody(false);
+	}
+	
+	public final void createBody(boolean force) {
+		if (body == null || force) { // create Body only once
+			BodyBuilder bodyBuilder = new BodyBuilder(world.box2dWorld);
+			body = bodyBuilder
+					.type(state.type)
+					.linearDamping(state.linearDamping)
+					.angularDamping(state.angularDamping)
+					.position(state.position.x, state.position.y)
+					.userData(this)
+					.build();
+			
+			updateImage();
+		}
 	}
 	
 	public Vector2 getPos() {
@@ -67,9 +72,16 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image {
 	
 	public void contactWith(GameObject<?> obj, Contact contact) {}
 	
-	public void destroy(){
+	public void destroy() {
 		world.box2dWorld.destroyBody(body);
+		body = null;
 		remove();
+	}
+	
+	@Override
+	public void reuse() {
+		state = new ObjectState();
+		createBody(true);
 	}
 	
 	@Override  

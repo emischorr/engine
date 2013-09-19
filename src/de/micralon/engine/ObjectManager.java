@@ -10,6 +10,11 @@ public class ObjectManager  {
 		objects.add(obj);
 	}
 	
+	/**
+	 * Remove a object from the world. 
+	 * NOTE: this adds the object to a list of objects to delete. The object gets actually deleted when safe to do so (ie. outside of a world step).
+	 * @param obj GameObject to remove
+	 */
 	public void remove(GameObject<?> obj) {
 		objects.removeValue(obj, true);
 		deleteList.add(obj);
@@ -29,6 +34,10 @@ public class ObjectManager  {
 		return objects;
 	}
 	
+	/**
+	 * Updates the handled objects and actually removes objects which are marked to delete.
+	 * Make sure to call this method AFTER your world step. 
+	 */
 	public void update() {
 		// delete objects
 		for (GameObject<?> obj : deleteList) {
