@@ -4,18 +4,21 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 
 import de.micralon.engine.builder.BodyBuilder;
 
-
 public abstract class GameObject<WORLD extends GameWorld> extends Image implements Reuseable {
 	protected transient WORLD world;
 	private transient Body body;
 	private final Scaling scaling;
 	protected float textureOffsetX = 0, textureOffsetY = 0;
+	public Fixture fix;
+	private final Filter filterData = new Filter();
 	
 	public ObjectState state;
 	
@@ -66,6 +69,16 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 		textureOffsetY = y;
 	}
 	
+	public final void setFilterData(short category) {
+		setFilterData(category, (short) ~category);
+	}
+	
+	public final void setFilterData(short category, short mask) {
+		filterData.categoryBits = category;
+		filterData.maskBits = mask;
+		fix.setFilterData(filterData);
+	}
+	
 	public Body getBody() {
 		return body;
 	}
@@ -73,8 +86,10 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	public void contactWith(GameObject<?> obj, Contact contact) {}
 	
 	public void destroy() {
-		world.box2dWorld.destroyBody(body);
-		body = null;
+		if (body != null) {
+			world.box2dWorld.destroyBody(body);
+			body = null;
+		}
 		remove();
 	}
 	
