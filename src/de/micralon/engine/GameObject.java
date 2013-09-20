@@ -85,6 +85,9 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	
 	public void contactWith(GameObject<?> obj, Contact contact) {}
 	
+	/**
+	 * Don't call this directly from inside of the physics step
+	 */
 	public void destroy() {
 		if (body != null) {
 			world.box2dWorld.destroyBody(body);
