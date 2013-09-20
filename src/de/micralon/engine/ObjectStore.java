@@ -8,7 +8,7 @@ public abstract class ObjectStore<T> {
 	protected final Array<T> usedObjects = new Array<T>();
 	protected final Array<T> freeObjects = new Array<T>();
 	
-	private T tempT;
+	protected T tempT;
 	
 	public abstract T create();
 	

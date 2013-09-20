@@ -39,7 +39,7 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	}
 	
 	public final void createBody(boolean force) {
-		if (body == null || force) { // create Body only once
+		if (force || body == null) { // create Body only once
 			BodyBuilder bodyBuilder = new BodyBuilder(world.box2dWorld);
 			body = bodyBuilder
 					.type(state.type)

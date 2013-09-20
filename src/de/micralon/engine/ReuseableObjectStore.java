@@ -3,8 +3,6 @@ package de.micralon.engine;
 import com.badlogic.gdx.Gdx;
 
 public abstract class ReuseableObjectStore<T extends Reuseable> extends ObjectStore<T> {
-
-	private T tempT;
 	
 	/**
 	 * Get a new or already freed Object
