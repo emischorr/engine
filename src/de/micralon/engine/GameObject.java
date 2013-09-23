@@ -112,6 +112,14 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 		fix.setFilterData(filterData);
 	}
 	
+	public void setFilterData(Filter filter) {
+		fix.setFilterData(filter);
+	}
+	
+	public Filter getFilterData() {
+		return filterData;
+	}
+	
 	public Body getBody() {
 		return body;
 	}

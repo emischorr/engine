@@ -10,7 +10,7 @@ public interface Destructible {
      * Get damage model of this object
      * @return Damage model
      */
-    DamageModel getDatamageModel();
+    DamageModel getDamageModel();
     
 	/**
      * Set body as destroyed

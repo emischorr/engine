@@ -88,10 +88,10 @@ public class ContactManager implements ContactListener {
     protected void evalDamage(GameObject<?> object, ContactImpulse impulse) {
         if (Destructible.class.isInstance(object)) {
             /* Hit and check final health status */
-            if (((Destructible)object).getDatamageModel() == null)
+            if (((Destructible)object).getDamageModel() == null)
                 return;
-            ((Destructible)object).getDatamageModel().hit(impulse.getNormalImpulses()[0]);
-            if (((Destructible)object).getDatamageModel().getHealth() < 0.01f) {
+            ((Destructible)object).getDamageModel().hit(impulse.getNormalImpulses()[0]);
+            if (((Destructible)object).getDamageModel().getHealth() < 0.01f) {
 
                 if (!((Destructible)object).isDestroyed()) {
                 	// TODO: give points/XP/whatever...
