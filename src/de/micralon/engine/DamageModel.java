@@ -6,11 +6,15 @@ package de.micralon.engine;
 public abstract class DamageModel {
 	protected float health;
 	
+	protected float maxHealth() {
+		return 1f;
+	}
+	
 	/**
      * Reset health to a default value.
      */
     public void resetHealth() {
-        health = 1f;
+        health = maxHealth();
     }
 
     /**
@@ -19,6 +23,14 @@ public abstract class DamageModel {
      */
     public void setHealth(float health) {
         this.health = health;
+    }
+    
+    public void addHealth(float health) {
+    	if (this.health + health < maxHealth()) {
+    		this.health += health;
+    	} else {
+    		resetHealth();
+    	}
     }
 
     /**
