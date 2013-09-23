@@ -77,6 +77,9 @@ public abstract class GameWorld {
 	 * Only called by server
 	 */
 	public synchronized void addPlayer(Player player, boolean local) {
+		// set player ID
+		player.ID = players.size();
+		// add player to list
 		players.put(player.ID, player);
 		// add player to local world
 		if (local) {
