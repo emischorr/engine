@@ -47,7 +47,7 @@ public class ObjectManager  {
 
 		// update object state
 		for (GameObject<?> obj : objects) {
-			obj.updateState();
+			obj.update();
 		}
 	}
 

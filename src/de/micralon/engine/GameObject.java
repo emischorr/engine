@@ -3,6 +3,7 @@ package de.micralon.engine;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -20,18 +21,34 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	public Fixture fix;
 	private final Filter filterData = new Filter();
 	
-	public ObjectState state;
+	// set these characteristics in sub classes according to your needs
+	protected BodyType type = BodyType.StaticBody;
+	protected float linearDamping = 0;
+	protected float angularDamping = 0;
+	protected float bodyWidth;
+	protected float bodyHeight;
 	
-	public GameObject(WORLD world, ObjectState state) {
-		this(world, state, Scaling.stretch);
+	public GameObject(WORLD world) {
+		this(world, null, 1, 1, 0, 0, Scaling.stretch);
 	}
 	
-	protected GameObject(WORLD world, ObjectState state, Scaling scaling) {
+	protected GameObject(WORLD world, BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
+		this(world, type, bodyWidth, bodyHeight, linearDamping, angularDamping, Scaling.stretch);
+	}
+	
+	protected GameObject(WORLD world, BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
 		super();
 		this.world = world;
-		this.state = state;
 		this.scaling = scaling;
+		
+		if (type != null) this.type = type;
+		this.bodyWidth = bodyWidth;
+		this.bodyHeight = bodyHeight;
+		this.linearDamping = linearDamping;
+		this.angularDamping = angularDamping;
+		
 		createBody();
+		createShape();
 	}
 	
 	public final void createBody() {
@@ -42,10 +59,10 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 		if (force || body == null) { // create Body only once
 			BodyBuilder bodyBuilder = new BodyBuilder(world.box2dWorld);
 			body = bodyBuilder
-					.type(state.type)
-					.linearDamping(state.linearDamping)
-					.angularDamping(state.angularDamping)
-					.position(state.position.x, state.position.y)
+					.type(type)
+					.linearDamping(linearDamping)
+					.angularDamping(angularDamping)
+					.position(0, 0)
 					.userData(this)
 					.build();
 			
@@ -53,13 +70,29 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 		}
 	}
 	
+	protected void createShape() {}
+	
+	public float getBodyWidth() {
+		return bodyWidth;
+	}
+	
+	public float getBodyHeight() {
+		return bodyHeight;
+	}
+	
+	public void setDegree(float degree) {
+		getBody().setTransform(getPos(), MathUtils.degreesToRadians*degree);
+	}
+	
+	public float getDegree() {
+		return body.getAngle() * MathUtils.radiansToDegrees;
+	}
+	
 	public Vector2 getPos() {
-		return state.position;
+		return body.getPosition();
 	}
 	
 	public void setPos(float x, float y) {
-		state.position.x = x;
-		state.position.y = y;
 		body.setTransform(x, y, 0);
 		updateImage();
 	}
@@ -83,10 +116,12 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 		return body;
 	}
 	
+	public void update() {}
+	
 	public void contactWith(GameObject<?> obj, Contact contact) {}
 	
 	/**
-	 * Don't call this directly from inside of the physics step
+	 * Don't call this directly from inside the physics step
 	 */
 	public void destroy() {
 		if (body != null) {
@@ -98,27 +133,21 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	
 	@Override
 	public void reuse() {
-		state = new ObjectState();
 		createBody(true);
+		createShape();
 	}
 	
 	@Override  
     public void act(float delta) {
-		updateState(); // update the state based on the movement of the body in the world
         super.act(delta);
         updateImage(); // make the actor follow the box2d body  
     }
 	
-	public void updateState() {
-		state.position = body.getPosition();
-		state.rotation = MathUtils.radiansToDegrees * body.getAngle();
-	}
-	
 	private void updateImage() {
-		setOrigin(state.width*0.5f, state.height*0.5f);
-		setRotation(state.rotation);
-		setPosition(state.position.x-state.width*0.5f+textureOffsetX, state.position.y-state.height*0.5f+textureOffsetY); // set the actor position at the box2d body position
-		setSize(state.width, state.height); // scale actor to body's size  
+		setOrigin(bodyWidth*0.5f, bodyHeight*0.5f);
+		setRotation(MathUtils.radiansToDegrees * body.getAngle());
+		setPosition(body.getPosition().x-bodyWidth*0.5f+textureOffsetX, body.getPosition().y-bodyHeight*0.5f+textureOffsetY); // set the actor position at the box2d body position
+		setSize(bodyWidth, bodyHeight); // scale actor to body's size  
 		setScaling(scaling); // stretch the texture  
 		setAlign(Align.center);
 	}

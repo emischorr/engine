@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 
@@ -12,12 +13,16 @@ public abstract class AnimatedGameObject<WORLD extends GameWorld> extends GameOb
 	private transient Animation currentAnimation;
 	private float stateTime = 0;
 
-	public AnimatedGameObject(WORLD world, ObjectState state) {
-		super(world, state);
+	public AnimatedGameObject(WORLD world) {
+		super(world);
 	}
 	
-	public AnimatedGameObject(WORLD world, ObjectState state, Scaling scaling) {
-		super(world, state, scaling);
+	protected AnimatedGameObject(WORLD world, BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
+		this(world, type, bodyWidth, bodyHeight, linearDamping, angularDamping, Scaling.stretch);
+	}
+	
+	public AnimatedGameObject(WORLD world, BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
+		super(world, type, bodyWidth, bodyHeight, linearDamping, angularDamping, scaling);
 	}
 	
 	protected void setAnimation(Animation animation) {
@@ -36,7 +41,7 @@ public abstract class AnimatedGameObject<WORLD extends GameWorld> extends GameOb
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		if (currentAnimation != null) {
-			batch.draw(currentAnimation.getKeyFrame(stateTime, true), state.position.x - state.width/2 + textureOffsetX, state.position.y - state.height/2 + textureOffsetY, state.width, state.height);
+			batch.draw(currentAnimation.getKeyFrame(stateTime, true), getPos().x - bodyWidth/2 + textureOffsetX, getPos().y - bodyHeight/2 + textureOffsetY, bodyWidth, bodyHeight);
 		} else {
 			super.draw(batch, parentAlpha);
 		}

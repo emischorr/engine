@@ -23,7 +23,7 @@ public abstract class ObjectStore<T> {
 			tempT = create();
 		}
 		usedObjects.add(tempT);
-		Gdx.app.log("ObjectStore", "get(). Size: "+this.toString());
+		Gdx.app.log("ObjectStore", "get(). new size: "+this.toString());
 		return tempT;
 	}
 	
@@ -41,7 +41,7 @@ public abstract class ObjectStore<T> {
 	
 	@Override
 	public String toString() {
-		return String.valueOf(freeObjects.size)+"/"+String.valueOf(usedObjects.size);
+		return "free: "+String.valueOf(freeObjects.size)+" / used: "+String.valueOf(usedObjects.size);
 	}
 	
 	public void clear() {
