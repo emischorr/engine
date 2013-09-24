@@ -21,7 +21,7 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	public Fixture fix;
 	private final Filter filterData = new Filter();
 	
-	public long objectID;
+	private long objectID;
 	
 	// set these characteristics in sub classes according to your needs
 	protected BodyType type = BodyType.StaticBody;
@@ -75,6 +75,14 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	}
 	
 	protected void createShape() {}
+	
+	public long getObjectID() {
+		return objectID;
+	}
+	
+	public void setObjectID(long objectID) {
+		world.getObjectManager().changeID(this.objectID, objectID);
+	}
 	
 	public float getBodyWidth() {
 		return bodyWidth;

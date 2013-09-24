@@ -1,15 +1,31 @@
 package de.micralon.engine;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ObjectMap.Values;
 
 public class ObjectManager  {
-	private transient Array<GameObject<?>> objects = new Array<GameObject<?>>();
-	private transient Array<GameObject<?>> deleteList = new Array<GameObject<?>>();
+//	private transient Array<GameObject<?>> objects = new Array<GameObject<?>>();
+	private transient ObjectMap<Long, GameObject<?>> objectMap;
+	private transient Array<GameObject<?>> deleteList;
 	private long objectIDseq = 0;
+	
+	// temp vars
+	private GameObject<?> tmpObj;
+	
+	public ObjectManager() {
+		this(32);
+	}
+	
+	public ObjectManager(int initCapacity) {
+		objectMap = new ObjectMap<Long, GameObject<?>>(initCapacity);
+		deleteList = new Array<GameObject<?>>(initCapacity/2);
+	}
 
 	public void add(GameObject<?> obj) {
-		objects.add(obj);
-		obj.objectID = objectIDseq++;
+//		objects.add(obj);
+		obj.setObjectID(objectIDseq++);
+		objectMap.put(obj.getObjectID(), obj);
 	}
 	
 	/**
@@ -18,13 +34,24 @@ public class ObjectManager  {
 	 * @param obj GameObject to remove
 	 */
 	public void remove(GameObject<?> obj) {
-		objects.removeValue(obj, true);
+//		objects.removeValue(obj, true);
+		objectMap.remove(obj.getObjectID());
 		deleteList.add(obj);
 	}
 	
+	public void changeID(long oldID, long newID) {
+		tmpObj = objectMap.remove(oldID);
+		objectMap.put(newID, tmpObj);
+	}
+	
+	/**
+	 * EXPERIMENTAL
+	 * @param klass
+	 * @return
+	 */
 	public Array<?> getObjectsByClass(Class<?> klass) {
 		Array<GameObject<?>> result = new Array<GameObject<?>>();
-		for (GameObject<?> obj : objects) {
+		for (GameObject<?> obj : objectMap.values()) {
 			if (klass.isInstance(obj)) {
 				result.add(obj);
 			}
@@ -32,8 +59,12 @@ public class ObjectManager  {
 		return result;
 	}
 	
-	public Array<GameObject<?>> getObjects() {
-		return objects;
+	public GameObject<?> getObject(long objectID) {
+		return objectMap.get(objectID);
+	}
+	
+	public Values<GameObject<?>> getObjects() {
+		return objectMap.values();
 	}
 	
 	/**
@@ -48,7 +79,7 @@ public class ObjectManager  {
 		deleteList.clear();
 
 		// update object state
-		for (GameObject<?> obj : objects) {
+		for (GameObject<?> obj : objectMap.values()) {
 			obj.update();
 		}
 	}
