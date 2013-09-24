@@ -5,9 +5,11 @@ import com.badlogic.gdx.utils.Array;
 public class ObjectManager  {
 	private transient Array<GameObject<?>> objects = new Array<GameObject<?>>();
 	private transient Array<GameObject<?>> deleteList = new Array<GameObject<?>>();
+	private long objectIDseq = 0;
 
 	public void add(GameObject<?> obj) {
 		objects.add(obj);
+		obj.objectID = objectIDseq++;
 	}
 	
 	/**

@@ -73,6 +73,10 @@ public abstract class GameWorld {
         objectManager = new ObjectManager();
 	}
 	
+	public ObjectManager getObjectManager() {
+		return objectManager;
+	}
+	
 	/**
 	 * Only called by server
 	 */
@@ -92,12 +96,10 @@ public abstract class GameWorld {
 	}
 	
 	public void addObject(GameObject<?> obj) {
-		objectManager.add(obj);
 		physics.addActor(obj);
 	}
 	
 	public void removeObject(GameObject<?> obj) {
-		objectManager.remove(obj);
 		physics.removeActor(obj);
 	}
 	

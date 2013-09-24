@@ -21,6 +21,8 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	public Fixture fix;
 	private final Filter filterData = new Filter();
 	
+	public long objectID;
+	
 	// set these characteristics in sub classes according to your needs
 	protected BodyType type = BodyType.StaticBody;
 	protected float linearDamping = 0;
@@ -40,6 +42,8 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 		super();
 		this.world = world;
 		this.scaling = scaling;
+		
+		world.getObjectManager().add(this);
 		
 		if (type != null) this.type = type;
 		this.bodyWidth = bodyWidth;
@@ -136,6 +140,7 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 			world.box2dWorld.destroyBody(body);
 			body = null;
 		}
+		world.getObjectManager().remove(this);
 		remove();
 	}
 	
