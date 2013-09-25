@@ -22,19 +22,18 @@ public abstract class GameWorld {
 	
     private Rectangle cullingArea;
     
-    protected static final int VIEW_WIDTH = 18;
-	protected static final int VIEW_HEIGHT = 12;
+    protected static int VIEW_WIDTH = 18;
+	protected static int VIEW_HEIGHT = 12;
 	
-	//TODO: calculate: map size * tile size
-	protected static final int WORLD_WIDTH = 120;
-	protected static final int WORLD_HEIGHT = 20;
+	private static int WORLD_WIDTH = 50;
+	private static int WORLD_HEIGHT = 50;
 	
 	public GameObject<?> focusObject;
 	private Vector2 camPos = new Vector2();
-    private static final int CAMERA_RIGHT_LIMIT = WORLD_WIDTH - VIEW_WIDTH/2 - 1;
-    private static final int CAMERA_LEFT_LIMIT = VIEW_WIDTH/2 - 1;
-    private static final int CAMERA_UP_LIMIT = WORLD_HEIGHT - VIEW_HEIGHT/2 - 1;
-    private static final int CAMERA_DOWN_LIMIT = VIEW_HEIGHT/2 - 1;
+    private static int CAMERA_RIGHT_LIMIT = WORLD_WIDTH - VIEW_WIDTH/2 + 1;
+    private static int CAMERA_LEFT_LIMIT = VIEW_WIDTH/2 - 1;
+    private static int CAMERA_UP_LIMIT = WORLD_HEIGHT - VIEW_HEIGHT/2 + 1;
+    private static int CAMERA_DOWN_LIMIT = VIEW_HEIGHT/2 - 1;
 	
 	public Background background;
 	
@@ -75,6 +74,38 @@ public abstract class GameWorld {
 	
 	public ObjectManager getObjectManager() {
 		return objectManager;
+	}
+	
+	public void setWorldSize(int width, int height) {
+		WORLD_WIDTH = width;
+		WORLD_HEIGHT = height;
+		
+		updateCameraBorders();
+	}
+	
+	public int getWorldWidth() {
+		return WORLD_WIDTH;
+	}
+	
+	public int getWorldHeight() {
+		return WORLD_HEIGHT;
+	}
+	
+	public void setViewSize(int width, int height) {
+		VIEW_WIDTH = width;
+		VIEW_HEIGHT = height;
+		
+		updateCameraBorders();
+		
+		stage.setViewport(VIEW_WIDTH, VIEW_HEIGHT, false);
+		cullingArea = new Rectangle(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
+	}
+	
+	private void updateCameraBorders() {
+		CAMERA_RIGHT_LIMIT = WORLD_WIDTH - VIEW_WIDTH/2 + 1;
+	    CAMERA_LEFT_LIMIT = VIEW_WIDTH/2 - 1;
+	    CAMERA_UP_LIMIT = WORLD_HEIGHT - VIEW_HEIGHT/2 + 1;
+	    CAMERA_DOWN_LIMIT = VIEW_HEIGHT/2 - 1;
 	}
 	
 	/**
