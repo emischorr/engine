@@ -127,7 +127,11 @@ public abstract class GameWorld {
 	}
 	
 	public void addObject(GameObject<?> obj) {
-		physics.addActor(obj);
+		addObject(obj, physics);
+	}
+	
+	public void addObject(GameObject<?> obj, Group group) {
+		group.addActor(obj);
 	}
 	
 	public void removeObject(GameObject<?> obj) {
