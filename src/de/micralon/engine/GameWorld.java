@@ -1,7 +1,6 @@
 package de.micralon.engine;
 
 import java.util.HashMap;
-import java.util.List;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -9,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 
 public abstract class GameWorld {
 	public LightManager lightManager;
@@ -46,6 +46,9 @@ public abstract class GameWorld {
 	private ObjectManager objectManager;
 	public HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
+	// temp vars
+	Array<Contact> contacts;
+	
 	
 	public GameWorld() {
 		init();
@@ -143,7 +146,7 @@ public abstract class GameWorld {
 		background.update();
 		
 		// since Box2D 2.2 we need to reset the friction of any existing contacts
-		List<Contact> contacts = box2dWorld.getContactList();
+		contacts = box2dWorld.getContactList();
 		for (int i = 0; i < box2dWorld.getContactCount(); i++) {
 			Contact contact = contacts.get(i);
 			contact.resetFriction();
