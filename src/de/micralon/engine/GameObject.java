@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 
 import de.micralon.engine.builder.BodyBuilder;
@@ -22,6 +23,8 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	private final Filter filterData = new Filter();
 	
 	private long objectID;
+	
+	private Array<LastingEffect> lastingEffects = new Array<LastingEffect>();
 	
 	// set these characteristics in sub classes according to your needs
 	protected BodyType type = BodyType.StaticBody;
@@ -158,18 +161,30 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 		createShape();
 	}
 	
+	public void addLastingEffect(LastingEffect effect) {
+		lastingEffects.add(effect);
+	}
+	
 	@Override  
     public void act(float delta) {
         super.act(delta);
-        updateImage(); // make the actor follow the box2d body  
+        updateImage(); // make the actor follow the box2d body
+        updateLastingEffects(delta);
     }
 	
-	private void updateImage() {
+	private final void updateImage() {
 		setOrigin(bodyWidth*0.5f, bodyHeight*0.5f);
 		setRotation(MathUtils.radiansToDegrees * body.getAngle());
 		setPosition(body.getPosition().x-bodyWidth*0.5f+textureOffsetX, body.getPosition().y-bodyHeight*0.5f+textureOffsetY); // set the actor position at the box2d body position
 		setSize(bodyWidth, bodyHeight); // scale actor to body's size  
 		setScaling(scaling); // stretch the texture  
 		setAlign(Align.center);
+	}
+	
+	private final void updateLastingEffects(float delta) {
+		for (LastingEffect effect : lastingEffects) {
+			effect.update(delta);
+			if (effect.isTimedOut()) lastingEffects.removeValue(effect, true);
+		}
 	}
 }
