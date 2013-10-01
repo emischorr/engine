@@ -9,14 +9,16 @@ public class LastingEffect {
 		this.duration = duration;
 	}
 	
-	private void effect() {}
+	public void startEffect() {}
+	public void timeEffect() {}
+	public void endEffect() {}
 	
 	public void update(float delta) {
 		if (!timedOut) {
 			if (startTime == 0) startTime = System.currentTimeMillis();
 			
 			if (startTime + duration >= System.currentTimeMillis()) {
-				effect();
+				timeEffect();
 			} else {
 				timedOut = true;
 			}

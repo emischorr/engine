@@ -101,7 +101,7 @@ public abstract class GameWorld {
 		updateCameraBorders();
 		
 		stage.setViewport(VIEW_WIDTH, VIEW_HEIGHT, false);
-		cullingArea = new Rectangle(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
+		cullingArea.set(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
 	}
 	
 	private void updateCameraBorders() {
