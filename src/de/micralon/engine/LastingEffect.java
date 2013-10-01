@@ -1,31 +1,35 @@
 package de.micralon.engine;
 
 public class LastingEffect {
-	private float duration;
+	private long duration;
 	private long startTime = 0;
 	private boolean timedOut = false;
 	
-	public LastingEffect(float duration) {
+	public LastingEffect(long duration) {
 		this.duration = duration;
 	}
 	
-	public void startEffect() {}
-	public void timeEffect() {}
-	public void endEffect() {}
+	public void startEffect(Object self) {}
+	public void timeEffect(Object self) {}
+	public void endEffect(Object self) {}
 	
-	public void update(float delta) {
+	public final void update(Object self, float delta) {
 		if (!timedOut) {
-			if (startTime == 0) startTime = System.currentTimeMillis();
+			if (startTime == 0) {
+				startTime = System.currentTimeMillis();
+				startEffect(self);
+			}
 			
-			if (startTime + duration >= System.currentTimeMillis()) {
-				timeEffect();
+			if (startTime + duration > System.currentTimeMillis()) {
+				timeEffect(self);
 			} else {
 				timedOut = true;
+				endEffect(self);
 			}
 		}
 	}
 	
-	public boolean isTimedOut() {
+	public final boolean isTimedOut() {
 		return timedOut;
 	}
 }

@@ -183,7 +183,7 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	
 	private final void updateLastingEffects(float delta) {
 		for (LastingEffect effect : lastingEffects) {
-			effect.update(delta);
+			effect.update(this, delta);
 			if (effect.isTimedOut()) lastingEffects.removeValue(effect, true);
 		}
 	}
