@@ -3,10 +3,14 @@ package de.micralon.engine;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 public class GameRenderer {
 	private GameWorld world;
+	private SpriteBatch batch;
+	private BitmapFont font;
     private OrthographicCamera camera;
     private Box2DDebugRenderer debugRenderer;
     
@@ -16,6 +20,7 @@ public class GameRenderer {
     public boolean drawWorld = true;
     public boolean drawLight = false;
     public boolean drawDebug = true;
+    public boolean drawTags = true;
     
     public boolean drawBodies = true;
 	public boolean drawJoints = false;
@@ -23,9 +28,15 @@ public class GameRenderer {
 	public boolean drawInactiveBodies = false;
 	public boolean drawVelocities = false;
 	public boolean drawContacts = false;
+	
+	public GameRenderer(GameWorld world, SpriteBatch batch) {
+		this(world, batch, null);
+	}
     
-    public GameRenderer(GameWorld world) {
+    public GameRenderer(GameWorld world, SpriteBatch batch, BitmapFont font) {
     	this.world = world;
+    	this.batch = batch;
+    	this.font = font;
         debugRenderer = new Box2DDebugRenderer(drawBodies, drawJoints, drawAAAB, drawInactiveBodies, drawVelocities, drawContacts);
       
         // we obtain a reference to the game stage camera. The camera is scaled to box2d meter units
@@ -65,6 +76,14 @@ public class GameRenderer {
         if (drawLight) {
         	if (updateLight) { rayHandler.update(); }
         	rayHandler.render();
+        }
+        
+        if (drawTags && font != null) {
+        	batch.begin();
+        	for (NameTag tag : world.tags) {
+        		tag.draw(batch, font);
+        	}
+        	batch.end();
         }
     }
     

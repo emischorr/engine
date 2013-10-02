@@ -14,6 +14,7 @@ public abstract class GameWorld {
 	public LightManager lightManager;
 	public World box2dWorld;
 	public Stage stage;
+	public Array<NameTag> tags = new Array<NameTag>();
 	
 	private static final float DEFAULT_GRAVITY = -9.8f;
 	

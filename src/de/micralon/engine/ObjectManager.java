@@ -8,7 +8,7 @@ public class ObjectManager  {
 //	private transient Array<GameObject<?>> objects = new Array<GameObject<?>>();
 	private transient ObjectMap<Long, GameObject<?>> objectMap;
 	private transient Array<GameObject<?>> deleteList;
-	private long objectIDseq = 0;
+	private long objectIDseq = 1;
 	
 	// temp vars
 	private GameObject<?> tmpObj;
@@ -24,7 +24,7 @@ public class ObjectManager  {
 
 	public void add(GameObject<?> obj) {
 //		objects.add(obj);
-		obj.setObjectID(objectIDseq++);
+		obj.setObjectID(objectIDseq++, true);
 		objectMap.put(obj.getObjectID(), obj);
 	}
 	

@@ -1,5 +1,6 @@
 package de.micralon.engine;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -83,8 +84,21 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 		return objectID;
 	}
 	
-	public void setObjectID(long objectID) {
-		world.getObjectManager().changeID(this.objectID, objectID);
+	public final void setObjectID(long objectID) {
+		setObjectID(objectID, false);
+	}
+	
+	/**
+	 * Sets the objectID. DON'T CALL THIS!
+	 * @param objectID
+	 * @param force
+	 */
+	public final void setObjectID(long objectID, boolean force) {
+		if (force) {
+			this.objectID = objectID;
+		} else {
+			world.getObjectManager().changeID(this.objectID, objectID);
+		}
 	}
 	
 	public float getBodyWidth() {
@@ -171,6 +185,10 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
         updateImage(); // make the actor follow the box2d body
         updateLastingEffects(delta);
     }
+	
+	public void draw(SpriteBatch batch, float parentAlpha) {
+		super.draw(batch, parentAlpha);
+	}
 	
 	private final void updateImage() {
 		setOrigin(bodyWidth*0.5f, bodyHeight*0.5f);
