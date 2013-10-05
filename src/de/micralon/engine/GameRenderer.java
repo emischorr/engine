@@ -16,10 +16,10 @@ public class GameRenderer {
     
     private final RayHandler rayHandler;
     
-    public boolean drawBackground = false;
+    public boolean drawBackground = true;
     public boolean drawWorld = true;
-    public boolean drawLight = false;
-    public boolean drawDebug = true;
+    public boolean drawLight = true;
+    public boolean drawDebug = false;
     public boolean drawTags = true;
     
     public boolean drawBodies = true;
@@ -30,13 +30,19 @@ public class GameRenderer {
 	public boolean drawContacts = false;
 	
 	public GameRenderer(GameWorld world, SpriteBatch batch) {
-		this(world, batch, null);
+		this(world, batch, null, new GameRendererOptions());
 	}
     
-    public GameRenderer(GameWorld world, SpriteBatch batch, BitmapFont font) {
+    public GameRenderer(GameWorld world, SpriteBatch batch, BitmapFont font, GameRendererOptions options) {
     	this.world = world;
     	this.batch = batch;
     	this.font = font;
+
+		drawBackground = options.drawBackground;
+		drawWorld = options.drawWorld;
+		drawLight = options.drawLight;
+		drawDebug = options.drawDebug;
+    		
         debugRenderer = new Box2DDebugRenderer(drawBodies, drawJoints, drawAAAB, drawInactiveBodies, drawVelocities, drawContacts);
       
         // we obtain a reference to the game stage camera. The camera is scaled to box2d meter units
@@ -57,11 +63,6 @@ public class GameRenderer {
         
         rayHandler.setCombinedMatrix(camera.combined);
         
-        // box2d debug renderering
-        if (drawDebug) {
-        	debugRenderer.render(world.box2dWorld, camera.combined);
-        }
-        
         // background rendering
         if (drawBackground) {
         	world.background.draw();
@@ -78,6 +79,11 @@ public class GameRenderer {
         	rayHandler.render();
         }
         
+        // box2d debug renderering
+        if (drawDebug) {
+        	debugRenderer.render(world.box2dWorld, camera.combined);
+        }
+        
         if (drawTags && font != null) {
         	batch.begin();
         	for (NameTag tag : world.tags) {
@@ -86,7 +92,5 @@ public class GameRenderer {
         	batch.end();
         }
     }
-    
-    
     
 }
