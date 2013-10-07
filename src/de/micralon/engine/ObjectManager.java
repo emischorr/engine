@@ -72,16 +72,20 @@ public class ObjectManager  {
 	 * Make sure to call this method AFTER your world step. 
 	 */
 	public void update() {
+		for (GameObject<?> obj : objectMap.values()) {
+			// update object state
+			obj.update();
+			// check for destroyed objects
+			if (obj instanceof Destructible && !((Destructible) obj).isDestroyed() && ((Destructible) obj).getDamageModel().getHealth() <= 0) {
+				((Destructible) obj).setDestroyed();
+			}
+		}
+		
 		// delete objects
 		for (GameObject<?> obj : deleteList) {
 			obj.destroy();
 		}
 		deleteList.clear();
-
-		// update object state
-		for (GameObject<?> obj : objectMap.values()) {
-			obj.update();
-		}
 	}
 
 }
