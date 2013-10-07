@@ -47,8 +47,6 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 		this.world = world;
 		this.scaling = scaling;
 		
-		world.getObjectManager().add(this);
-		
 		if (type != null) this.type = type;
 		this.bodyWidth = bodyWidth;
 		this.bodyHeight = bodyHeight;
@@ -165,7 +163,6 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 			world.box2dWorld.destroyBody(body);
 			body = null;
 		}
-		world.getObjectManager().remove(this);
 		remove();
 	}
 	

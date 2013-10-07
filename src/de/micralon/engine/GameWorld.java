@@ -136,6 +136,7 @@ public abstract class GameWorld {
 	
 	public void addObject(GameObject<?> obj, Group group) {
 		group.addActor(obj);
+		objectManager.add(obj);
 	}
 	
 	public void removeObject(GameObject<?> obj) {
