@@ -140,6 +140,7 @@ public abstract class GameWorld {
 	
 	public void removeObject(GameObject<?> obj) {
 		physics.removeActor(obj);
+		objectManager.remove(obj);
 	}
 	
 	public void update(float deltaTime) {
