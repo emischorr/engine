@@ -6,7 +6,7 @@ package de.micralon.engine;
 public abstract class DamageModel {
 	protected float health;
 	
-	protected float maxHealth() {
+	public float maxHealth() {
 		return 1f;
 	}
 	
