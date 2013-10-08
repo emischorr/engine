@@ -49,6 +49,11 @@ public class ContactManager implements ContactListener {
 			((Trigger)userDataA).triggerOut((GameObject<?>)userDataB);
 		} else if (userDataB != null && userDataB instanceof Trigger) {
 			((Trigger)userDataB).triggerOut((GameObject<?>)userDataA);
+		} else {		
+			if (userDataA != null && userDataB != null) {
+				((GameObject<?>)userDataA).endContactWith((GameObject<?>)userDataB, contact);
+				((GameObject<?>)userDataB).endContactWith((GameObject<?>)userDataA, contact);
+			}
 		}
 	}
 

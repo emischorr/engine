@@ -116,7 +116,11 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	}
 	
 	public Vector2 getPos() {
-		return body.getPosition();
+		if (body != null) {
+			return body.getPosition();
+		} else {
+			return null;
+		}
 	}
 	
 	public void setPos(float x, float y) {
@@ -154,6 +158,7 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	public void update() {}
 	
 	public void contactWith(GameObject<?> obj, Contact contact) {}
+	public void endContactWith(GameObject<?> obj, Contact contact) {}
 	
 	/**
 	 * Don't call this directly from inside the physics step

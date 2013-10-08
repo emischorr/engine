@@ -163,7 +163,7 @@ public abstract class GameWorld {
 	}
 	
 	private void updateCameraPosition() {
-		if (focusObject != null) {
+		if (focusObject != null && focusObject.getPos() != null) {
 			camPos.set(focusObject.getPos());
 			// limit the view on the level angles
 			if (camPos.x > CAMERA_RIGHT_LIMIT)
