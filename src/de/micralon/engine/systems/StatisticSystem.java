@@ -2,7 +2,10 @@ package de.micralon.engine.systems;
 
 import com.badlogic.gdx.utils.ObjectMap;
 
+import de.micralon.engine.GameWorld;
+
 public class StatisticSystem {
+	private GameWorld world;
 	private long levelStartTime;
 	private ObjectMap<Integer, Integer> playerPoints = new ObjectMap<Integer, Integer>();
 	private ObjectMap<Integer, Integer> playerKills = new ObjectMap<Integer, Integer>();
@@ -11,12 +14,16 @@ public class StatisticSystem {
 	// temp vars
 	int levelSeconds;
 	
+	public StatisticSystem(GameWorld world) {
+		this.world = world;
+	}
+	
 	public void startLevel() {
-		levelStartTime = System.currentTimeMillis();
+		levelStartTime = world.getGameTime();
 	}
 	
 	public int getLevelTime() {
-		return (int) ((levelStartTime - System.currentTimeMillis()) / 1000);
+		return (int) ((levelStartTime - world.getGameTime()) / 1000);
 	}
 	
 	public String getLevelTimeAsString() {

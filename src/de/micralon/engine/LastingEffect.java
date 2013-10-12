@@ -1,11 +1,13 @@
 package de.micralon.engine;
 
 public class LastingEffect {
+	private GameWorld world;
 	private long duration;
 	private long startTime = 0;
 	private boolean timedOut = false;
 	
-	public LastingEffect(long duration) {
+	public LastingEffect(GameWorld world, long duration) {
+		this.world = world;
 		this.duration = duration;
 	}
 	
@@ -16,11 +18,11 @@ public class LastingEffect {
 	public final void update(Object self, float delta) {
 		if (!timedOut) {
 			if (startTime == 0) {
-				startTime = System.currentTimeMillis();
+				startTime = world.getGameTime();
 				startEffect(self);
 			}
 			
-			if (startTime + duration > System.currentTimeMillis()) {
+			if (startTime + duration > world.getGameTime()) {
 				timeEffect(self);
 			} else {
 				timedOut = true;
