@@ -36,6 +36,8 @@ public abstract class GameWorld {
     private static int CAMERA_UP_LIMIT = WORLD_HEIGHT - VIEW_HEIGHT/2 + 1;
     private static int CAMERA_DOWN_LIMIT = VIEW_HEIGHT/2 - 1;
 	
+    private long gameTime;
+    
 	public Background background;
 	
 	public Group bg = new Group();
@@ -74,6 +76,10 @@ public abstract class GameWorld {
         background = new Background(stage.getCamera());
         
         objectManager = new ObjectManager();
+	}
+	
+	public long getGameTime() {
+		return gameTime;
 	}
 	
 	public ObjectManager getObjectManager() {
@@ -145,6 +151,7 @@ public abstract class GameWorld {
 	}
 	
 	public void update(float deltaTime) {
+		gameTime += deltaTime;
 		updateCameraPosition();
 		background.update();
 		
