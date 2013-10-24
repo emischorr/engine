@@ -2,6 +2,8 @@ package de.micralon.engine;
 
 import box2dLight.RayHandler;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,10 +18,6 @@ public class GameRenderer {
     
     private final RayHandler rayHandler;
     
-    public boolean drawBackground = true;
-    public boolean drawWorld = true;
-    public boolean drawLight = true;
-    public boolean drawDebug = false;
     public boolean drawTags = true;
     
     public boolean drawBodies = true;
@@ -29,6 +27,8 @@ public class GameRenderer {
 	public boolean drawVelocities = false;
 	public boolean drawContacts = false;
 	
+	public GameRendererOptions options;
+	
 	public GameRenderer(GameWorld world, SpriteBatch batch) {
 		this(world, batch, null, new GameRendererOptions());
 	}
@@ -37,11 +37,7 @@ public class GameRenderer {
     	this.world = world;
     	this.batch = batch;
     	this.font = font;
-
-		drawBackground = options.drawBackground;
-		drawWorld = options.drawWorld;
-		drawLight = options.drawLight;
-		drawDebug = options.drawDebug;
+    	this.options = options;
     		
         debugRenderer = new Box2DDebugRenderer(drawBodies, drawJoints, drawAAAB, drawInactiveBodies, drawVelocities, drawContacts);
       
@@ -56,31 +52,31 @@ public class GameRenderer {
     }
     
     public void render(boolean updateLight) {
-//    	Gdx.gl.glClearColor(0, 0, 0, 1);
-//		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
+    	Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
 		
         camera.update();
         
         rayHandler.setCombinedMatrix(camera.combined);
         
         // background rendering
-        if (drawBackground) {
+        if (options.drawBackground) {
         	world.background.draw();
         }
         
         // game stage rendering
-        if (drawWorld) {
+        if (options.drawWorld) {
         	world.stage.draw();
         }
         
         // draw the light
-        if (drawLight) {
+        if (options.drawLight) {
         	if (updateLight) { rayHandler.update(); }
         	rayHandler.render();
         }
         
         // box2d debug renderering
-        if (drawDebug) {
+        if (options.drawDebug) {
         	debugRenderer.render(world.box2dWorld, camera.combined);
         }
         

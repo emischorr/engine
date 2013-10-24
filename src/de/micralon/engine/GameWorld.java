@@ -2,7 +2,6 @@ package de.micralon.engine;
 
 import java.util.HashMap;
 
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.World;
@@ -14,6 +13,7 @@ public abstract class GameWorld {
 	public LightManager lightManager;
 	public World box2dWorld;
 	public Stage stage;
+	public CameraHelper cameraHelper;
 	public Array<NameTag> tags = new Array<NameTag>();
 	
 	private static final float DEFAULT_GRAVITY = -9.8f;
@@ -21,20 +21,8 @@ public abstract class GameWorld {
     private final static int VELOCITY_ITERS = 6;
     private final static int POSITION_ITERS = 2;
 	
-    private Rectangle cullingArea;
-    
-    protected static int VIEW_WIDTH = 18;
-	protected static int VIEW_HEIGHT = 12;
-	
 	private static int WORLD_WIDTH = 50;
 	private static int WORLD_HEIGHT = 50;
-	
-	public GameObject<?> focusObject;
-	private Vector2 camPos = new Vector2();
-    private static int CAMERA_RIGHT_LIMIT = WORLD_WIDTH - VIEW_WIDTH/2 + 1;
-    private static int CAMERA_LEFT_LIMIT = VIEW_WIDTH/2 - 1;
-    private static int CAMERA_UP_LIMIT = WORLD_HEIGHT - VIEW_HEIGHT/2 + 1;
-    private static int CAMERA_DOWN_LIMIT = VIEW_HEIGHT/2 - 1;
 	
     private long gameTime;
     
@@ -63,12 +51,13 @@ public abstract class GameWorld {
 		new ContactManager(this);
 		
 		stage = new Stage(); // create the game stage
-        stage.setViewport(VIEW_WIDTH, VIEW_HEIGHT, false); // set the game stage viewport to the meters size
         
-        cullingArea = new Rectangle(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
-        bg.setCullingArea(cullingArea);
-        physics.setCullingArea(cullingArea);
-        fg.setCullingArea(cullingArea);
+        cameraHelper = new CameraHelper(stage);
+        cameraHelper.setViewSize(18, 12); // view in meters
+        
+        cameraHelper.applyCulling(bg);
+        cameraHelper.applyCulling(physics);
+        cameraHelper.applyCulling(fg);
         stage.addActor(bg);
         stage.addActor(physics);
         stage.addActor(fg);
@@ -90,7 +79,7 @@ public abstract class GameWorld {
 		WORLD_WIDTH = width;
 		WORLD_HEIGHT = height;
 		
-		updateCameraBorders();
+		cameraHelper.updateCameraBorders(WORLD_WIDTH, WORLD_HEIGHT);
 	}
 	
 	public int getWorldWidth() {
@@ -99,23 +88,6 @@ public abstract class GameWorld {
 	
 	public int getWorldHeight() {
 		return WORLD_HEIGHT;
-	}
-	
-	public void setViewSize(int width, int height) {
-		VIEW_WIDTH = width;
-		VIEW_HEIGHT = height;
-		
-		updateCameraBorders();
-		
-		stage.setViewport(VIEW_WIDTH, VIEW_HEIGHT, false);
-		cullingArea.set(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
-	}
-	
-	private void updateCameraBorders() {
-		CAMERA_RIGHT_LIMIT = WORLD_WIDTH - VIEW_WIDTH/2 + 1;
-	    CAMERA_LEFT_LIMIT = VIEW_WIDTH/2 - 1;
-	    CAMERA_UP_LIMIT = WORLD_HEIGHT - VIEW_HEIGHT/2 + 1;
-	    CAMERA_DOWN_LIMIT = VIEW_HEIGHT/2 - 1;
 	}
 	
 	/**
@@ -151,8 +123,8 @@ public abstract class GameWorld {
 	}
 	
 	public void update(float deltaTime) {
-		gameTime += deltaTime;
-		updateCameraPosition();
+		gameTime = (long) (gameTime + deltaTime*1000);
+		cameraHelper.updateCameraPosition();
 		background.update();
 		
 		// since Box2D 2.2 we need to reset the friction of any existing contacts
@@ -167,24 +139,6 @@ public abstract class GameWorld {
 		
 		stage.act(deltaTime); // update game stage
 		objectManager.update(); // delete objects and update state
-	}
-	
-	private void updateCameraPosition() {
-		if (focusObject != null && focusObject.getPos() != null) {
-			camPos.set(focusObject.getPos());
-			// limit the view on the level angles
-			if (camPos.x > CAMERA_RIGHT_LIMIT)
-				camPos.x = CAMERA_RIGHT_LIMIT;
-			else if (camPos.x < CAMERA_LEFT_LIMIT)
-				camPos.x = CAMERA_LEFT_LIMIT;
-			if (camPos.y > CAMERA_UP_LIMIT)
-				camPos.y = CAMERA_UP_LIMIT;
-			else if (camPos.y < CAMERA_DOWN_LIMIT)
-				camPos.y = CAMERA_DOWN_LIMIT;
-			stage.getCamera().position.set(camPos.x, camPos.y, 0);
-			// update cullingArea
-			cullingArea.setPosition(camPos.x - VIEW_WIDTH/2, camPos.y - VIEW_HEIGHT/2);
-		}
 	}
 	
 	public float getGravity() {
