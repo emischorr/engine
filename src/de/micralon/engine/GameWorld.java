@@ -2,6 +2,7 @@ package de.micralon.engine;
 
 import java.util.HashMap;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.World;
@@ -25,6 +26,9 @@ public abstract class GameWorld {
 	private static int WORLD_HEIGHT = 50;
 	
     private long gameTime;
+    
+    @SuppressWarnings("rawtypes")
+	private Level level;
     
 	public Background background;
 	
@@ -67,6 +71,24 @@ public abstract class GameWorld {
         objectManager = new ObjectManager();
 	}
 	
+	@SuppressWarnings({ "rawtypes" })
+	public boolean load(String levelName) {
+		try {
+			level = (Level)Class.forName(levelName).getConstructor(this.getClass()).newInstance(this);
+			level.load();
+			Gdx.app.log("GameWorld", "Loaded level "+level);
+			return true;
+		} catch (Exception e) {
+			Gdx.app.log("GameWorld", "Error loading level "+level);
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/**
+	 * GameTime in milliseconds
+	 * @return the actual game time in ms
+	 */
 	public long getGameTime() {
 		return gameTime;
 	}
@@ -133,6 +155,9 @@ public abstract class GameWorld {
 			Contact contact = contacts.get(i);
 			contact.resetFriction();
 		}
+		
+		// update level script
+		if (level != null) level.update(deltaTime);
 		
 		// update box2d world
 		box2dWorld.step(deltaTime, VELOCITY_ITERS, POSITION_ITERS);
