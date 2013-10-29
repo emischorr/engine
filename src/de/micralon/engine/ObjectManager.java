@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Values;
 
+import de.micralon.engine.net.Network.ObjectData;
 import de.micralon.engine.net.Network.ObjectsData;
 
 public class ObjectManager  {
@@ -15,16 +16,22 @@ public class ObjectManager  {
 	
 	private boolean trackUpdates = false;
 	
+	private static final int DEFAULT_CAPACITY = 32;
+	
 	// temp vars
 	private GameObject<?> tmpObj;
 	private ObjectsData objectsData;
 	
 	public ObjectManager() {
-		this(32);
+		this(DEFAULT_CAPACITY);
 	}
 	
 	public ObjectManager(int initCapacity) {
-		this(initCapacity,false);
+		this(initCapacity, false);
+	}
+	
+	public ObjectManager(boolean trackUpdates) {
+		this(DEFAULT_CAPACITY, trackUpdates);
 	}
 	
 	public ObjectManager(int initCapacity, boolean trackUpdates) {
@@ -62,15 +69,23 @@ public class ObjectManager  {
 	}
 	
 	public ObjectsData getUpdateData() {
-		if (trackUpdates) {
-			objectsData = new ObjectsData();
+		objectsData = new ObjectsData();
+		if (trackUpdates) { // delta update
 			for (Long id : updateList) {
 				objectsData.objects.add(objectMap.get(id).getData());
 			}
 			updateList.clear();
-			return objectsData;
-		} else {
-			return null;
+		} else { // Full object data update
+			for (GameObject<?> obj : objectMap.values()) {
+				objectsData.objects.add(obj.getData());
+			}
+		}
+		return objectsData;
+	}
+	
+	public void syncObjects(ObjectsData data) {
+		for (ObjectData objData : data.objects) {
+			objectMap.get(objData.objectID).setData(objData);
 		}
 	}
 	

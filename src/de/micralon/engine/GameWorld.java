@@ -10,6 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 
+import de.micralon.engine.net.Network.ObjectsData;
+import de.micralon.engine.net.NetworkNode;
+
 public abstract class GameWorld {
 	public LightManager lightManager;
 	public World box2dWorld;
@@ -46,10 +49,14 @@ public abstract class GameWorld {
 	
 	
 	public GameWorld() {
-		init();
+		init(false);
 	}
 	
-	private void init() {
+	/**
+	 * Initialize world. DON'T FORGET to call this in your world implementation
+	 * @param trackUpdates
+	 */
+	protected final void init(boolean trackUpdates) {
 		box2dWorld = new World(new Vector2(0, getGravity()), true);
 		lightManager = new LightManager(box2dWorld);
 		new ContactManager(this);
@@ -68,7 +75,7 @@ public abstract class GameWorld {
         
         background = new Background(stage.getCamera());
         
-        objectManager = new ObjectManager();
+        objectManager = new ObjectManager(trackUpdates);
 	}
 	
 	@SuppressWarnings({ "rawtypes" })
@@ -164,6 +171,14 @@ public abstract class GameWorld {
 		
 		stage.act(deltaTime); // update game stage
 		objectManager.update(); // delete objects and update state
+	}
+	
+	public void sync(NetworkNode node) {
+		node.sendMessage(objectManager.getUpdateData());
+	}
+	
+	public void updateObjects(ObjectsData data) {
+		objectManager.syncObjects(data);
 	}
 	
 	public float getGravity() {

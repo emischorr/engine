@@ -25,6 +25,7 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	private final Filter filterData = new Filter();
 	
 	private long objectID;
+	private boolean trackUpdates = true; // set this to false if you do not care synchronizing position data
 	
 	private Array<LastingEffect> lastingEffects = new Array<LastingEffect>();
 	
@@ -207,8 +208,18 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 		updateImage();
 	}
 	
+	/**
+	 * Set trackUpdates to false if you do not want to synchronize position and rotation state over a network. 
+	 * Default: true
+	 * Note: Also check that ObjectManger is set to track updates
+	 * @param trackUpdates whether updates are tracked or not
+	 */
+	protected final void trackUpdates(boolean trackUpdates) {
+		this.trackUpdates = trackUpdates;
+	}
+	
 	private final void needUpdate() {
-		world.getObjectManager().needUpdate(this); // notify manager about update
+		if (trackUpdates) world.getObjectManager().needUpdate(this); // notify manager about update
 		updateImage(); // make the actor follow the box2d body
 	}
 	
