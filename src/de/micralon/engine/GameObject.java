@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 
 import de.micralon.engine.builder.BodyBuilder;
+import de.micralon.engine.net.Network.ObjectData;
 
 public abstract class GameObject<WORLD extends GameWorld> extends Image implements Reuseable {
 	protected transient WORLD world;
@@ -33,6 +34,9 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	protected float angularDamping = 0;
 	protected float bodyWidth;
 	protected float bodyHeight;
+	
+	// temp vars
+	private ObjectData data;
 	
 	public GameObject(WORLD world) {
 		this(world, null, 1, 1, 0, 0, Scaling.stretch);
@@ -72,7 +76,7 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 					.userData(this)
 					.build();
 			
-			updateImage();
+			needUpdate();
 		}
 	}
 	
@@ -109,6 +113,7 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	
 	public void setDegree(float degree) {
 		getBody().setTransform(getPos(), MathUtils.degreesToRadians*degree);
+		needUpdate();
 	}
 	
 	public float getDegree() {
@@ -125,7 +130,7 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	
 	public void setPos(float x, float y) {
 		body.setTransform(x, y, 0);
-		updateImage();
+		needUpdate();
 	}
 	
 	public void setTextureOffset(float x, float y) {
@@ -184,12 +189,27 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	@Override  
     public void act(float delta) {
         super.act(delta);
-        updateImage(); // make the actor follow the box2d body
+        needUpdate();
         updateLastingEffects(delta);
     }
 	
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
+	}
+	
+	public ObjectData getData() {
+		data = new ObjectData(objectID, getPos(), getDegree());
+		return data;
+	}
+	
+	public void setData(ObjectData data) {
+		getBody().setTransform(data.position, MathUtils.degreesToRadians*data.rotation);
+		updateImage();
+	}
+	
+	private final void needUpdate() {
+		world.getObjectManager().needUpdate(this); // notify manager about update
+		updateImage(); // make the actor follow the box2d body
 	}
 	
 	private final void updateImage() {

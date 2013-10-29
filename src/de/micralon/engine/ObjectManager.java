@@ -4,22 +4,35 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Values;
 
+import de.micralon.engine.net.Network.ObjectsData;
+
 public class ObjectManager  {
 //	private transient Array<GameObject<?>> objects = new Array<GameObject<?>>();
 	private transient ObjectMap<Long, GameObject<?>> objectMap;
 	private transient Array<GameObject<?>> deleteList;
+	private transient Array<Long> updateList;
 	private long objectIDseq = 1;
+	
+	private boolean trackUpdates = false;
 	
 	// temp vars
 	private GameObject<?> tmpObj;
+	private ObjectsData objectsData;
 	
 	public ObjectManager() {
 		this(32);
 	}
 	
 	public ObjectManager(int initCapacity) {
+		this(initCapacity,false);
+	}
+	
+	public ObjectManager(int initCapacity, boolean trackUpdates) {
+		this.trackUpdates = trackUpdates;
+		
 		objectMap = new ObjectMap<Long, GameObject<?>>(initCapacity);
 		deleteList = new Array<GameObject<?>>(initCapacity/2);
+		if (trackUpdates) updateList = new Array<Long>(initCapacity);
 	}
 
 	public void add(GameObject<?> obj) {
@@ -42,6 +55,23 @@ public class ObjectManager  {
 	public void changeID(long oldID, long newID) {
 		tmpObj = objectMap.remove(oldID);
 		objectMap.put(newID, tmpObj);
+	}
+	
+	public void needUpdate(GameObject<?> obj) {
+		if (trackUpdates) updateList.add(obj.getObjectID());
+	}
+	
+	public ObjectsData getUpdateData() {
+		if (trackUpdates) {
+			objectsData = new ObjectsData();
+			for (Long id : updateList) {
+				objectsData.objects.add(objectMap.get(id).getData());
+			}
+			updateList.clear();
+			return objectsData;
+		} else {
+			return null;
+		}
 	}
 	
 	/**

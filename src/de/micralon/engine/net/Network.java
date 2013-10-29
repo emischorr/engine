@@ -1,6 +1,9 @@
 package de.micralon.engine.net;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.IntArray;
@@ -8,8 +11,48 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryonet.EndPoint;
+import com.esotericsoftware.kryonet.FrameworkMessage.Ping;
+import com.esotericsoftware.minlog.Log;
+
+import de.micralon.engine.Player;
 
 public class Network {
+	
+	static public void register(EndPoint endPoint) {
+		Log.set(Log.LEVEL_DEBUG); // include debug jar for logging
+		
+        Kryo kryo = endPoint.getKryo();
+        kryo.register(Ping.class);
+        kryo.register(Vector2.class);
+        kryo.register(Object[].class);
+        kryo.register(HashMap.class);
+        kryo.register(Player.class);
+        registerLibGDXClasses(kryo);
+    }
+	
+	static public class ObjectData {
+    	public long objectID;
+    	public Vector2 position;
+    	public float rotation;
+    	
+    	public ObjectData() {}
+    	public ObjectData(long objectID, Vector2 position, float rotation) {
+    		this.objectID = objectID;
+    		this.position = position;
+    		this.rotation = rotation;
+    	}
+    }
+	
+	static public class ObjectsData {
+		public Array<ObjectData> objects;
+		
+		public ObjectsData() {}
+		public ObjectsData(Array<ObjectData> objects) {
+			this.objects = objects;
+		}
+	}
+	
 	@SuppressWarnings("rawtypes")
     protected static void registerLibGDXClasses(Kryo kryo) {
         kryo.register(Array.class, new Serializer<Array>() {
