@@ -1,6 +1,8 @@
-package de.micralon.engine;
+package de.micralon.engine.manager;
 
 import com.badlogic.gdx.utils.Array;
+
+import de.micralon.engine.Player;
 
 public class PlayerManager {
 	private Array<Player> players;

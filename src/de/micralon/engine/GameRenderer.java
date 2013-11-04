@@ -69,13 +69,15 @@ public class GameRenderer {
         	world.stage.draw();
         }
         
+        world.effectManager.draw(batch);
+        
         // draw the light
         if (options.drawLight) {
         	if (updateLight) { rayHandler.update(); }
         	rayHandler.render();
         }
         
-        // box2d debug renderering
+        // box2d debug rendering
         if (options.drawDebug) {
         	debugRenderer.render(world.box2dWorld, camera.combined);
         }

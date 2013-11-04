@@ -10,6 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 
+import de.micralon.engine.manager.ContactManager;
+import de.micralon.engine.manager.EffectManager;
+import de.micralon.engine.manager.LightManager;
+import de.micralon.engine.manager.ObjectManager;
 import de.micralon.engine.net.Network.ObjectsData;
 import de.micralon.engine.net.NetworkNode;
 
@@ -42,6 +46,7 @@ public abstract class GameWorld {
 	public Player localPlayer;
 	
 	private ObjectManager objectManager;
+	public EffectManager effectManager;
 	public HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
 	// temp vars
@@ -76,6 +81,7 @@ public abstract class GameWorld {
         background = new Background(stage.getCamera());
         
         objectManager = new ObjectManager(trackUpdates);
+        effectManager = new EffectManager();
 	}
 	
 	@SuppressWarnings({ "rawtypes" })
@@ -171,6 +177,7 @@ public abstract class GameWorld {
 		
 		stage.act(deltaTime); // update game stage
 		objectManager.update(); // delete objects and update state
+		effectManager.update(); // delete effects
 	}
 	
 	public void sync(NetworkNode node) {

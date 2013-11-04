@@ -1,4 +1,4 @@
-package de.micralon.engine;
+package de.micralon.engine.manager;
 
 import box2dLight.ConeLight;
 import box2dLight.DirectionalLight;
@@ -9,6 +9,8 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.physics.box2d.World;
+
+import de.micralon.engine.ObjectStore;
 
 public class LightManager {
 	public RayHandler rayHandler;

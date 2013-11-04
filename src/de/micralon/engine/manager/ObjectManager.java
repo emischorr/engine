@@ -1,9 +1,11 @@
-package de.micralon.engine;
+package de.micralon.engine.manager;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Values;
 
+import de.micralon.engine.Destructible;
+import de.micralon.engine.GameObject;
 import de.micralon.engine.net.Network.ObjectData;
 import de.micralon.engine.net.Network.ObjectsData;
 

@@ -1,9 +1,14 @@
-package de.micralon.engine;
+package de.micralon.engine.manager;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
+
+import de.micralon.engine.Destructible;
+import de.micralon.engine.GameObject;
+import de.micralon.engine.GameWorld;
+import de.micralon.engine.Trigger;
 
 public class ContactManager implements ContactListener {
 	
