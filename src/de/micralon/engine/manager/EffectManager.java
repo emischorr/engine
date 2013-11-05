@@ -56,6 +56,10 @@ public class EffectManager implements Disposable {
 		return peak;
 	}
 	
+	public int getCount() {
+		return effects.size;
+	}
+	
 	public void update() {
 		for (PooledEffect effect : effects) {
 			if (effect.isComplete()) {
