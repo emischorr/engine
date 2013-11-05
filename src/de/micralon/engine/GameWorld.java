@@ -194,6 +194,8 @@ public abstract class GameWorld {
 	
 	public void dispose() {
 		lightManager.dispose();
+		objectManager.dispose();
+		effectManager.dispose();
 		box2dWorld.dispose();
 		stage.dispose();
 	}

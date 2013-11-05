@@ -5,9 +5,10 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 
-public class EffectManager {
+public class EffectManager implements Disposable {
 	private ObjectMap<String, ParticleEffectPool> pools;
 	private Array<PooledEffect> effects;
 	
@@ -62,5 +63,11 @@ public class EffectManager {
 		for (PooledEffect effect : effects) {
 			effect.draw(batch);
 		}
+	}
+
+	@Override
+	public void dispose() {
+		pools.clear();
+		effects.clear();
 	}
 }

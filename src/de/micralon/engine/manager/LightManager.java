@@ -9,10 +9,11 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Disposable;
 
 import de.micralon.engine.ObjectStore;
 
-public class LightManager {
+public class LightManager implements Disposable {
 	public RayHandler rayHandler;
 	private ObjectStore<PointLight> pointLights;
 	private ObjectStore<ConeLight> coneLights;

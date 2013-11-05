@@ -1,6 +1,7 @@
 package de.micralon.engine.manager;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Values;
 
@@ -9,7 +10,7 @@ import de.micralon.engine.GameObject;
 import de.micralon.engine.net.Network.ObjectData;
 import de.micralon.engine.net.Network.ObjectsData;
 
-public class ObjectManager  {
+public class ObjectManager implements Disposable {
 //	private transient Array<GameObject<?>> objects = new Array<GameObject<?>>();
 	private transient ObjectMap<Long, GameObject<?>> objectMap;
 	private transient Array<GameObject<?>> deleteList;
@@ -132,6 +133,13 @@ public class ObjectManager  {
 		for (GameObject<?> obj : deleteList) {
 			obj.destroy();
 		}
+		deleteList.clear();
+	}
+
+	@Override
+	public void dispose() {
+		objectMap.clear();
+		updateList.clear();
 		deleteList.clear();
 	}
 
