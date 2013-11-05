@@ -1,4 +1,4 @@
-package de.micralon.engine;
+package de.micralon.engine.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;

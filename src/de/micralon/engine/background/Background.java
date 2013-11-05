@@ -1,4 +1,4 @@
-package de.micralon.engine;
+package de.micralon.engine.background;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;

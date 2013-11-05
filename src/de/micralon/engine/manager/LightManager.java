@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 
-import de.micralon.engine.ObjectStore;
+import de.micralon.engine.utils.ObjectStore;
 
 public class LightManager implements Disposable {
 	public RayHandler rayHandler;

@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Scaling;
 
 import de.micralon.engine.builder.BodyBuilder;
 import de.micralon.engine.net.Network.ObjectData;
+import de.micralon.engine.utils.Reuseable;
 
 public abstract class GameObject<WORLD extends GameWorld> extends Image implements Reuseable {
 	protected transient WORLD world;
