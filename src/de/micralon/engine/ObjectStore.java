@@ -2,9 +2,10 @@ package de.micralon.engine;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 
-public abstract class ObjectStore<T> {
-	
+public abstract class ObjectStore<T> implements Disposable {
+	private int peak;
 	protected final Array<T> usedObjects = new Array<T>();
 	protected final Array<T> freeObjects = new Array<T>();
 	
@@ -21,6 +22,7 @@ public abstract class ObjectStore<T> {
 			tempT = freeObjects.removeIndex(0);
 		} else {
 			tempT = create();
+			peak++;
 		}
 		usedObjects.add(tempT);
 		Gdx.app.log("ObjectStore", "get(). new size: "+this.toString());
@@ -39,6 +41,10 @@ public abstract class ObjectStore<T> {
 		return usedObjects;
 	}
 	
+	public int getPeak() {
+		return peak;
+	}
+	
 	@Override
 	public String toString() {
 		return "free: "+String.valueOf(freeObjects.size)+" / used: "+String.valueOf(usedObjects.size);
@@ -49,5 +55,10 @@ public abstract class ObjectStore<T> {
 		usedObjects.clear();
 		freeObjects.clear();
 		Gdx.app.log("ObjectStore", "cleared store");
+	}
+	
+	@Override
+	public void dispose() {
+		clear();
 	}
 }
