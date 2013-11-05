@@ -2,6 +2,7 @@ package de.micralon.engine;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter.ScaledNumericValue;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -56,5 +57,6 @@ public class ParticleEffectActor extends Actor {
 	
 	public void dispose() {
 		effect.dispose();
+		if (effect instanceof PooledEffect) ((PooledEffect) effect).free();
 	}
 }
