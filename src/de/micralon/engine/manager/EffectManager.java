@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 public class EffectManager implements Disposable {
 	private ObjectMap<String, ParticleEffectPool> pools;
 	private Array<PooledEffect> effects;
+	private int peak;
 	
 	private static final int DEFAULT_CAPACITY = 32;
 	
@@ -37,6 +38,7 @@ public class EffectManager implements Disposable {
 	public PooledEffect getEffect(String name) {
 		effect = pools.get(name).obtain();
 		effects.add(effect);
+		if (effects.size > peak) peak = effects.size;
 		return effect;
 	}
 	
@@ -48,6 +50,10 @@ public class EffectManager implements Disposable {
 	
 	public void free(PooledEffect effect) {
 		effect.free();
+	}
+	
+	public int getPeak() {
+		return peak;
 	}
 	
 	public void update() {
