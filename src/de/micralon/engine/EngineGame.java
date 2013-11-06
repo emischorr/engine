@@ -35,6 +35,10 @@ public class EngineGame extends Game {
 	public void create() {
 		Gdx.app.log( LOG, "Creating game on " + Gdx.app.getType() );
 		
+		initServices();
+	}
+	
+	protected void initServices() {
 		// create the preferences manager
         preferencesManager = new PreferencesManager();
 		

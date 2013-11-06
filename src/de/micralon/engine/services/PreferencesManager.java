@@ -8,15 +8,18 @@ public class PreferencesManager {
     private static final String PREF_VOLUME = "volume";
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
-    private static final String PREFS_NAME = "micraspacePreferences";
+    
+    private String name = "enginePreferences";
+    
+    public PreferencesManager() {}
 
-    public PreferencesManager()
-    {
+    public PreferencesManager(String name) {
+    	this.name = name;
     }
 
     protected Preferences getPrefs()
     {
-        return Gdx.app.getPreferences( PREFS_NAME );
+        return Gdx.app.getPreferences( name );
     }
 
     public boolean isSoundEnabled()
