@@ -49,6 +49,11 @@ public class ParticleEffectActor extends Actor {
 		if (!started) {
 			start();
 		}
+		if (effect.isComplete()) {
+			started = false;
+			dispose(); // particle effect (return to pool if pooled)
+			remove(); // from stage
+		}
 	}
 
 	public ParticleEffect getEffect() {
