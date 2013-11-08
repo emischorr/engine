@@ -11,7 +11,7 @@ public class Player {
 	
 	public transient Camera camera;
 	
-	public transient GameObject<?> character;
+	public transient GameObject character;
 	
 	public Player() {}
 	

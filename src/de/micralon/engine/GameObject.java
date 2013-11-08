@@ -17,8 +17,7 @@ import de.micralon.engine.builder.BodyBuilder;
 import de.micralon.engine.net.Network.ObjectData;
 import de.micralon.engine.utils.Reuseable;
 
-public abstract class GameObject<WORLD extends GameWorld> extends Image implements Reuseable {
-	protected transient WORLD world;
+public abstract class GameObject extends Image implements Reuseable {
 	private transient Body body;
 	private final Scaling scaling;
 	protected float textureOffsetX = 0, textureOffsetY = 0;
@@ -40,17 +39,16 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	// temp vars
 	private ObjectData data;
 	
-	public GameObject(WORLD world) {
-		this(world, null, 1, 1, 0, 0, Scaling.stretch);
+	public GameObject() {
+		this(null, 1, 1, 0, 0, Scaling.stretch);
 	}
 	
-	protected GameObject(WORLD world, BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
-		this(world, type, bodyWidth, bodyHeight, linearDamping, angularDamping, Scaling.stretch);
+	protected GameObject(BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
+		this(type, bodyWidth, bodyHeight, linearDamping, angularDamping, Scaling.stretch);
 	}
 	
-	protected GameObject(WORLD world, BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
+	protected GameObject(BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
 		super();
-		this.world = world;
 		this.scaling = scaling;
 		
 		if (type != null) this.type = type;
@@ -69,7 +67,7 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	
 	public final void createBody(boolean force) {
 		if (force || body == null) { // create Body only once
-			BodyBuilder bodyBuilder = new BodyBuilder(world.box2dWorld);
+			BodyBuilder bodyBuilder = new BodyBuilder(GameWorld.ctx.box2dWorld);
 			body = bodyBuilder
 					.type(type)
 					.linearDamping(linearDamping)
@@ -101,7 +99,7 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 		if (force) {
 			this.objectID = objectID;
 		} else {
-			world.getObjectManager().changeID(this.objectID, objectID);
+			GameWorld.ctx.getObjectManager().changeID(this.objectID, objectID);
 		}
 	}
 	
@@ -164,15 +162,15 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	
 	public void update() {}
 	
-	public void contactWith(GameObject<?> obj, Contact contact) {}
-	public void endContactWith(GameObject<?> obj, Contact contact) {}
+	public void contactWith(GameObject obj, Contact contact) {}
+	public void endContactWith(GameObject obj, Contact contact) {}
 	
 	/**
 	 * Don't call this directly from inside the physics step
 	 */
 	public void destroy() {
 		if (body != null) {
-			world.box2dWorld.destroyBody(body);
+			GameWorld.ctx.box2dWorld.destroyBody(body);
 			body = null;
 		}
 		remove();
@@ -220,7 +218,7 @@ public abstract class GameObject<WORLD extends GameWorld> extends Image implemen
 	}
 	
 	private final void needUpdate() {
-		if (trackUpdates) world.getObjectManager().needUpdate(this); // notify manager about update
+		if (trackUpdates) GameWorld.ctx.getObjectManager().needUpdate(this); // notify manager about update
 		updateImage(); // make the actor follow the box2d body
 	}
 	

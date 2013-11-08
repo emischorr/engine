@@ -11,7 +11,7 @@ public class SpawnPoint implements SpawnPointInterface {
 	}
 
 	@Override
-	public void spawn(GameObject<?> obj) {
+	public void spawn(GameObject obj) {
 		obj.setPos(posX, posY);
 	}
 

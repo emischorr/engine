@@ -25,6 +25,8 @@ public abstract class GameWorld {
 	public CameraHelper cameraHelper;
 	public Array<NameTag> tags = new Array<NameTag>();
 	
+	public static GameWorld ctx;
+	
 	private static final float DEFAULT_GRAVITY = -9.8f;
 	
     private final static int VELOCITY_ITERS = 6;
@@ -55,6 +57,7 @@ public abstract class GameWorld {
 	
 	
 	public GameWorld() {
+		ctx = this;
 		init(false);
 	}
 	
@@ -144,16 +147,16 @@ public abstract class GameWorld {
 		players.remove(playerID);
 	}
 	
-	public void addObject(GameObject<?> obj) {
+	public void addObject(GameObject obj) {
 		addObject(obj, physics);
 	}
 	
-	public void addObject(GameObject<?> obj, Group group) {
+	public void addObject(GameObject obj, Group group) {
 		group.addActor(obj);
 		objectManager.add(obj);
 	}
 	
-	public void removeObject(GameObject<?> obj) {
+	public void removeObject(GameObject obj) {
 		physics.removeActor(obj);
 		objectManager.remove(obj);
 	}

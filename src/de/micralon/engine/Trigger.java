@@ -8,7 +8,7 @@ import de.micralon.engine.builder.BodyBuilder;
 
 public class Trigger {
 	private Body body;
-	private Array<GameObject<?>> objects = new Array<GameObject<?>>();
+	private Array<GameObject> objects = new Array<GameObject>();
 	private Runnable inAction;
 	private Runnable outAction;
 	private boolean active = true;

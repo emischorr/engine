@@ -15,8 +15,8 @@ public class ContactManager implements ContactListener {
 	//temp vars
 	Object userDataA;
 	Object userDataB;
-	GameObject<?> a;
-	GameObject<?> b;
+	GameObject a;
+	GameObject b;
 	
 	public ContactManager(GameWorld world) {
 		world.box2dWorld.setContactListener(this);
@@ -28,13 +28,13 @@ public class ContactManager implements ContactListener {
 		userDataB = contact.getFixtureB().getBody().getUserData();
 		
 		if (userDataA instanceof Trigger) {
-			((Trigger)userDataA).triggerIn((GameObject<?>)userDataB);
+			((Trigger)userDataA).triggerIn((GameObject)userDataB);
 		} else if (userDataB instanceof Trigger) {
-			((Trigger)userDataB).triggerIn((GameObject<?>)userDataA);
+			((Trigger)userDataB).triggerIn((GameObject)userDataA);
 		} else {		
 			if (userDataA != null && userDataB != null) {
-				((GameObject<?>)userDataA).contactWith((GameObject<?>)userDataB, contact);
-				((GameObject<?>)userDataB).contactWith((GameObject<?>)userDataA, contact);
+				((GameObject)userDataA).contactWith((GameObject)userDataB, contact);
+				((GameObject)userDataB).contactWith((GameObject)userDataA, contact);
 			}
 		}
 	}
@@ -51,13 +51,13 @@ public class ContactManager implements ContactListener {
 		}
 		
 		if (userDataA != null && userDataA instanceof Trigger) {
-			((Trigger)userDataA).triggerOut((GameObject<?>)userDataB);
+			((Trigger)userDataA).triggerOut((GameObject)userDataB);
 		} else if (userDataB != null && userDataB instanceof Trigger) {
-			((Trigger)userDataB).triggerOut((GameObject<?>)userDataA);
+			((Trigger)userDataB).triggerOut((GameObject)userDataA);
 		} else {		
 			if (userDataA != null && userDataB != null) {
-				((GameObject<?>)userDataA).endContactWith((GameObject<?>)userDataB, contact);
-				((GameObject<?>)userDataB).endContactWith((GameObject<?>)userDataA, contact);
+				((GameObject)userDataA).endContactWith((GameObject)userDataB, contact);
+				((GameObject)userDataB).endContactWith((GameObject)userDataA, contact);
 			}
 		}
 	}
@@ -73,7 +73,7 @@ public class ContactManager implements ContactListener {
             if(contact.getFixtureA() != null)
             {
                 if (GameObject.class.isInstance(contact.getFixtureA().getBody().getUserData())) {
-                	a = (GameObject<?>) contact.getFixtureA().getBody().getUserData();
+                	a = (GameObject) contact.getFixtureA().getBody().getUserData();
                     evalDamage(a, impulse);
 
                 }
@@ -83,7 +83,7 @@ public class ContactManager implements ContactListener {
             if(contact.getFixtureB() != null)
             {
                 if (GameObject.class.isInstance(contact.getFixtureB().getBody().getUserData())) {
-                	b = (GameObject<?>) contact.getFixtureB().getBody().getUserData();
+                	b = (GameObject) contact.getFixtureB().getBody().getUserData();
                     evalDamage(b, impulse);
                 }
             }
@@ -95,7 +95,7 @@ public class ContactManager implements ContactListener {
      * @param object Current object
      * @param impulse Impulse
      */
-    protected void evalDamage(GameObject<?> object, ContactImpulse impulse) {
+    protected void evalDamage(GameObject object, ContactImpulse impulse) {
         if (Destructible.class.isInstance(object)) {
             /* Hit and check final health status */
             if (((Destructible)object).getDamageModel() == null)

@@ -18,7 +18,7 @@ public class CameraHelper {
     private int CAMERA_LEFT_LIMIT;
     private int CAMERA_UP_LIMIT;
     private int CAMERA_DOWN_LIMIT;
-	private GameObject<?> target;
+	private GameObject target;
 	public boolean followTarget = true;
 	
 	private boolean culling = true;
@@ -49,7 +49,7 @@ public class CameraHelper {
 		camera.zoom = zoom;
 	}
 	
-	public void setTarget(GameObject<?> object) {
+	public void setTarget(GameObject object) {
 		this.target = object;
 	}
 	

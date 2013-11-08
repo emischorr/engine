@@ -9,20 +9,16 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 
-public abstract class AnimatedGameObject<WORLD extends GameWorld> extends GameObject<WORLD> {
+public abstract class AnimatedGameObject extends GameObject {
 	private transient Animation currentAnimation;
 	private float stateTime = 0;
-
-	public AnimatedGameObject(WORLD world) {
-		super(world);
+	
+	protected AnimatedGameObject(BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
+		this(type, bodyWidth, bodyHeight, linearDamping, angularDamping, Scaling.stretch);
 	}
 	
-	protected AnimatedGameObject(WORLD world, BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
-		this(world, type, bodyWidth, bodyHeight, linearDamping, angularDamping, Scaling.stretch);
-	}
-	
-	public AnimatedGameObject(WORLD world, BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
-		super(world, type, bodyWidth, bodyHeight, linearDamping, angularDamping, scaling);
+	public AnimatedGameObject(BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
+		super(type, bodyWidth, bodyHeight, linearDamping, angularDamping, scaling);
 	}
 	
 	protected void setAnimation(Animation animation) {
