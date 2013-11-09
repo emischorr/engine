@@ -37,7 +37,6 @@ public abstract class GameWorld {
 	
     private long gameTime;
     
-    @SuppressWarnings("rawtypes")
 	private Level level;
     
 	public Background background;
@@ -88,7 +87,6 @@ public abstract class GameWorld {
         effectManager = new EffectManager();
 	}
 	
-	@SuppressWarnings({ "rawtypes" })
 	public boolean load(String levelName) {
 		try {
 			level = (Level)Class.forName(levelName).getConstructor(this.getClass()).newInstance(this);

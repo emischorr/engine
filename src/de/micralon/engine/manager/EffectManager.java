@@ -17,6 +17,7 @@ public class EffectManager implements Disposable {
 	
 	// temp vars
 	private PooledEffect effect;
+	private int free = 0;
 	
 	public EffectManager() {
 		this(DEFAULT_CAPACITY);
@@ -54,6 +55,13 @@ public class EffectManager implements Disposable {
 	
 	public int getPeak() {
 		return peak;
+	}
+	
+	public int getFree() {
+		for (ParticleEffectPool pool : pools.values()) {
+			free += pool.getFree();
+		}
+		return free;
 	}
 	
 	public int getCount() {

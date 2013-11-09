@@ -7,13 +7,8 @@ import com.badlogic.gdx.utils.Array;
 import de.micralon.engine.commands.Command;
 
 
-public abstract class Level<WORLD> {
-	protected final WORLD world;
+public abstract class Level {
 	protected final Array<Command> commands = new Array<Command>();
-	
-	public Level(WORLD world) {
-		this.world = world;
-	}
 	
 	public void load() {}
 	
@@ -29,9 +24,9 @@ public abstract class Level<WORLD> {
 		}
 	}
 	
-	protected final void buildMap(GameWorld world, String mapName) {
+	protected final void buildMap(String mapName) {
 		TiledMap map = new TmxMapLoader().load("maps/"+mapName+".tmx");
-		MapBuilder mapBuilder = new MapBuilder(world, "maps/materials.xml", 2f);
+		MapBuilder mapBuilder = new MapBuilder(GameWorld.ctx, "maps/materials.xml", 2f);
 		mapBuilder.build(map);
 	}
 	

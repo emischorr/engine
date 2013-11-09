@@ -1,17 +1,17 @@
 package de.micralon.engine.commands;
 
-import de.micralon.engine.Level;
+import de.micralon.engine.GameWorld;
 
 public class NextLevel implements Command {
-	private Level<?> level;
+	private String level;
     
-    public NextLevel(Level<?> level) {
+    public NextLevel(String level) {
             this.level = level;
     }
     
     @Override
     public void update (float delta) {
-//            GameWorld.ctx.load(level);
+            GameWorld.ctx.load(level);
     }
 
     @Override
