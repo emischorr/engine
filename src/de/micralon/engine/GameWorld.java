@@ -89,7 +89,7 @@ public abstract class GameWorld {
 	
 	public boolean load(String levelName) {
 		try {
-			level = (Level)Class.forName(levelName).getConstructor(this.getClass()).newInstance(this);
+			level = (Level)Class.forName(levelName).getConstructor().newInstance();
 			level.load();
 			Gdx.app.log("GameWorld", "Loaded level "+level);
 			return true;

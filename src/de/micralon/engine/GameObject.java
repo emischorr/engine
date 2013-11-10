@@ -112,8 +112,10 @@ public abstract class GameObject extends Image implements Reuseable {
 	}
 	
 	public void setDegree(float degree) {
-		getBody().setTransform(getPos(), MathUtils.degreesToRadians*degree);
-		needUpdate();
+		if (body != null) {
+			getBody().setTransform(getPos(), MathUtils.degreesToRadians*degree);
+			needUpdate();
+		}
 	}
 	
 	public float getDegree() {
