@@ -1,4 +1,4 @@
-package de.micralon.engine.commands;
+package de.micralon.engine.scripting;
 
 public interface Command {
 	public void update(float delta);

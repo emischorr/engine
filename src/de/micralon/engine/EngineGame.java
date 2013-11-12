@@ -14,6 +14,8 @@ public class EngineGame extends Game {
     public static final boolean DEV_MODE = true;
     public static final boolean SHOW_FPS = false;
     
+    public static EngineGame ctx;
+    
     // Services
     private PreferencesManager preferencesManager;
     private MusicManager musicManager;
@@ -34,6 +36,7 @@ public class EngineGame extends Game {
 	@Override
 	public void create() {
 		Gdx.app.log( LOG, "Creating game on " + Gdx.app.getType() );
+		ctx = this;
 		
 		initServices();
 	}
