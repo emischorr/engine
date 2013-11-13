@@ -17,13 +17,14 @@ import de.micralon.engine.manager.LightManager;
 import de.micralon.engine.manager.ObjectManager;
 import de.micralon.engine.net.Network.ObjectsData;
 import de.micralon.engine.net.NetworkNode;
+import de.micralon.engine.text.Text;
 
 public abstract class GameWorld {
 	public LightManager lightManager;
 	public World box2dWorld;
 	public Stage stage;
 	public CameraHelper cameraHelper;
-	public Array<NameTag> tags = new Array<NameTag>();
+	public Array<Text> texts = new Array<Text>();
 	
 	public static GameWorld ctx;
 	
@@ -180,6 +181,10 @@ public abstract class GameWorld {
 		stage.act(deltaTime); // update game stage
 		objectManager.update(); // delete objects and update state
 		effectManager.update(); // delete effects
+		
+		for (Text text : texts) {
+			text.update(deltaTime);
+		}
 	}
 	
 	public void sync(NetworkNode node) {

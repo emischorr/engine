@@ -5,20 +5,20 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+
+import de.micralon.engine.text.Text;
 
 public class GameRenderer {
 	private GameWorld world;
 	private SpriteBatch batch;
-	private BitmapFont font;
     private OrthographicCamera camera;
     private Box2DDebugRenderer debugRenderer;
     
     private final RayHandler rayHandler;
     
-    public boolean drawTags = true;
+    public boolean drawText = true;
     
     public boolean drawBodies = true;
 	public boolean drawJoints = false;
@@ -30,13 +30,12 @@ public class GameRenderer {
 	public GameRendererOptions options;
 	
 	public GameRenderer(GameWorld world, SpriteBatch batch) {
-		this(world, batch, null, new GameRendererOptions());
+		this(world, batch, new GameRendererOptions());
 	}
     
-    public GameRenderer(GameWorld world, SpriteBatch batch, BitmapFont font, GameRendererOptions options) {
+    public GameRenderer(GameWorld world, SpriteBatch batch, GameRendererOptions options) {
     	this.world = world;
     	this.batch = batch;
-    	this.font = font;
     	this.options = options;
     		
         debugRenderer = new Box2DDebugRenderer(drawBodies, drawJoints, drawAAAB, drawInactiveBodies, drawVelocities, drawContacts);
@@ -82,10 +81,10 @@ public class GameRenderer {
         	debugRenderer.render(world.box2dWorld, camera.combined);
         }
         
-        if (drawTags && font != null) {
+        if (drawText) {
         	batch.begin();
-        	for (NameTag tag : world.tags) {
-        		tag.draw(batch, font);
+        	for (Text text : world.texts) {
+        		text.draw(batch);
         	}
         	batch.end();
         }
