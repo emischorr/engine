@@ -40,23 +40,27 @@ public class EffectManager implements Disposable {
 	}
 	
 	public void showEffect(String name, float xPos, float yPos) {
-		effect = getEffect(name);
-		ParticleEffectActor actor = new ParticleEffectActor(effect);
+		ParticleEffectActor actor = getEffectActor(name);
 		actor.setPosition(xPos, yPos);
 		actor.start();
 		GameWorld.ctx.bg.addActor(actor);
+	}
+	
+	public ParticleEffectActor getEffectActor(String name) {
+		effect = getEffect(name);
+		return new ParticleEffectActor(effect);
+	}
+	
+	public PooledEffect getEffect(String name, float xPos, float yPos) {
+		effect = getEffect(name);
+		effect.setPosition(xPos, yPos);
+		return effect;
 	}
 	
 	public PooledEffect getEffect(String name) {
 		effect = pools.get(name).obtain();
 		effects.add(effect);
 		if (effects.size > peak) peak = effects.size;
-		return effect;
-	}
-	
-	public PooledEffect getEffect(String name, float xPos, float yPos) {
-		effect = getEffect(name);
-		effect.setPosition(xPos, yPos);
 		return effect;
 	}
 	

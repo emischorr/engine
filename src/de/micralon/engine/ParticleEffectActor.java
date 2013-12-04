@@ -9,7 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class ParticleEffectActor extends Actor {
-	private boolean started = false;
+	private boolean holdEffect = false;
+	private boolean running = false;
 	private ParticleEffect effect;
 	private float rotation;
 
@@ -24,7 +25,16 @@ public class ParticleEffectActor extends Actor {
 	
 	public void start() {
 		effect.start(); //need to start the particle spawning
-		started = true;
+		running = true;
+	}
+	
+	public void stop() {
+		if (running) {
+			effect.allowCompletion();
+			effect.reset();
+//			effect.setDuration(0);
+			running = false;
+		}
 	}
 	
 	public void rotate(float degrees) {
@@ -46,14 +56,28 @@ public class ParticleEffectActor extends Actor {
 		super.act(delta);
 		effect.setPosition(getX(), getY());
 		effect.update(delta);
-		if (!started) {
+		if (!running) {
 			start();
 		}
-		if (effect.isComplete()) {
-			started = false;
-			dispose(); // particle effect (return to pool if pooled)
-			remove(); // from stage
-		}
+//		if (effect.isComplete()) {
+//			running = false;
+//			if (!holdEffect) {
+//				dispose(); // particle effect (return to pool if pooled)
+//				remove(); // from stage
+//			}
+//		}
+	}
+	
+	@Override
+	public void setPosition(float x, float y) {
+		super.setPosition(x, y);
+		effect.setPosition(x, y);
+	}
+	
+	@Override
+	public boolean remove() {
+		dispose();
+		return super.remove();
 	}
 
 	public ParticleEffect getEffect() {
