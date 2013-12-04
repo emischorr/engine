@@ -1,4 +1,6 @@
-package de.micralon.engine.commands;
+package de.micralon.engine.scripting.commands;
+
+import de.micralon.engine.scripting.Command;
 
 public class Wait implements Command {
 	float duration;

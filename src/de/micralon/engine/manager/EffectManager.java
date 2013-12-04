@@ -8,6 +8,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 
+import de.micralon.engine.GameWorld;
+import de.micralon.engine.ParticleEffectActor;
+
 public class EffectManager implements Disposable {
 	private ObjectMap<String, ParticleEffectPool> pools;
 	private Array<PooledEffect> effects;
@@ -34,6 +37,14 @@ public class EffectManager implements Disposable {
 	
 	public void addEffect(String name, ParticleEffect effect) {
 		pools.put(name, new ParticleEffectPool(effect, 1, 20));
+	}
+	
+	public void showEffect(String name, float xPos, float yPos) {
+		effect = getEffect(name);
+		ParticleEffectActor actor = new ParticleEffectActor(effect);
+		actor.setPosition(xPos, yPos);
+		actor.start();
+		GameWorld.ctx.bg.addActor(actor);
 	}
 	
 	public PooledEffect getEffect(String name) {

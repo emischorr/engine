@@ -13,6 +13,7 @@ public class SpawnPoint implements SpawnPointInterface {
 	@Override
 	public void spawn(GameObject obj) {
 		obj.setPos(posX, posY);
+		GameWorld.ctx.addObject(obj);
 	}
 
 }
