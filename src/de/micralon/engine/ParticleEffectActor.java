@@ -60,7 +60,7 @@ public class ParticleEffectActor extends Actor {
 			start();
 		}
 		if (effect.isComplete()) {
-			running = false;
+			stop();
 			if (!holdEffect) {
 				dispose(); // particle effect (return to pool if pooled)
 				remove(); // from stage
@@ -77,6 +77,7 @@ public class ParticleEffectActor extends Actor {
 	@Override
 	public boolean remove() {
 		if (super.remove()) {
+			stop();
 			dispose();
 			return true;
 		} else {
