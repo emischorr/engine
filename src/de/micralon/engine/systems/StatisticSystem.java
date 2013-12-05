@@ -36,11 +36,11 @@ public class StatisticSystem {
 	}
 	
 	public int getPlayerPoints(int playerID) {
-		return playerPoints.get(playerID);
+		return playerPoints.get(playerID) != null ? playerPoints.get(playerID) : 0;
 	}
 	
 	public void addPoints(int playerID, int points) {
-		playerPoints.put(playerID, playerPoints.get(playerID)+points);
+		playerPoints.put(playerID, getPlayerPoints(playerID)+points);
 	}
 	
 	public ObjectMap<Integer, Integer> getPlayerKills() {
@@ -48,11 +48,11 @@ public class StatisticSystem {
 	}
 	
 	public int getPlayerKills(int playerID) {
-		return playerKills.get(playerID);
+		return playerKills.get(playerID) != null ? playerKills.get(playerID) : 0;
 	}
 	
 	public void addKill(int playerID) {
-		playerKills.put(playerID, playerKills.get(playerID)+1);
+		playerKills.put(playerID, getPlayerKills(playerID)+1);
 	}
 	
 	public ObjectMap<Integer, Integer> getPlayerDeaths() {
@@ -60,10 +60,10 @@ public class StatisticSystem {
 	}
 	
 	public int getPlayerDeaths(int playerID) {
-		return playerDeaths.get(playerID);
+		return playerDeaths.get(playerID) != null ? playerDeaths.get(playerID) : 0;
 	}
 	
 	public void addDeath(int playerID) {
-		playerDeaths.put(playerID, playerDeaths.get(playerID)+1);
+		playerDeaths.put(playerID, getPlayerDeaths(playerID)+1);
 	}
 }

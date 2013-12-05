@@ -31,4 +31,6 @@ public interface Destructible {
      * @return Body.
      */
     Body getBody();
+    
+    int getScore();
 }
