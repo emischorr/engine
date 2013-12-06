@@ -25,7 +25,7 @@ public abstract class ObjectStore<T> implements Disposable {
 			peak++;
 		}
 		usedObjects.add(tempT);
-		Gdx.app.log("ObjectStore", "get(). new size: "+this.toString());
+//		Gdx.app.log("ObjectStore", "get(). new size: "+this.toString());
 		return tempT;
 	}
 	

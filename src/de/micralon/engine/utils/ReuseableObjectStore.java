@@ -16,7 +16,7 @@ public abstract class ReuseableObjectStore<T extends Reuseable> extends ObjectSt
 			tempT = create();
 		}
 		usedObjects.add(tempT);
-		Gdx.app.log("ReuseableObjectStore", "get(). Size: "+this.toString());
+//		Gdx.app.log("ReuseableObjectStore", "get(). Size: "+this.toString());
 		return tempT;
 	}
 	
