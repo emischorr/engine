@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 public abstract class ObjectStore<T> implements Disposable {
-	private int peak = 0;
+	protected int peak = 0;
 	protected final Array<T> usedObjects = new Array<T>();
 	protected final Array<T> freeObjects = new Array<T>();
 	
@@ -39,6 +39,10 @@ public abstract class ObjectStore<T> implements Disposable {
 	
 	public Array<T> getObjects() {
 		return usedObjects;
+	}
+	
+	public int getCount() {
+		return usedObjects != null ? usedObjects.size : 0;
 	}
 	
 	public int getPeak() {
