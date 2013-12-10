@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class ParticleEffectActor extends Actor {
-	private boolean holdEffect = false;
 	private boolean running = false;
 	private ParticleEffect effect;
 	private float rotation;
@@ -60,11 +59,7 @@ public class ParticleEffectActor extends Actor {
 			start();
 		}
 		if (effect.isComplete()) {
-			stop();
-			if (!holdEffect) {
-				dispose(); // particle effect (return to pool if pooled)
-				remove(); // from stage
-			}
+			remove();
 		}
 	}
 	
@@ -89,8 +84,12 @@ public class ParticleEffectActor extends Actor {
 		return effect;
 	}
 	
-	public void dispose() {
-		effect.dispose();
-		if (effect instanceof PooledEffect) ((PooledEffect) effect).free();
+	public void dispose() { 
+		if (effect instanceof PooledEffect) { 
+			GameWorld.ctx.effectManager.free((PooledEffect) effect);
+			// ((PooledEffect) effect).free();
+		} else {
+			effect.dispose();
+		}
 	}
 }

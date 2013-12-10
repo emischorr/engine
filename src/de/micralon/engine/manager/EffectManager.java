@@ -65,6 +65,7 @@ public class EffectManager implements Disposable {
 	}
 	
 	public void free(PooledEffect effect) {
+		effects.removeValue(effect, true);
 		effect.free();
 	}
 	
@@ -73,6 +74,7 @@ public class EffectManager implements Disposable {
 	}
 	
 	public int getFree() {
+		free = 0;
 		for (ParticleEffectPool pool : pools.values()) {
 			free += pool.getFree();
 		}
@@ -86,8 +88,7 @@ public class EffectManager implements Disposable {
 	public void update() {
 		for (PooledEffect effect : effects) {
 			if (effect.isComplete()) {
-				effects.removeValue(effect, true);
-				effect.free();
+				free(effect);
 			}
 		}
 	}

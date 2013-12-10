@@ -45,6 +45,10 @@ public abstract class ObjectStore<T> implements Disposable {
 		return usedObjects != null ? usedObjects.size : 0;
 	}
 	
+	public int getFree() {
+		return freeObjects != null ? freeObjects.size : 0;
+	}
+	
 	public int getPeak() {
 		return peak;
 	}
