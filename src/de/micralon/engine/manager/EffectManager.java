@@ -101,7 +101,10 @@ public class EffectManager implements Disposable {
 
 	@Override
 	public void dispose() {
-		pools.clear();
+		for (PooledEffect effect : effects) {
+			free(effect);
+		}
 		effects.clear();
+		pools.clear();
 	}
 }
