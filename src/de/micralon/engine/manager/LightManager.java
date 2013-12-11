@@ -45,6 +45,7 @@ public class LightManager implements Disposable {
 		tempPL.setDistance(distance);
 		tempPL.setPosition(0, 0);
 		tempPL.setStaticLight(true); // use static light as default
+		tempPL.setActive(true);
 		return tempPL;
 	}
 	
@@ -55,6 +56,7 @@ public class LightManager implements Disposable {
 		tempCL.setDistance(distance);
 		tempCL.setPosition(0, 0);
 		tempCL.setStaticLight(true); // use static light as default
+		tempCL.setActive(true);
 		return tempCL;
 	}
 	
