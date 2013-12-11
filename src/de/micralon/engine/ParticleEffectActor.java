@@ -87,6 +87,7 @@ public class ParticleEffectActor extends Actor {
 	public void dispose() { 
 		if (effect instanceof PooledEffect) { 
 			GameWorld.ctx.effectManager.free((PooledEffect) effect);
+			// TODO: make this work...
 			// ((PooledEffect) effect).free();
 		} else {
 			effect.dispose();
