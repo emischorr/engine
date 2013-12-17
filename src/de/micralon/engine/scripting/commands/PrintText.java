@@ -7,8 +7,8 @@ import de.micralon.engine.text.Text;
 public class PrintText implements Command {
 	private Text text;
 	
-	public PrintText() {
-		
+	public PrintText(Text text) {
+		this.text = text;
 	}
 
 	@Override
