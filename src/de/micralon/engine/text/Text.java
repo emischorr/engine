@@ -29,6 +29,10 @@ public class Text {
 		bounds = this.font.getBounds(text);
 	}
 	
+	public void setText(String text) {
+		this.text = text;
+	}
+	
 	public void update(float deltaTime) {
 		stateTime += deltaTime;
 	}
