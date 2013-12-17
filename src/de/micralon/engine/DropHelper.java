@@ -5,6 +5,11 @@ import java.util.Random;
 import com.badlogic.gdx.utils.Array;
 
 public class DropHelper {
+	public static final int DROP_BASE_VALUE = 100;
+	
+	public static Array<Dropable> drop() {
+		return drop(DROP_BASE_VALUE, drops, false);
+	}
 	
 	public static Array<Dropable> drop(int dropValue) {
 		return drop(dropValue, drops, false);
@@ -16,7 +21,7 @@ public class DropHelper {
 			Random random = new Random();
 			for (Drop drop : drops) {
 				// calculate chance to drop this
-		 		float chance = (dropValue/drop.valueLevel) * drop.minChance;
+		 		float chance = (dropValue/DROP_BASE_VALUE/drop.valueLevel) * drop.minChance;
 				if (chance > drop.maxChance) chance = drop.maxChance; // limit chance
 				// do we have luck?
 				if (random.nextInt(100)/100f <= chance) {
