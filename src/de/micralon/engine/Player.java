@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class Player {
 	public int ID;
-	public String name;
+	public String name = "Player";
 	public Color color = Color.RED;
 	
 	public transient Camera camera;
