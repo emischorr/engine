@@ -17,7 +17,7 @@ public class DropHelper {
 			for (Drop drop : drops) {
 				// calculate chance to drop this
 		 		float chance = (dropValue/drop.valueLevel) * drop.minChance;
-				if (drop.minChance > drop.maxChance) chance = drop.maxChance;
+				if (chance > drop.maxChance) chance = drop.maxChance; // limit chance
 				// do we have luck?
 				if (random.nextInt(100)/100f <= chance) {
 					items.add(drop.item);
@@ -28,7 +28,7 @@ public class DropHelper {
 		return items;
 	}
 	
-	public static Array<Drop> drops;
+	public static Array<Drop> drops = new Array<Drop>();
 	
 	static {
 //		drops.add(new Drop());
@@ -44,6 +44,12 @@ public class DropHelper {
 		
 		public Drop(Dropable item) {
 			this.item = item;
+		}
+		
+		public Drop(Dropable item, float maxChance, float minChance) {
+			this.item = item;
+			this.maxChance = maxChance;
+			this.minChance = minChance;
 		}
 		
 		public Drop(Dropable item, float maxChance, float minChance, int valueLevel) {
