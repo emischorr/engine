@@ -11,7 +11,7 @@ public class Text {
 	protected BitmapFont font;
 	protected Color color;
 	protected String text;
-	protected float x, y, alpha;
+	protected float x, y, alpha = 1;
 	
 	protected float stateTime;
 	
