@@ -19,7 +19,6 @@ public class Text {
 	private TextBounds bounds;
 	
 	public Text(BitmapFont font, Color color, String text, float x, float y) {
-		GameWorld.ctx.texts.add(this);
 		this.font = font;
 		this.color = color;
 		this.text = text;
@@ -27,6 +26,10 @@ public class Text {
 		this.y = y;
 		
 		bounds = this.font.getBounds(text);
+	}
+	
+	public void addToWorld() {
+		GameWorld.ctx.texts.add(this);
 	}
 	
 	public void setText(String text) {

@@ -14,6 +14,7 @@ public class NameTag extends Text {
 	
 	public NameTag(BitmapFont font, Color color, String text) {
 		super(font, color, text, 0, 0);
+		addToWorld();
 	}
 	
 	public void updatePos(Vector2 newPos) {

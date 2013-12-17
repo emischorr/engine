@@ -57,9 +57,9 @@ public class ObjectManager implements Disposable {
 	 * @param obj GameObject to remove
 	 */
 	public void remove(GameObject obj) {
-//		objects.removeValue(obj, true);
-		objectMap.remove(obj.getObjectID());
-		deleteList.add(obj);
+//		objectMap.remove(obj.getObjectID());
+//		deleteList.add(obj);
+		deleteList.add(objectMap.remove(obj.getObjectID()));
 	}
 	
 	public void changeID(long oldID, long newID) {
@@ -121,17 +121,22 @@ public class ObjectManager implements Disposable {
 	 */
 	public void update() {
 		for (GameObject obj : objectMap.values()) {
-			// update object state
-			obj.update();
-			// check for destroyed objects
-			if (obj instanceof Destructible && !((Destructible) obj).isDestroyed() && ((Destructible) obj).getDamageModel().getHealth() <= 0) {
-				((Destructible) obj).setDestroyed();
+			if (obj != null) {
+				// update object state
+				obj.update();
+				// check for destroyed objects
+				if (obj instanceof Destructible && !((Destructible) obj).isDestroyed() && ((Destructible) obj).getDamageModel().getHealth() <= 0) {
+					((Destructible) obj).setDestroyed();
+				}
+			} else {
+				// TODO: whats wrong here... why is obj == null?!
+				return;
 			}
 		}
 		
 		// delete objects
 		for (GameObject obj : deleteList) {
-			obj.destroy();
+			obj.destroy(); // destroy GameObject i.e. destroy body, free lights, ...
 		}
 		deleteList.clear();
 	}
