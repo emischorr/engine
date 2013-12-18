@@ -13,7 +13,7 @@ public class PlayerManager {
 	}
 	
 	public void addPlayer(Player player) {
-		player.ID = nextID++;
+		player.ID = ++nextID;
 		players.put(player.ID, player);
 	}
 	
@@ -31,5 +31,16 @@ public class PlayerManager {
 	
 	public int playerCount() {
 		return players.size();
+	}
+	
+	public HashMap<Integer, Player> getData() {
+		return players;
+	}
+	
+	public void setData(HashMap<Integer, Player> players) {
+		this.players = players;
+		for (Player player : players.values()) {
+			if (nextID < player.ID) nextID = player.ID;
+		}
 	}
 }
