@@ -1,21 +1,35 @@
 package de.micralon.engine.manager;
 
-import com.badlogic.gdx.utils.Array;
+import java.util.HashMap;
 
 import de.micralon.engine.Player;
 
 public class PlayerManager {
-	private Array<Player> players;
+	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
+	private int nextID;
 	
 	public PlayerManager() {
 		
 	}
 	
 	public void addPlayer(Player player) {
-		players.add(player);
+		player.ID = nextID++;
+		players.put(player.ID, player);
+	}
+	
+	public Player getPlayer(int id) {
+		return players.get(id);
+	}
+	
+	public void removePlayer(int id) {
+		players.remove(id);
 	}
 	
 	public void removePlayer(Player player) {
-		players.removeValue(player, true);
+		removePlayer(player.ID);
+	}
+	
+	public int playerCount() {
+		return players.size();
 	}
 }

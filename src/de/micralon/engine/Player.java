@@ -16,11 +16,6 @@ public class Player {
 	public Player() {}
 	
 	public Player(String name) {
-		this(0, name);
-	}
-	
-	public Player(int ID, String name) {
-		this.ID = ID;
 		this.name = name;
 		
 		//TODO: set correct viewport

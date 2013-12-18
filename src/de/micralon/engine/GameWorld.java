@@ -1,7 +1,5 @@
 package de.micralon.engine;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -15,6 +13,7 @@ import de.micralon.engine.manager.ContactManager;
 import de.micralon.engine.manager.EffectManager;
 import de.micralon.engine.manager.LightManager;
 import de.micralon.engine.manager.ObjectManager;
+import de.micralon.engine.manager.PlayerManager;
 import de.micralon.engine.net.Network.ObjectsData;
 import de.micralon.engine.net.NetworkNode;
 import de.micralon.engine.text.Text;
@@ -50,7 +49,8 @@ public abstract class GameWorld {
 	
 	private ObjectManager objectManager;
 	public EffectManager effectManager;
-	public HashMap<Integer, Player> players = new HashMap<Integer, Player>();
+	public PlayerManager playerManager;
+//	public HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
 	// temp vars
 	Array<Contact> contacts;
@@ -86,6 +86,7 @@ public abstract class GameWorld {
         
         objectManager = new ObjectManager(trackUpdates);
         effectManager = new EffectManager();
+        playerManager = new PlayerManager();
 	}
 	
 	public boolean load(String levelName) {
@@ -132,10 +133,8 @@ public abstract class GameWorld {
 	 * Only called by server
 	 */
 	public synchronized void addPlayer(Player player, boolean local) {
-		// set player ID
-		player.ID = players.size();
 		// add player to list
-		players.put(player.ID, player);
+		playerManager.addPlayer(player);
 		// add player to local world
 		if (local) {
 			localPlayer = player;
@@ -143,7 +142,7 @@ public abstract class GameWorld {
 	}
 	
 	public void removePlayer(int playerID) {
-		players.remove(playerID);
+		playerManager.removePlayer(playerID);
 	}
 	
 	public void addObject(GameObject obj) {
