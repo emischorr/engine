@@ -102,6 +102,10 @@ public abstract class GameWorld {
 		}
 	}
 	
+	public Level currentLevel() {
+		return level;
+	}
+	
 	/**
 	 * GameTime in milliseconds
 	 * @return the actual game time in ms

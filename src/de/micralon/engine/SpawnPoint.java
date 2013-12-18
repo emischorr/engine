@@ -15,5 +15,14 @@ public class SpawnPoint implements SpawnPointInterface {
 		obj.setPos(posX, posY);
 		GameWorld.ctx.addObject(obj);
 	}
+	
+	public void respawn(int playerID) {
+		respawn(GameWorld.ctx.playerManager.getPlayer(playerID).character);
+	}
+	
+	public void respawn(GameObject obj) {
+		obj.reuse();
+		spawn(obj);
+	}
 
 }

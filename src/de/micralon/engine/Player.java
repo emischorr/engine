@@ -8,6 +8,7 @@ public class Player {
 	public int ID;
 	public String name = "Player";
 	public Color color = Color.RED;
+	public boolean alive = true;
 	
 	public transient Camera camera;
 	

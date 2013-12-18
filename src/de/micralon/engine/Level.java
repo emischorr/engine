@@ -5,10 +5,13 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 import de.micralon.engine.scripting.Scene;
 
-
 public abstract class Level extends Scene {
 	
 	public void load() {}
+	
+	public void playerDied(int playerID) {
+		GameWorld.ctx.playerManager.getPlayer(playerID).alive = false;
+	}
 	
 	protected final void buildMap(String mapName) {
 		TiledMap map = new TmxMapLoader().load("maps/"+mapName+".tmx");
