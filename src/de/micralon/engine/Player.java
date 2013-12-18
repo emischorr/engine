@@ -9,6 +9,7 @@ public class Player {
 	public String name = "Player";
 	public Color color = Color.RED;
 	public boolean alive = true;
+	public long timeOfDeath;
 	
 	public transient Camera camera;
 	

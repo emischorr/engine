@@ -10,7 +10,7 @@ public abstract class Level extends Scene {
 	public void load() {}
 	
 	public void playerDied(int playerID) {
-		GameWorld.ctx.playerManager.getPlayer(playerID).alive = false;
+		GameWorld.ctx.playerManager.killPlayer(playerID);
 	}
 	
 	protected final void buildMap(String mapName) {
