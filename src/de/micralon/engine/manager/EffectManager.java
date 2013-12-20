@@ -8,12 +8,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 
+import de.micralon.engine.Effect;
 import de.micralon.engine.GameWorld;
 import de.micralon.engine.ParticleEffectActor;
 
 public class EffectManager implements Disposable {
 	private ObjectMap<String, ParticleEffectPool> pools;
 	private Array<PooledEffect> effects;
+	private Array<Effect> customEffects;
 	private int peak;
 	
 	private static final int DEFAULT_CAPACITY = 32;
@@ -29,6 +31,7 @@ public class EffectManager implements Disposable {
 	public EffectManager(int initCapacity) {
 		pools = new ObjectMap<String, ParticleEffectPool>(initCapacity);
 		effects = new Array<PooledEffect>(initCapacity/2);
+		customEffects = new Array<Effect>(initCapacity/2);
 	}
 	
 	public Array<String> getEffectNames() {
@@ -37,6 +40,10 @@ public class EffectManager implements Disposable {
 	
 	public void addEffect(String name, ParticleEffect effect) {
 		pools.put(name, new ParticleEffectPool(effect, 1, 20));
+	}
+	
+	public void showEffect(Effect effect, float xPos, float yPos) {
+		showEffect(effect.getEffectName(), xPos, yPos);
 	}
 	
 	public void showEffect(String name, float xPos, float yPos) {
@@ -85,10 +92,19 @@ public class EffectManager implements Disposable {
 		return effects.size;
 	}
 	
-	public void update() {
+	public void update(float deltaTime) {
 		for (PooledEffect effect : effects) {
 			if (effect.isComplete()) {
 				free(effect);
+			}
+		}
+		
+		for (Effect effect : customEffects) {
+			if (effect.isComplete()) {
+				customEffects.removeValue(effect, true);
+				effect.dispose();
+			} else {
+				effect.update(deltaTime);
 			}
 		}
 	}

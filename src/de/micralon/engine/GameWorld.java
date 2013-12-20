@@ -183,7 +183,7 @@ public abstract class GameWorld {
 		
 		stage.act(deltaTime); // update game stage
 		objectManager.update(); // delete objects and update state
-		effectManager.update(); // delete effects
+		effectManager.update(deltaTime); // delete effects
 		
 		for (Text text : texts) {
 			text.update(deltaTime);
