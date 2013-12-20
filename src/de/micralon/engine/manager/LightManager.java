@@ -27,15 +27,22 @@ public class LightManager implements Disposable {
 	private ConeLight tempCL;
 	
 	public LightManager(World box2dWorld) {
+		this(box2dWorld, true);
+	}
+	
+	public LightManager(World box2dWorld, boolean diffuseLight) {
 //		RayHandler.setGammaCorrection(true);
-        RayHandler.useDiffuseLight(true);
+        RayHandler.useDiffuseLight(diffuseLight);
 		rayHandler = new RayHandler(box2dWorld);
-		rayHandler.setAmbientLight(0.4f, 0.4f, 0.4f, 0.3f);
-		rayHandler.setCulling(true);            
+		rayHandler.setAmbientLight(0.4f, 0.4f, 0.4f, 0.3f);          
         rayHandler.setBlur(true);
         rayHandler.setBlurNum(1);
         rayHandler.setShadows(true);
         rayHandler.setCulling(true);
+	}
+	
+	public void setAmbientLight(float r, float g, float b, float a) {
+		rayHandler.setAmbientLight(r, g, b, a);
 	}
 	
 	public PointLight getPointLight(Color color, float distance) {
