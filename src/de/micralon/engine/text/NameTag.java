@@ -9,8 +9,9 @@ import com.badlogic.gdx.math.Vector3;
 import de.micralon.engine.GameWorld;
 
 public class NameTag extends Text {
-	private Vector3 pos = new Vector3();
 	public boolean pointer = false;
+	// temp vars
+	private Vector3 pos = new Vector3();
 	
 	public NameTag(BitmapFont font, Color color, String text) {
 		super(font, color, text, 0, 0);
