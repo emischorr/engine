@@ -1,5 +1,6 @@
 package de.micralon.engine.manager;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -120,6 +121,12 @@ public class ObjectManager implements Disposable {
 	 * Make sure to call this method AFTER your world step. 
 	 */
 	public void update() {
+		// delete objects
+		for (GameObject obj : deleteList) {
+			obj.destroy(); // destroy GameObject i.e. destroy body, free lights, ...
+		}
+		deleteList.clear();
+		
 		for (GameObject obj : objectMap.values()) {
 			if (obj != null) {
 				// update object state
@@ -130,15 +137,10 @@ public class ObjectManager implements Disposable {
 				}
 			} else {
 				// TODO: whats wrong here... why is obj == null?!
+				Gdx.app.log("ObjectManager", "WARNING: obj is null!");
 				return;
 			}
 		}
-		
-		// delete objects
-		for (GameObject obj : deleteList) {
-			obj.destroy(); // destroy GameObject i.e. destroy body, free lights, ...
-		}
-		deleteList.clear();
 	}
 
 	@Override
