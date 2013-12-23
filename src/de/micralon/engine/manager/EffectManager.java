@@ -44,6 +44,7 @@ public class EffectManager implements Disposable {
 	
 	public void showEffect(Effect effect, float xPos, float yPos) {
 		showEffect(effect.getEffectName(), xPos, yPos);
+		customEffects.add(effect);
 	}
 	
 	public void showEffect(String name, float xPos, float yPos) {
