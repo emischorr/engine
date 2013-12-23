@@ -41,8 +41,8 @@ public class Text {
 	}
 
 	public void draw (SpriteBatch batch) {
-//        bounds = Assets.font.getBounds(text);
+//        bounds = this.font.getBounds(text);
         font.setColor(color.r, color.g, color.b, alpha);
-        font.draw(batch, text, x - (int)(bounds.width / 2), y + (int)(bounds.height / 2));
+        font.draw(batch, text, x - (int)(bounds.width / 2), y - (int)(bounds.height / 2));
 	}
 }
