@@ -18,7 +18,7 @@ public class LightManager implements Disposable {
 	private ObjectStore<PointLight> pointLights;
 	private ObjectStore<ConeLight> coneLights;
 	
-	private static final int RAY_NUMS = 500;
+	private static int RAY_NUMS = 500;
 	
 	private DirectionalLight dl;
 	
@@ -27,10 +27,10 @@ public class LightManager implements Disposable {
 	private ConeLight tempCL;
 	
 	public LightManager(World box2dWorld) {
-		this(box2dWorld, true);
+		this(box2dWorld, true, RAY_NUMS);
 	}
 	
-	public LightManager(World box2dWorld, boolean diffuseLight) {
+	public LightManager(World box2dWorld, boolean diffuseLight, int rayNums) {
 //		RayHandler.setGammaCorrection(true);
         RayHandler.useDiffuseLight(diffuseLight);
 		rayHandler = new RayHandler(box2dWorld);
@@ -39,6 +39,7 @@ public class LightManager implements Disposable {
         rayHandler.setBlurNum(1);
         rayHandler.setShadows(true);
         rayHandler.setCulling(true);
+        RAY_NUMS = rayNums;
 	}
 	
 	public void setAmbientLight(float r, float g, float b, float a) {
