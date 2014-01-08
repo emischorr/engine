@@ -2,7 +2,6 @@ package de.micralon.engine.text;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.micralon.engine.GameWorld;
@@ -15,8 +14,8 @@ public class Text {
 	
 	protected float stateTime;
 	
-	// temp vars
-	private TextBounds bounds;
+	private float height;
+	private float width;
 	
 	public Text(BitmapFont font, Color color, String text, float x, float y) {
 		this.font = font;
@@ -25,7 +24,7 @@ public class Text {
 		this.x = x;
 		this.y = y;
 		
-		bounds = this.font.getBounds(text);
+		calcBounds();
 	}
 	
 	public void addToWorld() {
@@ -34,6 +33,7 @@ public class Text {
 	
 	public void setText(String text) {
 		this.text = text;
+		calcBounds(); // update bounds since text length may have changed
 	}
 	
 	public void update(float deltaTime) {
@@ -41,8 +41,12 @@ public class Text {
 	}
 
 	public void draw (SpriteBatch batch) {
-//        bounds = this.font.getBounds(text);
         font.setColor(color.r, color.g, color.b, alpha);
-        font.draw(batch, text, x - (int)(bounds.width / 2), y - (int)(bounds.height / 2));
+        font.draw(batch, text, x - (int)(width / 2), y + (int)(height / 2));
+	}
+	
+	private void calcBounds() {
+		height = this.font.getBounds(text).height;
+		width = this.font.getBounds(text).width;
 	}
 }

@@ -178,6 +178,7 @@ public abstract class GameWorld {
 		// update level script
 		if (level != null) level.update(deltaTime);
 		
+		// TODO: try to move this at the end of the method
 		// update box2d world
 		box2dWorld.step(deltaTime, VELOCITY_ITERS, POSITION_ITERS);
 		
