@@ -36,6 +36,8 @@ public abstract class GameObject extends Image implements Reuseable {
 	protected float bodyWidth;
 	protected float bodyHeight;
 	
+	private Vector2 lastPos;
+	
 	// temp vars
 	private ObjectData data;
 	
@@ -126,7 +128,7 @@ public abstract class GameObject extends Image implements Reuseable {
 		if (body != null) {
 			return body.getPosition();
 		} else {
-			return null;
+			return lastPos;
 		}
 	}
 	
@@ -169,9 +171,11 @@ public abstract class GameObject extends Image implements Reuseable {
 	
 	/**
 	 * Don't call this directly from inside the physics step
+	 * WARNING: this destroys the body
 	 */
 	public void destroy() {
 		if (body != null) {
+			lastPos = body.getPosition();
 			GameWorld.ctx.box2dWorld.destroyBody(body);
 			body = null;
 		}
