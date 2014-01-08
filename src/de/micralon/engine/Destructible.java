@@ -16,6 +16,7 @@ public interface Destructible {
      * Set body as destroyed
      *
      * This information can be used for sprite rendering.
+     * WARNING: this method is probably called from a callback inside world's step function so better do not change physics here
      */
     void setDestroyed();
 
