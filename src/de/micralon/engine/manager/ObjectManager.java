@@ -8,6 +8,8 @@ import com.badlogic.gdx.utils.ObjectMap.Values;
 
 import de.micralon.engine.Destructible;
 import de.micralon.engine.GameObject;
+import de.micralon.engine.GameWorld;
+import de.micralon.engine.builder.BodyBuilder;
 import de.micralon.engine.net.Network.ObjectData;
 import de.micralon.engine.net.Network.ObjectsData;
 
@@ -15,6 +17,7 @@ public class ObjectManager implements Disposable {
 //	private transient Array<GameObject<?>> objects = new Array<GameObject<?>>();
 	private transient ObjectMap<Long, GameObject> objectMap;
 	private transient Array<GameObject> deleteList;
+//	private transient Array<BodyBuilder> bodyBuildList;
 	private transient Array<Long> updateList;
 	private long objectIDseq = 1;
 	
@@ -43,8 +46,15 @@ public class ObjectManager implements Disposable {
 		
 		objectMap = new ObjectMap<Long, GameObject>(initCapacity);
 		deleteList = new Array<GameObject>(initCapacity/2);
+//		bodyBuildList = new Array<BodyBuilder>(initCapacity/2);
 		if (trackUpdates) updateList = new Array<Long>(initCapacity);
 	}
+	
+//	public BodyBuilder newBody() {
+//		BodyBuilder bodyBuilder = new BodyBuilder(GameWorld.ctx.box2dWorld);
+//		bodyBuildList.add(bodyBuilder);
+//		return bodyBuilder;
+//	}
 
 	public void add(GameObject obj) {
 //		objects.add(obj);
@@ -141,6 +151,11 @@ public class ObjectManager implements Disposable {
 				return;
 			}
 		}
+		
+		// create new bodies
+//		for (BodyBuilder bodyBuilder : bodyBuildList) {
+//			bodyBuilder.build();
+//		}
 	}
 
 	@Override

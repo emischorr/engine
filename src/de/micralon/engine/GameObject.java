@@ -57,6 +57,11 @@ public abstract class GameObject extends Image implements Reuseable {
 		this.linearDamping = linearDamping;
 		this.angularDamping = angularDamping;
 		
+		// TODO: move it out and call it outside of the world step
+		init();
+	}
+	
+	protected void init() {
 		createBody();
 		createShape();
 	}
