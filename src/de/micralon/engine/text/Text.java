@@ -14,8 +14,7 @@ public class Text {
 	
 	protected float stateTime;
 	
-	private float height;
-	private float width;
+	private float height, width;
 	
 	public Text(BitmapFont font, Color color, String text, float x, float y) {
 		this.font = font;
