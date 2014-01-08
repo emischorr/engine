@@ -44,7 +44,7 @@ public class SpawnPoint implements SpawnPointInterface {
 			for (Entry<GameObject, Long> entry : spawnQueue.entrySet()) {
 				if (entry.getValue() <= GameWorld.ctx.getGameTime()) {
 					spawn(entry.getKey());
-					spawnQueue.remove(entry);
+					spawnQueue.remove(entry.getKey());
 				}
 			}
 		}
