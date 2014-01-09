@@ -4,10 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Disposable;
 
 import de.micralon.engine.GameWorld;
 
-public class Hud {
+public class Hud implements Disposable {
 	protected Stage stage; // stage that holds the GUI. Pixel-exact size.
 	private OrthographicCamera cam;
 	
@@ -41,5 +42,10 @@ public class Hud {
 	
 	protected int getScreenHeight() {
 		return SCREEN_HEIGHT;
+	}
+	
+	@Override
+	public void dispose() {
+		stage.dispose();
 	}
 }
