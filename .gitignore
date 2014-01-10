@@ -9,6 +9,7 @@
 *.class
 
 # generated files
+bin/*
 engine*/bin/*
 engine*/gen/*
 
