@@ -6,9 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
+import de.micralon.engine.postprocessing.Processor;
 import de.micralon.engine.text.Text;
 
 public class GameRenderer {
@@ -28,7 +30,8 @@ public class GameRenderer {
 	public boolean drawVelocities = false;
 	public boolean drawContacts = false;
 	
-	private ShaderProgram shader;
+	private Processor processor;
+	private TextureRegion fboRegion;
 	
 	public GameRendererOptions options;
 	
@@ -48,52 +51,11 @@ public class GameRenderer {
         
         rayHandler = world.lightManager.rayHandler;
         
-//        String vertexShader = "\n" + 
-//        		"#ifdef GL_ES\n" + 
-//        		"#define MED mediump\n" + 
-//        		"#else  \n" + 
-//        		"#define MED \n" + 
-//        		"#endif\n" + 
-//        		"attribute vec4 a_position; \n" + 
-//        		"attribute vec2 a_texCoord0; \n" + 
-//        		"varying MED vec2 v_texCoords;\n" + 
-//        		"void main()\n" + 
-//        		"{\n" + 
-//        		"	v_texCoords = a_texCoord0;\n" + 
-//        		"	gl_Position = a_position;\n" + 
-//        		"}";
-//		String fragmentShader = "#ifdef GL_ES\n" + 
-//				"#define LOWP lowp\n" + 
-//				"#define MED mediump\n" + 
-//				"precision lowp float;\n" + 
-//				"#else\n" + 
-//				"#define LOWP  \n" + 
-//				"#define MED \n" + 
-//				"#endif\n" + 
-//				"uniform sampler2D u_texture0;\n" + 
-//				"uniform sampler2D u_texture1;\n" + 
-//				"uniform float BloomIntensity;\n" + 
-//				"uniform float OriginalIntensity;\n" + 
-//				"\n" + 
-//				"varying MED vec2 v_texCoords;\n" + 
-//				"\n" + 
-//				"void main()\n" + 
-//				"{\n" + 
-//				"	\n" + 
-//				"	vec3 original = texture2D(u_texture0, v_texCoords).rgb;\n" + 
-//				"	vec3 bloom = texture2D(u_texture1, v_texCoords).rgb * BloomIntensity; 	\n" + 
-//				"    original = OriginalIntensity * (original - original * bloom);	 	\n" + 
-//				" 	gl_FragColor.rgb =  original + bloom; 	\n" + 
-//				"}";
-//		
-//		ShaderProgram.pedantic = false;
-//		shader = new ShaderProgram(vertexShader, fragmentShader);
-//		
-//		if (!this.shader.isCompiled()) {
-//            Gdx.app.log("Problem loading shader:", this.shader.getLog());
-//        }
-//		if (shader.getLog().length()!=0)
-//			System.out.println(shader.getLog());
+        processor = new Processor();
+    }
+    
+    public void addPostEffect(ShaderProgram shader) {
+    	processor.addShader(shader);
     }
     
     public void render() {
@@ -107,6 +69,8 @@ public class GameRenderer {
         camera.update();
         
         rayHandler.setCombinedMatrix(camera.combined);
+        
+        processor.capture();
         
         // background rendering
         if (options.drawBackground) {
@@ -126,6 +90,13 @@ public class GameRenderer {
         	if (updateLight) { rayHandler.update(); }
         	rayHandler.render();
         }
+        
+        
+        fboRegion = new TextureRegion(processor.endCapture());
+		fboRegion.flip(false,  true);
+		batch.begin();
+        batch.draw(fboRegion, 0, 0);
+        batch.end();
         
         // box2d debug rendering
         if (options.drawDebug) {

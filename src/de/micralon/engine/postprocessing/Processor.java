@@ -24,6 +24,13 @@ public class Processor implements Disposable{
 	private Mesh quad;
 	private ObjectMap<String, Object> uniforms = new ObjectMap<String, Object>();
 	private FrameBuffer fbo, fbo2, tmp;
+	private final Color clearColor = Color.CLEAR;
+	private int clearBits = GL20.GL_COLOR_BUFFER_BIT;
+	private float clearDepth = 1f;
+	private boolean useDepth = false;
+	
+	//TODO: make array
+	ShaderProgram shader;
 	
 	// temp vars
 	private String cls;
@@ -32,20 +39,27 @@ public class Processor implements Disposable{
 		fbo = new FrameBuffer(Pixmap.Format.RGBA4444, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
 		fbo2 = new FrameBuffer(Pixmap.Format.RGBA4444, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
 		createQuad();
+		
+		if (useDepth) {
+			clearBits |= GL20.GL_DEPTH_BUFFER_BIT;
+		}
 	}
 	
 	public void setTextureFilter(TextureFilter filter) {
 		fbo.getColorBufferTexture().setFilter(filter, filter);
 	}
 	
+	@Deprecated
 	public void setUniform(String name, Object value) {
 		uniforms.put(name, value);
 	}
 	
+	@Deprecated
 	public void setUniform(String name, Object... values) {
 		uniforms.put(name, values);
 	}
 	
+	@Deprecated
 	public void run(ShaderProgram shader) {
 		fbo.begin();
 			Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -62,12 +76,42 @@ public class Processor implements Disposable{
 		swapBuffers();
 	}
 	
-	public void capture() {
-		
+	public void addShader(ShaderProgram shader) {
+		this.shader = shader;
 	}
 	
-	public void render() {
-		
+	public void capture() {
+		if (shader != null) {
+			swapBuffers();
+			fbo.begin();
+			
+			if (useDepth) {
+				Gdx.gl.glClearDepthf(clearDepth);
+			}
+	
+			Gdx.gl.glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+			Gdx.gl.glClear(clearBits);
+		}
+	}
+	
+	public Texture endCapture() {
+		fbo.end();
+		return fbo.getColorBufferTexture();
+	}
+	
+	public void render(FrameBuffer dest) {
+		if (shader != null) {
+			endCapture();
+			
+			quad.render(shader, GL20.GL_TRIANGLES);
+			
+			// ensure default texture unit #0 is active
+			Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+		}
+	}
+	
+	public void render () {
+		render(null);
 	}
 	
 	public Texture getResult() {
@@ -88,6 +132,7 @@ public class Processor implements Disposable{
 		fbo2 = tmp;
 	}
 	
+	@Deprecated
 	private void setUniforms(ShaderProgram shader) {
 		for (Entry<String, Object> entry: uniforms.entries()) {
 			if (entry.value.getClass().isArray()) {
@@ -100,6 +145,7 @@ public class Processor implements Disposable{
 		}
 	}
 	
+	@Deprecated
 	private void addUniform(ShaderProgram program, String key, Object value) {
 		cls = value.getClass().getName();
 		//TODO: change that to hashtable? Check performance first!
@@ -136,6 +182,7 @@ public class Processor implements Disposable{
 		}
 	}
 	
+	@Deprecated
 	private void addUniformsArray(ShaderProgram program, String key, Object[] values) {
 		if (values == null || values.length == 0) return;
 		cls = values[0].getClass().getName();
@@ -155,4 +202,11 @@ public class Processor implements Disposable{
 		quad.setIndices(new short[]{0, 1, 2, 2, 3, 0});
 	    //quad.setIndices(new short[]{1, 0, 2, 3});
 	}
+	
+	/** Restores the previously set viewport if one was specified earlier and the destination buffer is the screen */
+//	private static void restoreViewport (FrameBuffer dest) {
+//		if (hasViewport && dest == null) {
+//			Gdx.gl.glViewport((int)viewport.x, (int)viewport.y, (int)viewport.width, (int)viewport.height);
+//		}
+//	}
 }
