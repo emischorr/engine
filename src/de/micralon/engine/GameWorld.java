@@ -118,6 +118,11 @@ public abstract class GameWorld {
 		return objectManager;
 	}
 	
+	/**
+	 * Sets the world size in meters
+	 * @param width
+	 * @param height
+	 */
 	public void setWorldSize(int width, int height) {
 		WORLD_WIDTH = width;
 		WORLD_HEIGHT = height;

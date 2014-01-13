@@ -107,12 +107,14 @@ public class MapBuilder {
 			}
 		}
 		
-		for (MapObject obj : objectsLayer.getObjects()) {
-			// TODO: move in sub class
-//			if (obj instanceof RectangleMapObject && obj.getName().equalsIgnoreCase("orb")) {
-//				Rectangle rect = ((RectangleMapObject)obj).getRectangle();
-//				worldState.addObject(new Collectable(world, rect.getX()/tilePixel*tileSize, rect.getY()/tilePixel*tileSize));
-//			}
+		if (objectsLayer != null) {
+			for (MapObject obj : objectsLayer.getObjects()) {
+				// TODO: move in sub class
+	//			if (obj instanceof RectangleMapObject && obj.getName().equalsIgnoreCase("orb")) {
+	//				Rectangle rect = ((RectangleMapObject)obj).getRectangle();
+	//				worldState.addObject(new Collectable(world, rect.getX()/tilePixel*tileSize, rect.getY()/tilePixel*tileSize));
+	//			}
+			}
 		}
 	}
 	
