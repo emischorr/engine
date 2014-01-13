@@ -9,12 +9,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -26,18 +29,26 @@ public class Processor implements Disposable{
 	private FrameBuffer fbo, fbo2, tmp;
 	private final Color clearColor = Color.CLEAR;
 	private int clearBits = GL20.GL_COLOR_BUFFER_BIT;
-	private float clearDepth = 1f;
-	private boolean useDepth = false;
+	private final float clearDepth = 1f;
+	private boolean useDepth;
 	
 	//TODO: make array
 	ShaderProgram shader;
+	private Array<PostEffect> effects;
 	
 	// temp vars
 	private String cls;
+	private TextureRegion fboRegion;
 	
 	public Processor() {
-		fbo = new FrameBuffer(Pixmap.Format.RGBA4444, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-		fbo2 = new FrameBuffer(Pixmap.Format.RGBA4444, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+		this(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), false);
+	}
+	
+	public Processor(Pixmap.Format fboFormat, int fboSize, boolean useDepth) {
+		this.useDepth = useDepth;
+		
+		fbo = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), useDepth);
+		fbo2 = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), useDepth);
 		createQuad();
 		
 		if (useDepth) {
@@ -80,6 +91,16 @@ public class Processor implements Disposable{
 		this.shader = shader;
 	}
 	
+	public void addEffect(PostEffect effect) {
+		if (effects == null) initPostEffects();
+		
+		effects.add(effect);
+	}
+	
+	private void initPostEffects() {
+		effects = new Array<PostEffect>();
+	}
+
 	public void capture() {
 		if (shader != null) {
 			swapBuffers();
@@ -99,9 +120,31 @@ public class Processor implements Disposable{
 		return fbo.getColorBufferTexture();
 	}
 	
+	public TextureRegion dump() {
+		fboRegion = new TextureRegion(fbo.getColorBufferTexture());
+		fboRegion.flip(false,  true);
+		
+		return fboRegion;
+	}
+	
+	public void renderTo(SpriteBatch batch) {
+		if (shader != null) {
+			fboRegion = new TextureRegion(endCapture());
+			fboRegion.flip(false,  true);
+			
+			applyEffects();
+			
+			batch.begin();
+			batch.draw(fboRegion, 0, 0);
+			batch.end();
+		}
+	}
+	
 	public void render(FrameBuffer dest) {
 		if (shader != null) {
 			endCapture();
+			
+			applyEffects();
 			
 			quad.render(shader, GL20.GL_TRIANGLES);
 			
@@ -130,6 +173,17 @@ public class Processor implements Disposable{
 		tmp = fbo;
 		fbo = fbo2;
 		fbo2 = tmp;
+	}
+	
+	private void applyEffects() {
+		if (effects != null) {
+			for (PostEffect effect : effects) {
+				swapBuffers();
+				fbo.begin();
+					effect.render();
+				fbo.end();
+			}
+		}
 	}
 	
 	@Deprecated

@@ -31,7 +31,6 @@ public class GameRenderer {
 	public boolean drawContacts = false;
 	
 	private Processor processor;
-	private TextureRegion fboRegion;
 	
 	public GameRendererOptions options;
 	
@@ -79,7 +78,6 @@ public class GameRenderer {
         
         // game stage rendering
         if (options.drawWorld) {
-//        	world.stage.getSpriteBatch().setShader(shader);
         	world.stage.draw();
         }
         
@@ -91,12 +89,8 @@ public class GameRenderer {
         	rayHandler.render();
         }
         
+        processor.renderTo(batch);
         
-        fboRegion = new TextureRegion(processor.endCapture());
-		fboRegion.flip(false,  true);
-		batch.begin();
-        batch.draw(fboRegion, 0, 0);
-        batch.end();
         
         // box2d debug rendering
         if (options.drawDebug) {
@@ -112,4 +106,10 @@ public class GameRenderer {
         }
     }
     
+    public TextureRegion getFrame() {
+    	processor.capture();
+    	render();
+    	processor.endCapture();
+    	return processor.dump();
+    }
 }
