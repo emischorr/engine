@@ -14,8 +14,12 @@ public abstract class Level extends Scene {
 	}
 	
 	protected final void buildMap(String mapName) {
+		buildMap(mapName, 1);
+	}
+	
+	protected final void buildMap(String mapName, float tileSize) {
 		TiledMap map = new TmxMapLoader().load("maps/"+mapName+".tmx");
-		MapBuilder mapBuilder = new MapBuilder(GameWorld.ctx, "maps/materials.xml", 2f);
+		MapBuilder mapBuilder = new MapBuilder(GameWorld.ctx, "maps/materials.xml", tileSize);
 		mapBuilder.build(map);
 	}
 }
