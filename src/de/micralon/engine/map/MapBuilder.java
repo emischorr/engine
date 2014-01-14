@@ -1,4 +1,4 @@
-package de.micralon.engine;
+package de.micralon.engine.map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
@@ -19,11 +19,15 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
+import de.micralon.engine.GameWorld;
+
 public class MapBuilder {
 	private GameWorld world;
 	private ObjectMap<String, FixtureDef> m_materials = new ObjectMap<String, FixtureDef>();
 	private float tileSize; // the size of a tile in world units (2m)
-	private int tilePixel = 128; // the size of a tile in Pixel (128)
+//	private int tilePixel = 128; // the size of a tile in Pixel (128)
+	
+	private ObjectMapper objectMapper;
 	
 	// shared temp vars
 	private Image image;
@@ -46,13 +50,16 @@ public class MapBuilder {
 			loadMaterialsFile(materialsFile);
 		}
 	}
+	
+	public void addObjectMapper(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
+	}
 
 	public void build(TiledMap map) {
 		TiledMapTileLayer physicsLayer = (TiledMapTileLayer) map.getLayers().get("physics");
 		TiledMapTileLayer bgLayer = (TiledMapTileLayer) map.getLayers().get("bg");
 		TiledMapTileLayer fgLayer = (TiledMapTileLayer) map.getLayers().get("fg");
 		MapLayer objectsLayer = map.getLayers().get("objects");
-		MapLayer collectablesLayer = map.getLayers().get("collectables");
 		FixtureDef fixtureDef;
 		
 //		tileSize = (Float) map.getProperties().get("tilewidth");
@@ -65,8 +72,8 @@ public class MapBuilder {
 					createTile(bgLayer, x, y);
 				}
 				
+				// physics tile
 				Cell cell = physicsLayer.getCell(x, y);
-				
 				if (cell != null && cell.getTile() != null) {
 					PolygonShape shape;
 					shape = new PolygonShape();
@@ -108,12 +115,13 @@ public class MapBuilder {
 		}
 		
 		if (objectsLayer != null) {
-			for (MapObject obj : objectsLayer.getObjects()) {
-				// TODO: move in sub class
-	//			if (obj instanceof RectangleMapObject && obj.getName().equalsIgnoreCase("orb")) {
-	//				Rectangle rect = ((RectangleMapObject)obj).getRectangle();
-	//				worldState.addObject(new Collectable(world, rect.getX()/tilePixel*tileSize, rect.getY()/tilePixel*tileSize));
-	//			}
+			if (objectMapper != null) {
+				objectMapper.setTileSize(tileSize);
+				for (MapObject obj : objectsLayer.getObjects()) {
+					objectMapper.map(obj);
+				}
+			} else {
+				Gdx.app.log(LOG_TAG, "Found object layer but no ObjectMapper defined! Use addObjectMapper() to add one.");
 			}
 		}
 	}
@@ -171,4 +179,5 @@ public class MapBuilder {
 		}
 		image = null;
 	}
+
 }

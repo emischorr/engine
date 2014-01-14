@@ -14,6 +14,7 @@ import de.micralon.engine.manager.EffectManager;
 import de.micralon.engine.manager.LightManager;
 import de.micralon.engine.manager.ObjectManager;
 import de.micralon.engine.manager.PlayerManager;
+import de.micralon.engine.map.ObjectMapper;
 import de.micralon.engine.net.Network.ObjectsData;
 import de.micralon.engine.net.NetworkNode;
 import de.micralon.engine.text.Text;
@@ -46,6 +47,8 @@ public abstract class GameWorld {
 	public Group fg = new Group();
 	
 	public Player localPlayer;
+	
+	protected ObjectMapper objectMapper;
 	
 	private ObjectManager objectManager;
 	public EffectManager effectManager;
@@ -116,6 +119,10 @@ public abstract class GameWorld {
 	
 	public ObjectManager getObjectManager() {
 		return objectManager;
+	}
+	
+	public ObjectMapper getObjectMapper() {
+		return objectMapper;
 	}
 	
 	/**
