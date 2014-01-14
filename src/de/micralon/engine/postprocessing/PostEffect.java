@@ -1,8 +1,10 @@
 package de.micralon.engine.postprocessing;
 
-public class PostEffect {
+import com.badlogic.gdx.graphics.Texture;
 
-	public void render() {
+public abstract class PostEffect {
+
+	public void render(Texture input) {
 		
 	}
 }

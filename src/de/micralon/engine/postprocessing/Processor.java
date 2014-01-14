@@ -39,6 +39,7 @@ public class Processor implements Disposable{
 	// temp vars
 	private String cls;
 	private TextureRegion fboRegion;
+	private Texture input;
 	
 	public Processor() {
 		this(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), false);
@@ -178,9 +179,10 @@ public class Processor implements Disposable{
 	private void applyEffects() {
 		if (effects != null) {
 			for (PostEffect effect : effects) {
+				input = fbo.getColorBufferTexture();
 				swapBuffers();
 				fbo.begin();
-					effect.render();
+					effect.render(input);
 				fbo.end();
 			}
 		}
