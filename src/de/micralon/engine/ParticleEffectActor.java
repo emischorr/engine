@@ -9,12 +9,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class ParticleEffectActor extends Actor {
+	private boolean behind = false;
 	private boolean running = false;
 	private ParticleEffect effect;
 	private float rotation;
 
 	public ParticleEffectActor(ParticleEffect effect) {
 		this.effect = effect;
+		for (ParticleEmitter emitter : effect.getEmitters()) {
+			if (emitter.isBehind()) {
+				behind = true;
+				break;
+			}
+		}
+	}
+	
+	public boolean isBehind() {
+		return behind;
 	}
    
 	public ParticleEffectActor(String effectFile, String imagesDir) {

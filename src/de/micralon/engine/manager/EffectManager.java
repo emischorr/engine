@@ -51,7 +51,11 @@ public class EffectManager implements Disposable {
 		ParticleEffectActor actor = getEffectActor(name);
 		actor.setPosition(xPos, yPos);
 		actor.start();
-		GameWorld.ctx.bg.addActor(actor);
+		if (actor.isBehind()) {
+			GameWorld.ctx.bg.addActor(actor);
+		} else {
+			GameWorld.ctx.fg.addActor(actor);
+		}
 	}
 	
 	public ParticleEffectActor getEffectActor(String name) {
