@@ -145,9 +145,14 @@ public class Processor implements Disposable{
 		if (shader != null) {
 			endCapture();
 			
-			applyEffects();
 			
+			
+			dest.begin();
+			shader.begin();
+			applyEffects();
 			quad.render(shader, GL20.GL_TRIANGLES);
+			shader.end();
+			dest.end();
 			
 			// ensure default texture unit #0 is active
 			Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
