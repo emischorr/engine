@@ -137,6 +137,10 @@ public abstract class GameObject extends Image implements Reuseable {
 		}
 	}
 	
+	public void setPos(Vector2 pos) {
+		setPos(pos.x, pos.y);
+	}
+	
 	public void setPos(float x, float y) {
 		body.setTransform(x, y, 0);
 		needUpdate();

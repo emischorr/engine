@@ -10,6 +10,7 @@ public class Player {
 	public Color color = Color.RED;
 	public boolean alive = true;
 	public long timeOfDeath;
+	public Team team;
 	
 	public transient Camera camera;
 	
