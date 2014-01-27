@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 
 import de.micralon.engine.background.Background;
 import de.micralon.engine.manager.ContactManager;
+import de.micralon.engine.manager.DecalsManager;
 import de.micralon.engine.manager.EffectManager;
 import de.micralon.engine.manager.LightManager;
 import de.micralon.engine.manager.ObjectManager;
@@ -51,6 +52,7 @@ public abstract class GameWorld {
 	protected ObjectMapper objectMapper;
 	
 	private ObjectManager objectManager;
+	private DecalsManager decalsManager;
 	public EffectManager effectManager;
 	public PlayerManager playerManager;
 //	public HashMap<Integer, Player> players = new HashMap<Integer, Player>();
@@ -88,6 +90,7 @@ public abstract class GameWorld {
         background = new Background(stage.getCamera());
         
         objectManager = new ObjectManager(trackUpdates);
+        decalsManager = new DecalsManager();
         effectManager = new EffectManager();
         playerManager = new PlayerManager();
 	}
@@ -175,6 +178,10 @@ public abstract class GameWorld {
 		objectManager.remove(obj);
 	}
 	
+	public void addDecal(GameDecal decal, Group group) {
+		group.addActor(decalsManager.addDecal(decal));
+	}
+	
 	public void update(float deltaTime) {
 		gameTime = (long) (gameTime + deltaTime*1000);
 		cameraHelper.updateCameraPosition();
@@ -196,6 +203,7 @@ public abstract class GameWorld {
 		
 		stage.act(deltaTime); // update game stage
 		objectManager.update(); // delete objects and update state
+		decalsManager.update(deltaTime);
 		effectManager.update(deltaTime); // delete effects
 		
 		for (Text text : texts) {
