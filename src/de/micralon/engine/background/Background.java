@@ -22,7 +22,11 @@ public class Background {
 	
 	public void addLayer(Drawable drawable, float ratio) {
 		ParallaxLayer layer = new ParallaxLayer(drawable, ratio);
-		layer.setSize(1024, 624);
+		addLayer(layer);
+	}
+	
+	public void addLayer(ParallaxLayer layer) {
+//		layer.setSize(1024, 624);
 		layers.add(layer);
 		bgStage.addActor(layer);
 	}
