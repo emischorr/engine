@@ -8,6 +8,14 @@ import com.badlogic.gdx.utils.Disposable;
 public abstract class GameDecal extends Image implements Disposable {
 	public boolean show = true;
 	
+	public GameDecal() {
+		this(null, 0, 0);
+	}
+	
+	public GameDecal(float posX, float posY) {
+		this(null, posX, posY);
+	}
+	
 	public GameDecal(Drawable drawableRegion, float posX, float posY) {
 		super();
 		setDrawable(drawableRegion);
