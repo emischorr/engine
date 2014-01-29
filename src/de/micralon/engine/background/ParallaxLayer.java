@@ -2,10 +2,11 @@ package de.micralon.engine.background;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
-public class ParallaxLayer extends Image {
+public class ParallaxLayer extends Actor {
+	public Drawable drawable;
 	public float ratioX, ratioY;
 	
 	public ParallaxLayer(Drawable drawable, float ratio) {
@@ -21,7 +22,8 @@ public class ParallaxLayer extends Image {
 	}
 	
 	public ParallaxLayer(Drawable drawable, Color color, float ratioX, float ratioY) {
-		super(drawable);
+		super();
+		this.drawable = drawable;
 		setColor(color);
 		this.ratioX = ratioX;
 		this.ratioY = ratioY;
@@ -33,9 +35,10 @@ public class ParallaxLayer extends Image {
 	
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
-		super.draw(batch, parentAlpha);
+//		super.draw(batch, parentAlpha);
+		drawable.draw(batch, getX(), getY(), drawable.getMinWidth(), drawable.getMinHeight());
 		// draw the same on the left and right
-		getDrawable().draw(batch, getX() - getWidth(), getY(), getWidth(), getHeight());
-		getDrawable().draw(batch, getX() + getWidth(), getY(), getWidth(), getHeight());
+		drawable.draw(batch, getX() - getWidth(), getY(), drawable.getMinWidth(), drawable.getMinHeight());
+		drawable.draw(batch, getX() + getWidth(), getY(), drawable.getMinWidth(), drawable.getMinHeight());
 	}
 }

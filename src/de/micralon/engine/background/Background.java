@@ -26,7 +26,7 @@ public class Background {
 	}
 	
 	public void addLayer(ParallaxLayer layer) {
-//		layer.setSize(1024, 624);
+		layer.setSize(1024, 1024);
 		layers.add(layer);
 		bgStage.addActor(layer);
 	}

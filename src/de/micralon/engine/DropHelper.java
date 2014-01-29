@@ -24,10 +24,11 @@ public class DropHelper {
 			for (Drop drop : drops) {
 				calcChance(dropValue, drop);
 				// do we have luck?
-				if ( (random.nextInt(100)+1)/100f <= chance ) {
+				if ( random.nextInt(100)+1 <= chance ) {
 					Gdx.app.log("DropHelper", "Got lucky ("+chance+"%). droping...");
 					items.add(drop.item);
 					if (!multipleDrop) break;
+					dropValue -= chance;
 				}
 			}
 		}
