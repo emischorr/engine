@@ -1,20 +1,19 @@
 package de.micralon.engine;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 
 import de.micralon.engine.services.MusicManager;
 import de.micralon.engine.services.PreferencesManager;
 import de.micralon.engine.services.SoundManager;
+import de.micralon.engine.utils.Log;
 
 public class EngineGame extends Game {
-	// constant useful for logging
-    public static final String LOG = EngineGame.class.getSimpleName();
-    // whether we are in development mode
-    public static final boolean DEV_MODE = true;
-    public static final boolean SHOW_FPS = false;
-    
     public static EngineGame ctx;
+    public static boolean DEV, FPS;
+    
+    protected Player player;
     
     // Services
     private PreferencesManager preferencesManager;
@@ -33,12 +32,42 @@ public class EngineGame extends Game {
         return soundManager;
     }
     
+    public static boolean isDevelopment() {
+    	return DEV;
+    }
+    public static void setDevelopment(boolean mode) {
+    	DEV = mode;
+    }
+    
+    public static boolean showFPS() {
+    	return FPS;
+    }
+    public static void showFPS(boolean mode) {
+    	FPS = mode;
+    }
+    
+    public Player getPlayer() {
+    	if (player == null) {
+    		player = new Player("Player");
+    	}
+    	return player;
+    }
+    
 	@Override
 	public void create() {
-		Gdx.app.log( LOG, "Creating game on " + Gdx.app.getType() );
 		ctx = this;
 		
+		Log.setTopic(EngineGame.class.getSimpleName());
+		Log.info( "Creating game on " + Gdx.app.getType() );
 		initServices();
+		
+		if (EngineGame.isDevelopment()) {
+			Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		} else {
+			Gdx.app.setLogLevel(Application.LOG_NONE);
+		}
+		
+		GameAssets.loadAll();
 	}
 	
 	protected void initServices() {
@@ -48,7 +77,7 @@ public class EngineGame extends Game {
 		// create the music manager
         musicManager = new MusicManager();
         musicManager.setVolume( preferencesManager.getVolume() );
-        if( DEV_MODE ) {
+        if( isDevelopment() ) {
         	musicManager.setEnabled( false );
         } else {
         	musicManager.setEnabled( preferencesManager.isMusicEnabled() );
@@ -64,7 +93,7 @@ public class EngineGame extends Game {
     public void resize(int width, int height)
     {
         super.resize( width, height );
-        Gdx.app.log( LOG, "Resizing game to: " + width + " x " + height );
+        Log.info( "Resizing game to: " + width + " x " + height );
     }
 
 	@Override
