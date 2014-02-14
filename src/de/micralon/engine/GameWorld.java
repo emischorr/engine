@@ -29,7 +29,7 @@ public abstract class GameWorld {
 	
 	public static GameWorld ctx;
 	
-	private static final float DEFAULT_GRAVITY = -9.8f;
+	private static final Vector2 DEFAULT_GRAVITY = new Vector2(-9.8f, 0);
 	
     private final static int VELOCITY_ITERS = 6;
     private final static int POSITION_ITERS = 2;
@@ -71,7 +71,7 @@ public abstract class GameWorld {
 	 * @param trackUpdates
 	 */
 	protected final void init(boolean trackUpdates) {
-		box2dWorld = new World(new Vector2(0, getGravity()), true);
+		box2dWorld = new World(getGravity(), true);
 		lightManager = new LightManager(box2dWorld);
 		new ContactManager(this);
 		
@@ -219,7 +219,7 @@ public abstract class GameWorld {
 		objectManager.syncObjects(data);
 	}
 	
-	public float getGravity() {
+	public Vector2 getGravity() {
 		return DEFAULT_GRAVITY;
 	}
 	
