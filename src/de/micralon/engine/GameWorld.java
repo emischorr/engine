@@ -149,7 +149,7 @@ public abstract class GameWorld {
 	}
 	
 	
-	public synchronized void addPlayer(Player player) {
+	public final synchronized void addPlayer(Player player) {
 		addPlayer(player, true);
 	}
 	
