@@ -9,6 +9,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -31,6 +33,9 @@ public class MapBuilder {
 	
 	// shared temp vars
 	private Image image;
+	private Body body;
+	private Fixture fix;
+	private Filter filterData = new Filter();
 	
 	private final float STOP_GAP = 0f;
 	private final String LOG_TAG = "MapBuilder";
@@ -95,8 +100,12 @@ public class MapBuilder {
 					bodyDef.position.y = y*tileSize;
 					bodyDef.type = BodyDef.BodyType.StaticBody;
 					
-					Body body = world.box2dWorld.createBody(bodyDef);
-					body.createFixture(fixtureDef);
+					body = world.box2dWorld.createBody(bodyDef);
+					fix = body.createFixture(fixtureDef);
+					
+					// set filter data
+					// TODO: allow custom filter
+					fix.setFilterData(filterData);
 					
 					//TODO: add to body register to keep track of all bodies
 					
