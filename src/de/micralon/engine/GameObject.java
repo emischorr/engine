@@ -142,7 +142,7 @@ public abstract class GameObject extends Image implements Reuseable {
 	}
 	
 	public void setPos(float x, float y) {
-		body.setTransform(x, y, 0);
+		body.setTransform(x, y, body.getAngle());
 		needUpdate();
 	}
 	
