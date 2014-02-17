@@ -148,6 +148,11 @@ public abstract class GameWorld {
 		return WORLD_HEIGHT;
 	}
 	
+	
+	public synchronized void addPlayer(Player player) {
+		addPlayer(player, true);
+	}
+	
 	/**
 	 * Only called by server
 	 */
