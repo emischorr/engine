@@ -8,8 +8,6 @@ import com.badlogic.gdx.utils.ObjectMap.Values;
 
 import de.micralon.engine.Destructible;
 import de.micralon.engine.GameObject;
-import de.micralon.engine.GameWorld;
-import de.micralon.engine.builder.BodyBuilder;
 import de.micralon.engine.net.Network.ObjectData;
 import de.micralon.engine.net.Network.ObjectsData;
 
@@ -161,7 +159,7 @@ public class ObjectManager implements Disposable {
 	@Override
 	public void dispose() {
 		objectMap.clear();
-		updateList.clear();
+		if (trackUpdates) updateList.clear();
 		deleteList.clear();
 	}
 
