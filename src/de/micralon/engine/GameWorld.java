@@ -29,7 +29,7 @@ public abstract class GameWorld {
 	
 	public static GameWorld ctx;
 	
-	private static final Vector2 DEFAULT_GRAVITY = new Vector2(-9.8f, 0);
+	private static final Vector2 DEFAULT_GRAVITY = new Vector2(0, -9.8f);
 	
     private final static int VELOCITY_ITERS = 6;
     private final static int POSITION_ITERS = 2;
