@@ -131,7 +131,7 @@ public class ObjectManager implements Disposable {
 	public void update() {
 		// delete objects
 		for (GameObject obj : deleteList) {
-			obj.destroy(); // destroy GameObject i.e. destroy body, free lights, ...
+			if (obj != null) obj.destroy(); // destroy GameObject i.e. destroy body, free lights, ...
 		}
 		deleteList.clear();
 		
