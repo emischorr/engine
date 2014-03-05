@@ -66,6 +66,7 @@ public abstract class GameObject extends Image implements Reuseable {
 	protected void init() {
 		createBody();
 		createShape();
+		body.resetMassData();
 	}
 	
 	public final void createBody() {
