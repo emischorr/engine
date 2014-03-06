@@ -32,7 +32,7 @@ public class ContactManager implements ContactListener {
 		} else if (userDataB instanceof Trigger) {
 			((Trigger)userDataB).triggerIn((GameObject)userDataA);
 		} else {		
-			if (userDataA != null && userDataB != null) {
+			if (userDataA != null && userDataB != null && userDataA instanceof GameObject && userDataB instanceof GameObject) {
 				((GameObject)userDataA).contactWith((GameObject)userDataB, contact);
 				((GameObject)userDataB).contactWith((GameObject)userDataA, contact);
 			}
@@ -55,7 +55,7 @@ public class ContactManager implements ContactListener {
 		} else if (userDataB != null && userDataB instanceof Trigger) {
 			((Trigger)userDataB).triggerOut((GameObject)userDataA);
 		} else {		
-			if (userDataA != null && userDataB != null) {
+			if (userDataA != null && userDataB != null && userDataA instanceof GameObject && userDataB instanceof GameObject) {
 				((GameObject)userDataA).endContactWith((GameObject)userDataB, contact);
 				((GameObject)userDataB).endContactWith((GameObject)userDataA, contact);
 			}

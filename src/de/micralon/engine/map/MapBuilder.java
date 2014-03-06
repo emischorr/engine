@@ -1,5 +1,8 @@
 package de.micralon.engine.map;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -7,6 +10,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -24,11 +28,11 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 import de.micralon.engine.GameWorld;
 
 public class MapBuilder {
-	private GameWorld world;
-	private ObjectMap<String, FixtureDef> m_materials = new ObjectMap<String, FixtureDef>();
+	private final GameWorld world;
+	private final ObjectMap<String, FixtureDef> m_materials = new ObjectMap<String, FixtureDef>();
 	private float tileSize; // the size of a tile in world units (2m)
 //	private int tilePixel = 128; // the size of a tile in Pixel (128)
-	
+	private final ObjectMap<String, Body> createdBodies = new ObjectMap<String, Body>();
 	private ObjectMapper objectMapper;
 	
 	// shared temp vars
@@ -39,10 +43,16 @@ public class MapBuilder {
 	
 	private final float STOP_GAP = 0f;
 	private final String LOG_TAG = "MapBuilder";
+	private final boolean mergeBodies;
 	
 	public MapBuilder(GameWorld world, String materialsFile, float tileSize) {
+		this(world, materialsFile, tileSize, false);
+	}
+	
+	public MapBuilder(GameWorld world, String materialsFile, float tileSize, boolean mergeBodies) {
 		this.world = world;
 		this.tileSize = tileSize;
+		this.mergeBodies = mergeBodies;
 		
 		FixtureDef defaultFixture = new FixtureDef();
 		defaultFixture.density = 1.0f;
@@ -66,6 +76,7 @@ public class MapBuilder {
 		TiledMapTileLayer fgLayer = (TiledMapTileLayer) map.getLayers().get("fg");
 		MapLayer objectsLayer = map.getLayers().get("objects");
 		FixtureDef fixtureDef;
+		Array<Body> mergingBodies = new Array<Body>();
 		
 //		tileSize = (Float) map.getProperties().get("tilewidth");
 			
@@ -80,34 +91,53 @@ public class MapBuilder {
 				// physics tile
 				Cell cell = physicsLayer.getCell(x, y);
 				if (cell != null && cell.getTile() != null) {
-					PolygonShape shape;
-					shape = new PolygonShape();
-					shape.setAsBox(tileSize/2, tileSize/2);
-					
+					// get material info
 					MapProperties properties = cell.getTile().getProperties();
 					String material = properties.get("material", "default", String.class);
+					// load fixture for material
 					fixtureDef = m_materials.get(material);
-					
 					if (fixtureDef == null) {
 						Gdx.app.log(LOG_TAG, "material does not exist " + material + " using default");
 						fixtureDef = m_materials.get("default");
 					}
 					
+					// create shape
+					PolygonShape shape = new PolygonShape();
+					shape.setAsBox(tileSize/2, tileSize/2);
+					
+					// add shape to fixture
 					fixtureDef.shape = shape;
 					
-					BodyDef bodyDef = new BodyDef();
-					bodyDef.position.x = x*tileSize;
-					bodyDef.position.y = y*tileSize;
-					bodyDef.type = BodyDef.BodyType.StaticBody;
+					if (mergeBodies) {
+						// check if there are already adjacent bodies with same material
+						for (Body neighbour : getAdjacentBodies(x, y)) {
+							if (neighbour != null && material.equalsIgnoreCase((String) neighbour.getUserData())) {
+								mergingBodies.add(neighbour);
+							}
+						}
+					}
 					
-					body = world.box2dWorld.createBody(bodyDef);
-					fix = body.createFixture(fixtureDef);
+					if (mergingBodies.size > 0) {
+						//TODO: merge bodies
+						mergeTile(body, shape, x*tileSize, y*tileSize);
+					} else {
+						// create new body
+						BodyDef bodyDef = new BodyDef();
+						bodyDef.position.x = x*tileSize;
+						bodyDef.position.y = y*tileSize;
+						bodyDef.type = BodyDef.BodyType.StaticBody;
+						
+						body = world.box2dWorld.createBody(bodyDef);
+						body.setUserData(material);
+						fix = body.createFixture(fixtureDef);
+					}
 					
 					// set filter data
 					// TODO: allow custom filter
 					fix.setFilterData(filterData);
 					
-					//TODO: add to body register to keep track of all bodies
+					// add to body register to keep track of all bodies
+					createdBodies.put(bodyKey(x,y), body);
 					
 					// physics tile image
 					createTile(physicsLayer, x, y);
@@ -187,6 +217,30 @@ public class MapBuilder {
 			world.bg.addActor(image);
 		}
 		image = null;
+	}
+	
+	private String bodyKey(int x, int y) {
+		return x+"/"+y;
+	}
+	
+	/**
+	 * Get an array of adjacent bodies (bodies that have one side in common)
+	 * @param x coordinate of given body
+	 * @param y coordinate of given body
+	 * @return Array of bodies
+	 */
+	private Set<Body> getAdjacentBodies(int x, int y) {
+		Set<Body> bodies = new HashSet<Body>();
+		bodies.add(createdBodies.get(bodyKey(x+1, y)));
+		bodies.add(createdBodies.get(bodyKey(x-1, y)));
+		bodies.add(createdBodies.get(bodyKey(x, y+1)));
+		bodies.add(createdBodies.get(bodyKey(x, y-1)));
+		return bodies;
+	}
+	
+	private void mergeTile(Body body, PolygonShape shape, float x, float y) {
+		shape.setAsBox(tileSize/2, tileSize/2, new Vector2(x, y), 0);
+		body.createFixture(shape, 0);
 	}
 
 }
