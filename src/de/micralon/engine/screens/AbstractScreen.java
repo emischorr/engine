@@ -53,7 +53,7 @@ public class AbstractScreen<T extends EngineGame> implements Screen {
     
     protected Skin getSkin() {
         if( skin == null ) {
-            FileHandle skinFile = Gdx.files.internal( "skin/uiskin.json" );
+            FileHandle skinFile = Gdx.files.internal( EngineGame.assetRootFolder+"skin/uiskin.json" );
             skin = new Skin( skinFile );
         }
         return skin;

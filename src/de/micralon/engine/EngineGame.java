@@ -12,6 +12,7 @@ import de.micralon.engine.utils.Log;
 public class EngineGame extends Game {
     public static EngineGame ctx;
     public static boolean DEV, FPS;
+    public static String assetRootFolder = "";
     
     protected Player player;
     

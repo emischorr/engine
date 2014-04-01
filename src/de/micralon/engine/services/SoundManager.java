@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 
+import de.micralon.engine.EngineGame;
 import de.micralon.engine.utils.LRUCache;
 import de.micralon.engine.utils.LRUCache.CacheEntryRemovedListener;
 import de.micralon.engine.services.SoundManager.GameSound;
@@ -15,7 +16,7 @@ public class SoundManager implements CacheEntryRemovedListener<GameSound,Sound>,
 	// The available sound files.
     public enum GameSound
     {
-        CLICK( "sound/click.wav" );
+        CLICK( EngineGame.assetRootFolder+"sound/click.wav" );
 
         private final String fileName;
 

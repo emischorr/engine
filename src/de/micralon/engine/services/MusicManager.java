@@ -5,6 +5,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 
+import de.micralon.engine.EngineGame;
+
 public class MusicManager implements Disposable {
 	private final String LOG_TAG = "MusicManager";
 
@@ -13,7 +15,7 @@ public class MusicManager implements Disposable {
      */
     public enum GameMusic
     {
-        MENU( "music/menu.ogg" )
+        MENU( EngineGame.assetRootFolder+"music/menu.ogg" )
 //        ,LEVEL( "music/level.ogg" )
         ;
 

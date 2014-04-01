@@ -24,8 +24,8 @@ public abstract class Level extends Scene {
 	}
 	
 	protected final void buildMap(String mapName, ObjectMapper objectMapper, float tileSize, boolean mergeBodies) {
-		TiledMap map = new TmxMapLoader().load("maps/"+mapName+".tmx");
-		MapBuilder mapBuilder = new MapBuilder(GameWorld.ctx, "maps/materials.xml", tileSize, mergeBodies);
+		TiledMap map = new TmxMapLoader().load(EngineGame.assetRootFolder+"maps/"+mapName+".tmx");
+		MapBuilder mapBuilder = new MapBuilder(GameWorld.ctx, EngineGame.assetRootFolder+"maps/materials.xml", tileSize, mergeBodies);
 		mapBuilder.addObjectMapper(objectMapper);
 		mapBuilder.build(map);
 	}
