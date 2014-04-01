@@ -78,9 +78,11 @@ public class MapBuilder {
 		FixtureDef fixtureDef;
 		Array<Body> mergingBodies = new Array<Body>();
 		
+		String orientation = (String) map.getProperties().get("orientation");
+		
 //		tileSize = (Float) map.getProperties().get("tilewidth");
 			
-		for (int y = 0; y < physicsLayer.getHeight(); y++) {
+		for (int y = physicsLayer.getHeight(); y > 0 ; y--) {
 			for (int x = 0; x < physicsLayer.getWidth(); x++) {
 				
 				// bg tile image
@@ -140,7 +142,11 @@ public class MapBuilder {
 					createdBodies.put(bodyKey(x,y), body);
 					
 					// physics tile image
-					createTile(physicsLayer, x, y);
+					if (orientation.equalsIgnoreCase("staggered")) {
+						createIsoTile(physicsLayer, x, y);
+					} else {
+						createTile(physicsLayer, x, y);
+					}
 					
 					fixtureDef = null;
 					shape.dispose();
@@ -216,6 +222,18 @@ public class MapBuilder {
 		} else {
 			world.bg.addActor(image);
 		}
+		image = null;
+	}
+	
+	private void createIsoTile(TiledMapTileLayer layer, int x, int y) {
+		image = new Image(layer.getCell(x, y).getTile().getTextureRegion());
+		image.setPosition(x*tileSize+y%2*tileSize*0.5f, y*tileSize-y*(tileSize*0.5f+0.4f));
+		image.setSize(tileSize+STOP_GAP, tileSize+STOP_GAP);
+		image.setScaling(Scaling.stretch); // stretch the texture  
+		image.setAlign(Align.center);
+
+		world.physics.addActor(image);
+		
 		image = null;
 	}
 	
