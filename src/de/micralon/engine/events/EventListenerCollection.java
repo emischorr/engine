@@ -10,6 +10,7 @@ public class EventListenerCollection {
 	}
 	
 	public EventListener removeListener(EventListener listener) {
-		
+		//TODO: remove listener
+		return listener;
 	}
 }
