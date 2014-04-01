@@ -227,7 +227,7 @@ public class MapBuilder {
 	
 	private void createIsoTile(TiledMapTileLayer layer, int x, int y) {
 		image = new Image(layer.getCell(x, y).getTile().getTextureRegion());
-		image.setPosition(x*tileSize+y%2*tileSize*0.5f, y*tileSize-y*(tileSize*0.5f+0.4f));
+		image.setPosition(x*tileSize-tileSize*0.5f+y%2*tileSize*0.5f, y*tileSize-y*(tileSize*0.5f+0.4f));
 		image.setSize(tileSize+STOP_GAP, tileSize+STOP_GAP);
 		image.setScaling(Scaling.stretch); // stretch the texture  
 		image.setAlign(Align.center);
