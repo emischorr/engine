@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
@@ -21,6 +22,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Constructor;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 import de.micralon.engine.GameWorld;
 
@@ -32,6 +36,8 @@ public class MapBuilder {
 	private final ObjectMap<String, Body> createdBodies = new ObjectMap<String, Body>();
 	private ObjectMapper objectMapper;
 	
+	public Class<? extends IsoTile> isoTileClass = IsoTile.class;
+	
 	// shared temp vars
 	private Tile tile;
 	private Body body;
@@ -40,7 +46,11 @@ public class MapBuilder {
 	
 //	private final float STOP_GAP = 0f;
 	private final String LOG_TAG = "MapBuilder";
-	private final boolean mergeBodies;
+	private boolean mergeBodies;
+	
+	public MapBuilder(GameWorld world, String materialsFile) {
+		this(world, materialsFile, 1, false);
+	}
 	
 	public MapBuilder(GameWorld world, String materialsFile, float tileSize) {
 		this(world, materialsFile, tileSize, false);
@@ -61,6 +71,14 @@ public class MapBuilder {
 		if (materialsFile != null) {
 			loadMaterialsFile(materialsFile);
 		}
+	}
+	
+	public void setTileSize(float tileSize) {
+		this.tileSize = tileSize;
+	}
+	
+	public void setMergeBodies(boolean merge) {
+		this.mergeBodies = merge;
 	}
 	
 	public void addObjectMapper(ObjectMapper objectMapper) {
@@ -209,7 +227,12 @@ public class MapBuilder {
 	
 	private void createTile(String orientation, TiledMapTileLayer layer, int x, int y) {
 		if (orientation.equalsIgnoreCase("staggered")) {
-			tile = new IsoTile(layer.getCell(x, y).getTile().getTextureRegion(), x, y, tileSize);
+			try {
+				Constructor constructor = ClassReflection.getConstructor(isoTileClass, TextureRegion.class, int.class, int.class, float.class);
+				tile = (Tile) constructor.newInstance(layer.getCell(x, y).getTile().getTextureRegion(), x, y, tileSize);
+			} catch (ReflectionException e) {
+				e.printStackTrace();
+			}
 			addTileToLayer(tile, "physics");
 		} else {
 			tile = new SquareTile(layer.getCell(x, y).getTile().getTextureRegion(), x, y, tileSize);
