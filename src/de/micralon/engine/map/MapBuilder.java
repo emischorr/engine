@@ -234,7 +234,7 @@ public class MapBuilder {
 		image = new Image(layer.getCell(x, y).getTile().getTextureRegion());
 		image.setPosition(x*tileSize+tileSize-y%2*tileSize*0.5f, y*tileSize*0.25f);
 		image.setSize(tileSize+STOP_GAP, tileSize+STOP_GAP);
-		image.setScaling(Scaling.stretch); // stretch the texture  
+		image.setScaling(Scaling.fillX); // size the texture to match tile width  
 		image.setAlign(Align.center);
 
 		addTileToLayer(image, "physics");
