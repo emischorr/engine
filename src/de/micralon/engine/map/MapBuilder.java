@@ -17,11 +17,8 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
@@ -36,12 +33,12 @@ public class MapBuilder {
 	private ObjectMapper objectMapper;
 	
 	// shared temp vars
-	private Image image;
+	private Tile tile;
 	private Body body;
 	private Fixture fix;
 	private Filter filterData = new Filter();
 	
-	private final float STOP_GAP = 0f;
+//	private final float STOP_GAP = 0f;
 	private final String LOG_TAG = "MapBuilder";
 	private final boolean mergeBodies;
 	
@@ -96,8 +93,7 @@ public class MapBuilder {
 				}
 				
 				// physics tile
-				if (physicsLayer != null)
-					cell = physicsLayer.getCell(x, y);
+				if (physicsLayer != null) cell = physicsLayer.getCell(x, y);
 				if (cell != null && cell.getTile() != null) {
 					// get material info
 					MapProperties properties = cell.getTile().getProperties();
@@ -213,41 +209,22 @@ public class MapBuilder {
 	
 	private void createTile(String orientation, TiledMapTileLayer layer, int x, int y) {
 		if (orientation.equalsIgnoreCase("staggered")) {
-			createIsoTile(layer, x, y);
+			tile = new IsoTile(layer.getCell(x, y).getTile().getTextureRegion(), x, y, tileSize);
+			addTileToLayer(tile, "physics");
 		} else {
-			createSquareTile(layer, x, y);
+			tile = new SquareTile(layer.getCell(x, y).getTile().getTextureRegion(), x, y, tileSize);
+			addTileToLayer(tile, layer.getName());
 		}
+		tile = null;
 	}
 	
-	private void createSquareTile(TiledMapTileLayer layer, int x, int y) {
-		image = new Image(layer.getCell(x, y).getTile().getTextureRegion());
-		image.setPosition(x*tileSize-tileSize*0.5f, y*tileSize-tileSize*0.5f);
-		image.setSize(tileSize+STOP_GAP, tileSize+STOP_GAP);
-		image.setScaling(Scaling.stretch); // stretch the texture  
-		image.setAlign(Align.center);
-		
-		addTileToLayer(image, layer.getName());
-		image = null;
-	}
-	
-	private void createIsoTile(TiledMapTileLayer layer, int x, int y) {
-		image = new Image(layer.getCell(x, y).getTile().getTextureRegion());
-		image.setPosition(x*tileSize+tileSize-y%2*tileSize*0.5f, y*tileSize*0.25f);
-		image.setSize(tileSize+STOP_GAP, tileSize+STOP_GAP);
-		image.setScaling(Scaling.fillX); // size the texture to match tile width  
-		image.setAlign(Align.center);
-
-		addTileToLayer(image, "physics");
-		image = null;
-	}
-	
-	private void addTileToLayer(Image image, String layerName) {
+	private void addTileToLayer(Tile tile, String layerName) {
 		if (layerName.equalsIgnoreCase("fg")) {
-			world.fg.addActor(image);
+			world.fg.addActor(tile);
 		} else if (layerName.equalsIgnoreCase("physics")) {
-			world.physics.addActor(image);
+			world.physics.addActor(tile);
 		} else {
-			world.bg.addActor(image);
+			world.bg.addActor(tile);
 		}
 	}
 	

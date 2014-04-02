@@ -8,8 +8,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import de.micralon.engine.map.Tile;
 import de.micralon.engine.postprocessing.Processor;
 import de.micralon.engine.text.Text;
 
@@ -18,6 +22,7 @@ public class GameRenderer {
 	private SpriteBatch batch;
     private OrthographicCamera camera;
     private Box2DDebugRenderer debugRenderer;
+    private ShapeRenderer shapeRenderer;
     
     private final RayHandler rayHandler;
     
@@ -42,11 +47,15 @@ public class GameRenderer {
     	this.world = world;
     	this.batch = batch;
     	this.options = options;
+    	
+    	// we obtain a reference to the game stage camera. The camera is scaled to box2d meter units
+        camera = (OrthographicCamera) world.stage.getCamera();
     		
         debugRenderer = new Box2DDebugRenderer(drawBodies, drawJoints, drawAAAB, drawInactiveBodies, drawVelocities, drawContacts);
-      
-        // we obtain a reference to the game stage camera. The camera is scaled to box2d meter units
-        camera = (OrthographicCamera) world.stage.getCamera();
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.identity();
+        shapeRenderer.setColor(0, 1, 0, 0.5f);
         
         rayHandler = world.lightManager.rayHandler;
         
@@ -95,6 +104,19 @@ public class GameRenderer {
         // box2d debug rendering
         if (options.drawDebug) {
         	debugRenderer.render(world.box2dWorld, camera.combined);
+        }
+        
+        // TODO: optimize -> use separate flag
+        if (options.drawDebug) {
+	    	shapeRenderer.setProjectionMatrix(camera.combined);
+	        shapeRenderer.identity();
+			shapeRenderer.begin(ShapeType.Line);
+			for (Actor actor : world.physics.getChildren()) {
+				if (actor instanceof Tile) {
+					((Tile)actor).drawDebug(shapeRenderer);
+				}
+			}
+			shapeRenderer.end();
         }
         
         if (drawText) {
