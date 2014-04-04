@@ -24,5 +24,9 @@ public abstract class Tile extends Image {
 		this.setAlign(Align.center);
 	}
 	
+	public String identifier() {
+		return tileX+"/"+tileY;
+	}
+	
 	public void drawDebug(ShapeRenderer shapeRenderer) {}
 }
