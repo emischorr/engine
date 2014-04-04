@@ -7,11 +7,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 public abstract class Tile extends Image {
 	public final int tileX, tileY;
+	public static float tileSize = 1;
 	
-	public Tile(TextureRegion textureRegion, int tileX, int tileY, float tileSize) {
+	public Tile(TextureRegion textureRegion, int tileX, int tileY) {
+		this(textureRegion, tileX, tileY, tileSize);
+	}
+	
+	public Tile(TextureRegion textureRegion, int tileX, int tileY, float newTileSize) {
 		super(textureRegion);
 		this.tileX = tileX;
 		this.tileY = tileY;
+		
+		Tile.tileSize = newTileSize;
 		
 		this.setSize(tileSize, tileSize);
 		this.setAlign(Align.center);

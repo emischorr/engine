@@ -98,6 +98,7 @@ public class MapBuilder {
 		int mapWidth = (Integer) map.getProperties().get("width");
 		int mapHeight = (Integer) map.getProperties().get("height");
 //		tileSize = (Float) map.getProperties().get("tilewidth");
+		Tile.tileSize = tileSize;
 		
 		Cell cell;
 			
@@ -228,14 +229,14 @@ public class MapBuilder {
 	private void createTile(String orientation, TiledMapTileLayer layer, int x, int y) {
 		if (orientation.equalsIgnoreCase("staggered")) {
 			try {
-				Constructor constructor = ClassReflection.getConstructor(isoTileClass, TextureRegion.class, int.class, int.class, float.class);
-				tile = (Tile) constructor.newInstance(layer.getCell(x, y).getTile().getTextureRegion(), x, y, tileSize);
+				Constructor constructor = ClassReflection.getConstructor(isoTileClass, TextureRegion.class, int.class, int.class);
+				tile = (Tile) constructor.newInstance(layer.getCell(x, y).getTile().getTextureRegion(), x, y);
 			} catch (ReflectionException e) {
 				e.printStackTrace();
 			}
 			addTileToLayer(tile, "physics");
 		} else {
-			tile = new SquareTile(layer.getCell(x, y).getTile().getTextureRegion(), x, y, tileSize);
+			tile = new SquareTile(layer.getCell(x, y).getTile().getTextureRegion(), x, y);
 			addTileToLayer(tile, layer.getName());
 		}
 		tile = null;

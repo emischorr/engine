@@ -6,8 +6,8 @@ import com.badlogic.gdx.utils.Scaling;
 
 public class SquareTile extends Tile {
 
-	public SquareTile(TextureRegion textureRegion, int tileX, int tileY, float tileSize) {
-		super(textureRegion, tileX, tileY, tileSize);
+	public SquareTile(TextureRegion textureRegion, int tileX, int tileY) {
+		super(textureRegion, tileX, tileY);
 		
 		this.setPosition(tileX*tileSize-tileSize*0.5f, tileY*tileSize-tileSize*0.5f);
 		this.setScaling(Scaling.stretch); // stretch the texture
