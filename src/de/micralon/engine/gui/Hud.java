@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 
-import de.micralon.engine.GameWorld;
-
 public class Hud implements Disposable {
 	protected Stage stage; // stage that holds the GUI. Pixel-exact size.
 	private OrthographicCamera cam;
@@ -15,7 +13,7 @@ public class Hud implements Disposable {
 	private int SCREEN_WIDTH = Gdx.graphics.getWidth();
 	private int SCREEN_HEIGHT = Gdx.graphics.getHeight();
 	
-	public Hud(GameWorld world) {
+	public Hud() {
 		stage = new Stage();
 		stage.setViewport(SCREEN_WIDTH, SCREEN_HEIGHT, false);
 		
