@@ -35,7 +35,21 @@ public class DevelopmentController extends InputAdapter {
 			cameraHelper.setZoom(1);
 		}
 		
-		//TODO: move camera
+		if (keycode == Keys.NUM_4) {
+			cameraHelper.moveLeft(0.5f);
+		}
+		
+		if (keycode == Keys.NUM_6) {
+			cameraHelper.moveRight(0.5f);
+		}
+		
+		if (keycode == Keys.NUM_8) {
+			cameraHelper.moveUp(0.5f);
+		}
+		
+		if (keycode == Keys.NUM_2) {
+			cameraHelper.moveDown(0.5f);
+		}
 		
 		if (keycode == Keys.M) {
 			renderOptions.switchMode();

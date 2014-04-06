@@ -3,6 +3,7 @@ package de.micralon.engine;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Cullable;
 
@@ -61,19 +62,49 @@ public class CameraHelper {
 		cullable.setCullingArea(cullingArea);
 	}
 	
+	public void moveLeft(float distance) {
+		setPosition(camera.position.x - distance, camera.position.y);
+	}
+	
+	public void moveRight(float distance) {
+		setPosition(camera.position.x + distance, camera.position.y);
+	}
+	
+	public void moveUp(float distance) {
+		setPosition(camera.position.x, camera.position.y + distance);
+	}
+	
+	public void moveDown(float distance) {
+		setPosition(camera.position.x, camera.position.y - distance);
+	}
+	
+	public void setPosition(Vector3 pos) {
+		setPosition(pos.x, pos.y);
+	}
+	
+	public void setPosition(Vector2 pos) {
+		setPosition(pos.x, pos.y);
+	}
+	
+	public void setPosition(float x, float y) {
+		// limit the view on the level borders
+		if (x > CAMERA_RIGHT_LIMIT)
+			x = CAMERA_RIGHT_LIMIT;
+		else if (x < CAMERA_LEFT_LIMIT)
+			x = CAMERA_LEFT_LIMIT;
+		
+		if (y > CAMERA_UP_LIMIT)
+			y = CAMERA_UP_LIMIT;
+		else if (y < CAMERA_DOWN_LIMIT)
+			y = CAMERA_DOWN_LIMIT;
+		
+		camera.position.set(x, y, 0);
+	}
+	
 	public void updateCameraPosition() {
 		if (followTarget && target != null && target.getPos() != null) {
-			camPos.set(target.getPos());
-			// limit the view on the level angles
-			if (camPos.x > CAMERA_RIGHT_LIMIT)
-				camPos.x = CAMERA_RIGHT_LIMIT;
-			else if (camPos.x < CAMERA_LEFT_LIMIT)
-				camPos.x = CAMERA_LEFT_LIMIT;
-			if (camPos.y > CAMERA_UP_LIMIT)
-				camPos.y = CAMERA_UP_LIMIT;
-			else if (camPos.y < CAMERA_DOWN_LIMIT)
-				camPos.y = CAMERA_DOWN_LIMIT;
-			camera.position.set(camPos.x, camPos.y, 0);
+			// update position
+			setPosition(target.getPos());
 			// update cullingArea
 			if (culling) cullingArea.setPosition(camPos.x - VIEW_WIDTH/2, camPos.y - VIEW_HEIGHT/2);
 		}
