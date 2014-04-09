@@ -34,6 +34,7 @@ public class MapBuilder {
 	private float tileSize; // the size of a tile in world units (2m)
 //	private int tilePixel = 128; // the size of a tile in Pixel (128)
 	private final ObjectMap<String, Body> createdBodies = new ObjectMap<String, Body>();
+	private final ObjectMap<String, Tile> createdTiles = new ObjectMap<String, Tile>();
 	private ObjectMapper objectMapper;
 	
 	public Class<? extends IsoTile> isoTileClass = IsoTile.class;
@@ -160,7 +161,7 @@ public class MapBuilder {
 					fix.setFilterData(filterData);
 					
 					// add to body register to keep track of all bodies
-					createdBodies.put(bodyKey(x,y), body);
+					createdBodies.put(key(x,y), body);
 					
 					// physics tile image
 					createTile(orientation, physicsLayer, x, y);
@@ -239,6 +240,8 @@ public class MapBuilder {
 			tile = new SquareTile(layer.getCell(x, y).getTile().getTextureRegion(), x, y);
 			addTileToLayer(tile, layer.getName());
 		}
+		// add to tile register to keep track of all tiles
+		createdTiles.put(key(x,y), tile);
 		tile = null;
 	}
 	
@@ -252,22 +255,27 @@ public class MapBuilder {
 		}
 	}
 	
-	private String bodyKey(int x, int y) {
+	private String key(int x, int y) {
 		return x+"/"+y;
 	}
 	
+	public Tile getTile(int x, int y) {
+		return createdTiles.get( key(x, y) );
+	}
+	
 	/**
-	 * Get an array of adjacent bodies (bodies that have one side in common)
+	 * Get an array of adjacent bodies (bodies that have one side in common). <br/>
+	 * Only for none staggered maps!
 	 * @param x coordinate of given body
 	 * @param y coordinate of given body
 	 * @return Array of bodies
 	 */
 	private Set<Body> getAdjacentBodies(int x, int y) {
 		Set<Body> bodies = new HashSet<Body>();
-		bodies.add(createdBodies.get(bodyKey(x+1, y)));
-		bodies.add(createdBodies.get(bodyKey(x-1, y)));
-		bodies.add(createdBodies.get(bodyKey(x, y+1)));
-		bodies.add(createdBodies.get(bodyKey(x, y-1)));
+		bodies.add(createdBodies.get( key(x+1, y) ));
+		bodies.add(createdBodies.get( key(x-1, y) ));
+		bodies.add(createdBodies.get( key(x, y+1) ));
+		bodies.add(createdBodies.get( key(x, y-1) ));
 		return bodies;
 	}
 	

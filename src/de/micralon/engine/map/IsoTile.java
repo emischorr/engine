@@ -3,14 +3,19 @@ package de.micralon.engine.map;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Scaling;
+
+import de.micralon.engine.utils.MapUtils;
 
 public class IsoTile extends Tile {
 	protected static Polygon basePoly;
 	private Polygon renderPoly;
 	public static float yOffset;
+	//temp
+	private Vector2 normalCoords;
 
 	public IsoTile(TextureRegion textureRegion, int tileX, int tileY) {
 		super(textureRegion, tileX, tileY);
@@ -19,6 +24,15 @@ public class IsoTile extends Tile {
 		this.setScaling(Scaling.fillX); // size the texture to match tile width  
 		
 		initBasePolygon();
+	}
+	
+	public String identifier(boolean staggered) {
+		if (staggered) {
+			normalCoords = MapUtils.staggeredToNormal(this);
+			return (int)normalCoords.x+"/"+(int)normalCoords.y;
+		} else {
+			return super.identifier();
+		}
 	}
 	
 	@Override
