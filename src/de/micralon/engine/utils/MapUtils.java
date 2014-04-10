@@ -75,9 +75,9 @@ public class MapUtils {
 	
 	private static boolean hasNextTile(float start, float end, float a) {
 		if (start > end) {
-			return a > end;
+			return a >= end;
 		} else {
-			return a < end;
+			return a <= end;
 		}
 	}
 	
