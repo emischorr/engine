@@ -57,19 +57,19 @@ public class MapUtils {
 	 */
 	public static Array<Vector2> getSelectionCoords(Vector2 start, Vector2 end) {
 		Array<Vector2> selection = new Array<Vector2>();
-		for (float x = start.x; hasNextTile(start.x, end.x, x); nextTile(start.x, end.x, x)) {
-			for (float y = start.y; hasNextTile(start.y, end.y, y); nextTile(start.y, end.y, y)) {
+		for (float x = start.x; hasNextTile(start.x, end.x, x); x=nextTile(start.x, end.x, x)) {
+			for (float y = start.y; hasNextTile(start.y, end.y, y); y=nextTile(start.y, end.y, y)) {
 				selection.add(new Vector2(x, y));
 			}
 		}
 		return selection;
 	}
 	
-	private static void nextTile(float start, float end, float a) {
+	private static float nextTile(float start, float end, float a) {
 		if (start > end) {
-			a--;
+			return --a;
 		} else {
-			a++;
+			return ++a;
 		}
 	}
 	
