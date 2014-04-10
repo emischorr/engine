@@ -29,15 +29,15 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.micralon.engine.GameWorld;
 
 public class MapBuilder {
-	private final GameWorld world;
+	private static MapBuilder INSTANCE;
 	private final ObjectMap<String, FixtureDef> m_materials = new ObjectMap<String, FixtureDef>();
-	private float tileSize; // the size of a tile in world units (2m)
-//	private int tilePixel = 128; // the size of a tile in Pixel (128)
+	private float tileSize = 1; // the size of a tile in world units (2m)
+	
 	private final ObjectMap<String, Body> createdBodies = new ObjectMap<String, Body>();
 	private final ObjectMap<String, Tile> createdTiles = new ObjectMap<String, Tile>();
 	private ObjectMapper objectMapper;
 	
-	public Class<? extends IsoTile> isoTileClass = IsoTile.class;
+	private Class<? extends IsoTile> isoTileClass = IsoTile.class;
 	
 	// shared temp vars
 	private Tile tile;
@@ -49,41 +49,54 @@ public class MapBuilder {
 	private final String LOG_TAG = "MapBuilder";
 	private boolean mergeBodies;
 	
-	public MapBuilder(GameWorld world, String materialsFile) {
-		this(world, materialsFile, 1, false);
-	}
-	
-	public MapBuilder(GameWorld world, String materialsFile, float tileSize) {
-		this(world, materialsFile, tileSize, false);
-	}
-	
-	public MapBuilder(GameWorld world, String materialsFile, float tileSize, boolean mergeBodies) {
-		this.world = world;
-		this.tileSize = tileSize;
-		this.mergeBodies = mergeBodies;
-		
+	private MapBuilder() {		
 		FixtureDef defaultFixture = new FixtureDef();
 		defaultFixture.density = 1.0f;
 		defaultFixture.friction = 0.8f;
 		defaultFixture.restitution = 0.0f;
 		
 		m_materials.put("default", defaultFixture);
+	}
+	
+	public static MapBuilder getInstance() {
+		return getInstance(null, 1, true);
+	}
+	
+	public static MapBuilder getInstance(String materialsFile) {
+		return getInstance(materialsFile, 1, true);
+	}
+	
+	public static MapBuilder getInstance(String materialsFile, float tileSize, boolean mergeBodies) {
+		if (INSTANCE == null) {
+			INSTANCE = new MapBuilder();
+		}
 		
 		if (materialsFile != null) {
-			loadMaterialsFile(materialsFile);
+			INSTANCE.loadMaterialsFile(materialsFile);
 		}
+		INSTANCE.setTileSize(tileSize).setMergeBodies(mergeBodies);
+		
+		return INSTANCE;
 	}
 	
-	public void setTileSize(float tileSize) {
+	public MapBuilder setTileSize(float tileSize) {
 		this.tileSize = tileSize;
+		return this;
 	}
 	
-	public void setMergeBodies(boolean merge) {
+	public MapBuilder setMergeBodies(boolean merge) {
 		this.mergeBodies = merge;
+		return this;
 	}
 	
-	public void addObjectMapper(ObjectMapper objectMapper) {
+	public MapBuilder addObjectMapper(ObjectMapper objectMapper) {
 		this.objectMapper = objectMapper;
+		return this;
+	}
+	
+	public MapBuilder setIsoTileClass(Class<? extends IsoTile>isoTileClass) {
+		this.isoTileClass = isoTileClass;
+		return this;
 	}
 
 	public void build(TiledMap map) {
@@ -151,7 +164,7 @@ public class MapBuilder {
 						bodyDef.position.y = y*tileSize;
 						bodyDef.type = BodyDef.BodyType.StaticBody;
 						
-						body = world.box2dWorld.createBody(bodyDef);
+						body = GameWorld.ctx.box2dWorld.createBody(bodyDef);
 						body.setUserData(material);
 						fix = body.createFixture(fixtureDef);
 					}
@@ -189,7 +202,7 @@ public class MapBuilder {
 		}
 	}
 	
-	private void loadMaterialsFile(String materialsFile) {
+	public void loadMaterialsFile(String materialsFile) {
 		Gdx.app.log(LOG_TAG, "adding default material");
 		
 		FixtureDef fixtureDef = new FixtureDef();
@@ -197,6 +210,11 @@ public class MapBuilder {
 		fixtureDef.friction = 1.0f;
 		fixtureDef.restitution = 0.0f;
 		m_materials.put("default", fixtureDef);
+		
+		if (materialsFile == null) {
+			Gdx.app.log(LOG_TAG, "no materials file specified");
+			return;	
+		}
 		
 		Gdx.app.log(LOG_TAG, "loading materials file");
 		
@@ -247,16 +265,20 @@ public class MapBuilder {
 	
 	private void addTileToLayer(Tile tile, String layerName) {
 		if (layerName.equalsIgnoreCase("fg")) {
-			world.fg.addActor(tile);
+			GameWorld.ctx.fg.addActor(tile);
 		} else if (layerName.equalsIgnoreCase("physics")) {
-			world.physics.addActor(tile);
+			GameWorld.ctx.physics.addActor(tile);
 		} else {
-			world.bg.addActor(tile);
+			GameWorld.ctx.bg.addActor(tile);
 		}
 	}
 	
 	private String key(int x, int y) {
 		return x+"/"+y;
+	}
+	
+	public Tile getTile(Vector2 coord) {
+		return getTile((int)coord.x, (int)coord.y);
 	}
 	
 	public Tile getTile(int x, int y) {
