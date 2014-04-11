@@ -19,7 +19,7 @@ public class MapUtils {
 	public static Vector2 staggeredToNormal(float staggeredX, float staggeredY) {
 		temp.x = (float) (Math.floor(staggeredY / 2) + staggeredX);
 		temp.y = (float) (Math.floor(staggeredY / 2) + (staggeredY % 2) - staggeredX);
-		return temp;
+		return temp.cpy();
 	}
 	
 	public static Vector2 normalToStaggerd(IsoTile tile) {
@@ -31,7 +31,7 @@ public class MapUtils {
 	public static Vector2 normalToStaggerd(float normalX, float normalY) {
 		temp.x = (float) (normalX - Math.floor((normalX + normalY)/2));
 		temp.y = normalX + normalY;
-		return temp;
+		return temp.cpy();
 	}
 	
 	/**
