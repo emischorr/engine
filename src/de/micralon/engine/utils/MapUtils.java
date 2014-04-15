@@ -11,7 +11,7 @@ public class MapUtils {
 	private static Vector2 temp = new Vector2();
 	
 	public static Vector2 staggeredToNormal(IsoTile tile) {
-		return staggeredToNormal(tile.tileX, tile.tileY);
+		return staggeredToNormal(tile.coordX(), tile.coordY());
 	}
 	public static Vector2 staggeredToNormal(Vector2 staggered) {
 		return staggeredToNormal(staggered.x, staggered.y);
@@ -23,7 +23,7 @@ public class MapUtils {
 	}
 	
 	public static Vector2 normalToStaggerd(IsoTile tile) {
-		return normalToStaggerd(tile.tileX, tile.tileY);
+		return normalToStaggerd(tile.coordX(), tile.coordY());
 	}
 	public static Vector2 normalToStaggerd(Vector2 staggered) {
 		return normalToStaggerd(staggered.x, staggered.y);

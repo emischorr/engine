@@ -15,6 +15,7 @@ import de.micralon.engine.manager.EffectManager;
 import de.micralon.engine.manager.LightManager;
 import de.micralon.engine.manager.ObjectManager;
 import de.micralon.engine.manager.PlayerManager;
+import de.micralon.engine.map.GameMap;
 import de.micralon.engine.map.ObjectMapper;
 import de.micralon.engine.net.Network.ObjectsData;
 import de.micralon.engine.net.NetworkNode;
@@ -23,6 +24,7 @@ import de.micralon.engine.text.Text;
 public abstract class GameWorld {
 	public LightManager lightManager;
 	public World box2dWorld;
+	public GameMap map;
 	public Stage stage;
 	public CameraHelper cameraHelper;
 	public Array<Text> texts = new Array<Text>();

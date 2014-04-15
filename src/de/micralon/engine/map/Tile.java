@@ -7,8 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 public abstract class Tile extends Image {
-	public final int tileX, tileY;
 	public static float tileSize = 1;
+	
+	protected final int tileX, tileY;
 	
 	public Tile(TextureRegion textureRegion, int tileX, int tileY) {
 		this(textureRegion, tileX, tileY, tileSize);
@@ -27,6 +28,14 @@ public abstract class Tile extends Image {
 	
 	public String identifier() {
 		return tileX+"/"+tileY;
+	}
+	
+	public Integer coordX() {
+		return tileX;
+	}
+	
+	public Integer coordY() {
+		return tileY;
 	}
 	
 	public Vector2 getCoords() {
