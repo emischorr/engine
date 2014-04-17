@@ -6,6 +6,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 
+/**
+ * Represents the gaming interface for the player
+ * @author Enrico Mischorr
+ *
+ */
 public class Hud implements Disposable {
 	protected Stage stage; // stage that holds the GUI. Pixel-exact size.
 	private OrthographicCamera cam;
