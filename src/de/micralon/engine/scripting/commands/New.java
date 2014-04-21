@@ -1,7 +1,7 @@
 package de.micralon.engine.scripting.commands;
 
-import de.micralon.engine.GameObject;
 import de.micralon.engine.GameWorld;
+import de.micralon.engine.gameobjects.GameObject;
 import de.micralon.engine.scripting.Command;
 
 public class New implements Command {

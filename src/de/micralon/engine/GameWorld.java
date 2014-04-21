@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 
 import de.micralon.engine.background.Background;
+import de.micralon.engine.gameobjects.GameObject;
 import de.micralon.engine.manager.ContactManager;
 import de.micralon.engine.manager.DecalsManager;
 import de.micralon.engine.manager.EffectManager;

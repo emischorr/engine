@@ -1,7 +1,11 @@
-package de.micralon.engine;
+package de.micralon.engine.gameobjects;
 
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Scaling;
+
+import de.micralon.engine.DamageModel;
+import de.micralon.engine.Destructible;
+import de.micralon.engine.GameWorld;
 
 public abstract class DestructibleGameObject extends GameObject implements Destructible {
 	protected DamageModel damageModel;

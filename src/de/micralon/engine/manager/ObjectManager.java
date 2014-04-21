@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Values;
 
 import de.micralon.engine.Destructible;
-import de.micralon.engine.GameObject;
+import de.micralon.engine.gameobjects.GameObject;
 import de.micralon.engine.net.Network.ObjectData;
 import de.micralon.engine.net.Network.ObjectsData;
 

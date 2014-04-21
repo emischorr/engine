@@ -6,9 +6,9 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
 import de.micralon.engine.Destructible;
-import de.micralon.engine.GameObject;
 import de.micralon.engine.GameWorld;
 import de.micralon.engine.Trigger;
+import de.micralon.engine.gameobjects.GameObject;
 
 public class ContactManager implements ContactListener {
 	

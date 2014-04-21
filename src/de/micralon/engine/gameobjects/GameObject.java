@@ -1,28 +1,24 @@
-package de.micralon.engine;
+package de.micralon.engine.gameobjects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 
+import de.micralon.engine.GameWorld;
+import de.micralon.engine.LastingEffect;
 import de.micralon.engine.builder.BodyBuilder;
 import de.micralon.engine.net.Network.ObjectData;
 import de.micralon.engine.utils.Reuseable;
 
 public abstract class GameObject extends Image implements Reuseable {
-	private transient Body body;
+	private final Box2DPhysicsSystem physics;
 	private final Scaling scaling;
 	protected float textureOffsetX = 0, textureOffsetY = 0;
-	public Fixture fix;
-	private final Filter filterData = new Filter();
 	
 	private long objectID;
 	private boolean trackUpdates = true; // set this to false if you do not care synchronizing position data
@@ -30,13 +26,8 @@ public abstract class GameObject extends Image implements Reuseable {
 	private Array<LastingEffect> lastingEffects = new Array<LastingEffect>();
 	
 	// set these characteristics in sub classes according to your needs
-	protected BodyType type = BodyType.StaticBody;
-	protected float linearDamping = 0;
-	protected float angularDamping = 0;
 	protected float bodyWidth;
 	protected float bodyHeight;
-	
-	private Vector2 lastPos;
 	
 	// temp vars
 	private ObjectData data;
@@ -52,40 +43,18 @@ public abstract class GameObject extends Image implements Reuseable {
 	protected GameObject(BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
 		super();
 		this.scaling = scaling;
-		
-		if (type != null) this.type = type;
 		this.bodyWidth = bodyWidth;
 		this.bodyHeight = bodyHeight;
-		this.linearDamping = linearDamping;
-		this.angularDamping = angularDamping;
+		
+		physics = new Box2DPhysicsSystem(type, linearDamping, angularDamping);
 		
 		// TODO: move it out and call it outside of the world step
 		init();
 	}
 	
 	protected void init() {
-		createBody();
 		createShape();
 		body.resetMassData();
-	}
-	
-	public final void createBody() {
-		createBody(false);
-	}
-	
-	public final void createBody(boolean force) {
-		if (force || body == null) { // create Body only once
-			BodyBuilder bodyBuilder = new BodyBuilder(GameWorld.ctx.box2dWorld);
-			body = bodyBuilder
-					.type(type)
-					.linearDamping(linearDamping)
-					.angularDamping(angularDamping)
-					.position(0, 0)
-					.userData(this)
-					.build();
-			
-			needUpdate();
-		}
 	}
 	
 	protected void createShape() {}
@@ -120,22 +89,16 @@ public abstract class GameObject extends Image implements Reuseable {
 	}
 	
 	public void setDegree(float degree) {
-		if (body != null) {
-			getBody().setTransform(getPos(), MathUtils.degreesToRadians*degree);
-			needUpdate();
-		}
+		physics.setDegree(degree);
+		needUpdate();
 	}
 	
 	public float getDegree() {
-		return body.getAngle() * MathUtils.radiansToDegrees;
+		return physics.getDegree();
 	}
 	
 	public Vector2 getPos() {
-		if (body != null) {
-			return body.getPosition();
-		} else {
-			return lastPos;
-		}
+		return physics.getPosition();
 	}
 	
 	public void setPos(Vector2 pos) {
@@ -143,7 +106,7 @@ public abstract class GameObject extends Image implements Reuseable {
 	}
 	
 	public void setPos(float x, float y) {
-		body.setTransform(x, y, body.getAngle());
+		physics.setPosition(x, y);
 		needUpdate();
 	}
 	
@@ -152,43 +115,21 @@ public abstract class GameObject extends Image implements Reuseable {
 		textureOffsetY = y;
 	}
 	
-	public final void setFilterData(short category) {
-		setFilterData(category, (short) ~category);
-	}
-	
-	public final void setFilterData(short category, short mask) {
-		filterData.categoryBits = category;
-		filterData.maskBits = mask;
-		fix.setFilterData(filterData);
-	}
-	
-	public void setFilterData(Filter filter) {
-		fix.setFilterData(filter);
-	}
-	
-	public Filter getFilterData() {
-		return filterData;
-	}
-	
 	public Body getBody() {
 		return body;
 	}
 	
 	public void update() {}
 	
-	public void contactWith(GameObject obj, Contact contact) {}
-	public void endContactWith(GameObject obj, Contact contact) {}
+	public void contactWith(GameObject obj) {}
+	public void endContactWith(GameObject obj) {}
 	
 	/**
 	 * Don't call this directly from inside the physics step
 	 * WARNING: this destroys the body
 	 */
 	public void destroy() {
-		if (body != null) {
-			lastPos = body.getPosition();
-			GameWorld.ctx.box2dWorld.destroyBody(body);
-			body = null;
-		}
+		physics.destroy();
 		remove();
 	}
 	
@@ -219,7 +160,8 @@ public abstract class GameObject extends Image implements Reuseable {
 	}
 	
 	public void setData(ObjectData data) {
-		getBody().setTransform(data.position, MathUtils.degreesToRadians*data.rotation);
+//		getBody().setTransform(data.position, MathUtils.degreesToRadians*data.rotation);
+		physics.setPosition(data.position.x, data.position.y).setDegree(MathUtils.degreesToRadians*data.rotation);
 		updateImage();
 	}
 	
