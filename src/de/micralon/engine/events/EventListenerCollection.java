@@ -10,7 +10,12 @@ public class EventListenerCollection {
 	}
 	
 	public EventListener removeListener(EventListener listener) {
-		//TODO: remove listener
-		return listener;
+		for (EventListenerEntry entry : entries) {
+			if (entry.eventListener.equals(listener)) {
+				entries.removeValue(entry, true);
+				return listener;
+			}
+		}
+		return null;
 	}
 }
