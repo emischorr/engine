@@ -144,7 +144,7 @@ public class ObjectManager implements Disposable {
 					((Destructible) obj).setDestroyed();
 				}
 			} else {
-				// TODO: whats wrong here... why is obj == null?!
+				// TODO: what is wrong here... why is obj == null?!
 				Gdx.app.log("ObjectManager", "WARNING: obj is null!");
 				return;
 			}

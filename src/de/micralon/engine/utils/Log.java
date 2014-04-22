@@ -12,4 +12,8 @@ public class Log {
 	public static void info(String message) {
 		Gdx.app.log( log_topic, message );
 	}
+	
+	public static void warn(String message) {
+		Gdx.app.log( log_topic, message );
+	}
 }

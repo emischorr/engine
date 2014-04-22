@@ -3,7 +3,6 @@ package de.micralon.engine.gameobjects;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -11,12 +10,11 @@ import com.badlogic.gdx.utils.Scaling;
 
 import de.micralon.engine.GameWorld;
 import de.micralon.engine.LastingEffect;
-import de.micralon.engine.builder.BodyBuilder;
 import de.micralon.engine.net.Network.ObjectData;
 import de.micralon.engine.utils.Reuseable;
 
 public abstract class GameObject extends Image implements Reuseable {
-	private final Box2DPhysicsSystem physics;
+	private final PhysicsSystem physics;
 	private final Scaling scaling;
 	protected float textureOffsetX = 0, textureOffsetY = 0;
 	
@@ -33,28 +31,31 @@ public abstract class GameObject extends Image implements Reuseable {
 	private ObjectData data;
 	
 	public GameObject() {
-		this(null, 1, 1, 0, 0, Scaling.stretch);
+		this(new NoPhysicsSystem(), 1, 1, 0, 0, Scaling.stretch);
 	}
 	
-	protected GameObject(BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
-		this(type, bodyWidth, bodyHeight, linearDamping, angularDamping, Scaling.stretch);
+	protected GameObject(PhysicsSystem physics, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
+		this(physics, bodyWidth, bodyHeight, linearDamping, angularDamping, Scaling.stretch);
 	}
 	
-	protected GameObject(BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
+	protected GameObject(PhysicsSystem physics, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
 		super();
 		this.scaling = scaling;
 		this.bodyWidth = bodyWidth;
 		this.bodyHeight = bodyHeight;
-		
-		physics = new Box2DPhysicsSystem(type, linearDamping, angularDamping);
+		this.physics = physics;
 		
 		// TODO: move it out and call it outside of the world step
 		init();
 	}
 	
-	protected void init() {
+	protected final void init() {
+		initShape();
+	}
+	
+	private final void initShape() {
 		createShape();
-		body.resetMassData();
+		physics.resetMass(); // reset body mass
 	}
 	
 	protected void createShape() {}
@@ -115,10 +116,6 @@ public abstract class GameObject extends Image implements Reuseable {
 		textureOffsetY = y;
 	}
 	
-	public Body getBody() {
-		return body;
-	}
-	
 	public void update() {}
 	
 	public void contactWith(GameObject obj) {}
@@ -128,14 +125,14 @@ public abstract class GameObject extends Image implements Reuseable {
 	 * Don't call this directly from inside the physics step
 	 * WARNING: this destroys the body
 	 */
-	public void destroy() {
+	public final void destroy() {
 		physics.destroy();
 		remove();
 	}
 	
 	@Override
 	public void reuse() {
-		createBody(true);
+		physics.reset();
 		createShape();
 	}
 	
@@ -182,8 +179,8 @@ public abstract class GameObject extends Image implements Reuseable {
 	
 	private final void updateImage() {
 		setOrigin(bodyWidth*0.5f, bodyHeight*0.5f);
-		setRotation(MathUtils.radiansToDegrees * body.getAngle());
-		setPosition(body.getPosition().x-bodyWidth*0.5f+textureOffsetX, body.getPosition().y-bodyHeight*0.5f+textureOffsetY); // set the actor position at the box2d body position
+		setRotation(physics.getDegree());
+		setPosition(physics.getPosition().x-bodyWidth*0.5f+textureOffsetX, physics.getPosition().y-bodyHeight*0.5f+textureOffsetY); // set the actor position at the box2d body position
 		setSize(bodyWidth, bodyHeight); // scale actor to body's size  
 		setScaling(scaling); // stretch the texture  
 		setAlign(Align.center);

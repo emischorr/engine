@@ -91,6 +91,16 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 	public Filter getFilterData() {
 		return filterData;
 	}
+	
+	@Override
+	public void resetMass() {
+		body.resetMassData();
+	}
+	
+	@Override
+	public void reset() {
+		createBody(true);
+	}
 
 	@Override
 	public void destroy() {

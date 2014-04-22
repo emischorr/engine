@@ -11,7 +11,11 @@ public interface PhysicsSystem {
 	public PhysicsSystem setDegree(float degree);
 	
 	public float getDegree();
+	
+	public void resetMass();
+	
+	public void reset();
 
-	void destroy();
+	public void destroy();
 
 }

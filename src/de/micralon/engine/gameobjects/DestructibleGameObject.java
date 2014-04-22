@@ -1,6 +1,5 @@
 package de.micralon.engine.gameobjects;
 
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Scaling;
 
 import de.micralon.engine.DamageModel;
@@ -15,12 +14,12 @@ public abstract class DestructibleGameObject extends GameObject implements Destr
 		super();
 	}
 	
-	protected DestructibleGameObject(BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
-		super(type, bodyWidth, bodyHeight, linearDamping, angularDamping);
+	protected DestructibleGameObject(PhysicsSystem physics, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
+		super(physics, bodyWidth, bodyHeight, linearDamping, angularDamping);
 	}
 	
-	protected DestructibleGameObject(BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
-		super(type, bodyWidth, bodyHeight, linearDamping, angularDamping, scaling);
+	protected DestructibleGameObject(PhysicsSystem physics, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
+		super(physics, bodyWidth, bodyHeight, linearDamping, angularDamping, scaling);
 	}
 	
 	@Override

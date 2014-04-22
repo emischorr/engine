@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 
@@ -13,12 +12,12 @@ public abstract class AnimatedGameObject extends GameObject {
 	private transient Animation currentAnimation;
 	private float stateTime = 0;
 	
-	protected AnimatedGameObject(BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
-		this(type, bodyWidth, bodyHeight, linearDamping, angularDamping, Scaling.stretch);
+	protected AnimatedGameObject(PhysicsSystem physics, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
+		this(physics, bodyWidth, bodyHeight, linearDamping, angularDamping, Scaling.stretch);
 	}
 	
-	public AnimatedGameObject(BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
-		super(type, bodyWidth, bodyHeight, linearDamping, angularDamping, scaling);
+	public AnimatedGameObject(PhysicsSystem physics, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
+		super(physics, bodyWidth, bodyHeight, linearDamping, angularDamping, scaling);
 	}
 	
 	protected void setAnimation(Animation animation) {
