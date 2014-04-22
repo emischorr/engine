@@ -16,6 +16,7 @@ import de.micralon.engine.manager.EffectManager;
 import de.micralon.engine.manager.LightManager;
 import de.micralon.engine.manager.ObjectManager;
 import de.micralon.engine.manager.PlayerManager;
+import de.micralon.engine.map.GameMap;
 import de.micralon.engine.map.ObjectMapper;
 import de.micralon.engine.net.Network.ObjectsData;
 import de.micralon.engine.net.NetworkNode;
@@ -24,6 +25,7 @@ import de.micralon.engine.text.Text;
 public abstract class GameWorld {
 	public LightManager lightManager;
 	public World box2dWorld;
+	public GameMap map;
 	public Stage stage;
 	public CameraHelper cameraHelper;
 	public Array<Text> texts = new Array<Text>();
@@ -38,7 +40,7 @@ public abstract class GameWorld {
 	private static int WORLD_WIDTH = 50;
 	private static int WORLD_HEIGHT = 50;
 	
-    private long gameTime;
+    protected GameTimer gameTimer = new GameTimer();
     
 	private Level level;
     
@@ -118,7 +120,7 @@ public abstract class GameWorld {
 	 * @return the actual game time in ms
 	 */
 	public long getGameTime() {
-		return gameTime;
+		return gameTimer.getTime();
 	}
 	
 	public ObjectManager getObjectManager() {
@@ -189,7 +191,7 @@ public abstract class GameWorld {
 	}
 	
 	public void update(float deltaTime) {
-		gameTime = (long) (gameTime + deltaTime*1000);
+		gameTimer.update(deltaTime);
 		cameraHelper.updateCameraPosition();
 		background.update();
 		

@@ -10,7 +10,6 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -34,13 +33,11 @@ public class MapBuilder {
 	private float tileSize = 1; // the size of a tile in world units (2m)
 	
 	private final ObjectMap<String, Body> createdBodies = new ObjectMap<String, Body>();
-	private final ObjectMap<String, Tile> createdTiles = new ObjectMap<String, Tile>();
 	private ObjectMapper objectMapper;
 	
 	private Class<? extends IsoTile> isoTileClass = IsoTile.class;
 	
 	// shared temp vars
-	private Tile tile;
 	private Body body;
 	private Fixture fix;
 	private Filter filterData = new Filter();
@@ -99,10 +96,8 @@ public class MapBuilder {
 		return this;
 	}
 
-	public void build(TiledMap map) {
-		TiledMapTileLayer physicsLayer = (TiledMapTileLayer) map.getLayers().get("physics");
-		TiledMapTileLayer bgLayer = (TiledMapTileLayer) map.getLayers().get("bg");
-		TiledMapTileLayer fgLayer = (TiledMapTileLayer) map.getLayers().get("fg");
+	public GameMap build(TiledMap map) {
+		TiledMapTileLayer layer;
 		MapLayer objectsLayer = map.getLayers().get("objects");
 		FixtureDef fixtureDef;
 		Array<Body> mergingBodies = new Array<Body>();
@@ -114,78 +109,81 @@ public class MapBuilder {
 //		tileSize = (Float) map.getProperties().get("tilewidth");
 		Tile.tileSize = tileSize;
 		
-		Cell cell;
+		GameMap gameMap = new GameMap();
+		for (MapLayer l : map.getLayers()) {
+			if (l instanceof TiledMapTileLayer) gameMap.addLayer(l.getName());
+		}
 			
 		for (int y = mapHeight; y > 0 ; y--) {
 			for (int x = 0; x < mapWidth; x++) {
-				cell = null;
+				TileStack field = gameMap.createField();			
 				
-				// bg tile image
-				if (bgLayer != null && bgLayer.getCell(x, y) != null) {
-					createTile(orientation, bgLayer, x, y);
-				}
-				
-				// physics tile
-				if (physicsLayer != null) cell = physicsLayer.getCell(x, y);
-				if (cell != null && cell.getTile() != null) {
-					// get material info
-					MapProperties properties = cell.getTile().getProperties();
-					String material = properties.get("material", "default", String.class);
-					// load fixture for material
-					fixtureDef = m_materials.get(material);
-					if (fixtureDef == null) {
-						Gdx.app.log(LOG_TAG, "material does not exist " + material + " using default");
-						fixtureDef = m_materials.get("default");
-					}
+				for (String layerName : gameMap.getLayerNames()) {
+					layer = ((TiledMapTileLayer) map.getLayers().get(layerName));
 					
-					// create shape
-					PolygonShape shape = new PolygonShape();
-					shape.setAsBox(tileSize/2, tileSize/2);
-					
-					// add shape to fixture
-					fixtureDef.shape = shape;
-					
-					if (mergeBodies) {
-						// check if there are already adjacent bodies with same material
-						for (Body neighbour : getAdjacentBodies(x, y)) {
-							if (neighbour != null && material.equalsIgnoreCase((String) neighbour.getUserData())) {
-								mergingBodies.add(neighbour);
+					if ( layer.getCell(x, y) != null ) {
+						if (layerName.equalsIgnoreCase("physics")) {
+							// get material info
+							MapProperties properties = layer.getCell(x, y).getTile().getProperties();
+							String material = properties.get("material", "default", String.class);
+							// load fixture for material
+							fixtureDef = m_materials.get(material);
+							if (fixtureDef == null) {
+								Gdx.app.log(LOG_TAG, "material does not exist " + material + " using default");
+								fixtureDef = m_materials.get("default");
 							}
+							
+							// create shape
+							PolygonShape shape = new PolygonShape();
+							shape.setAsBox(tileSize/2, tileSize/2);
+							
+							// add shape to fixture
+							fixtureDef.shape = shape;
+							
+							if (mergeBodies) {
+								// check if there are already adjacent bodies with same material
+								for (Body neighbour : getAdjacentBodies(x, y)) {
+									if (neighbour != null && material.equalsIgnoreCase((String) neighbour.getUserData())) {
+										mergingBodies.add(neighbour);
+									}
+								}
+							}
+							
+							if (mergingBodies.size > 0) {
+								// merge bodies
+								mergeTile(body, shape, x*tileSize, y*tileSize);
+							} else {
+								// create new body
+								BodyDef bodyDef = new BodyDef();
+								bodyDef.position.x = x*tileSize;
+								bodyDef.position.y = y*tileSize;
+								bodyDef.type = BodyDef.BodyType.StaticBody;
+								
+								body = GameWorld.ctx.box2dWorld.createBody(bodyDef);
+								body.setUserData(material);
+								fix = body.createFixture(fixtureDef);
+							}
+							
+							// set filter data
+							// TODO: allow custom filter
+							fix.setFilterData(filterData);
+							
+							// add to body register to keep track of all bodies
+							createdBodies.put(key(x,y), body);
+							
+							// physics tile image
+							field.addTile( createTile(orientation, layer, x, y), layerName );
+							
+							fixtureDef = null;
+							shape.dispose();
+						} else {
+							field.addTile( createTile(orientation, layer, x, y), layerName );
 						}
 					}
-					
-					if (mergingBodies.size > 0) {
-						//TODO: merge bodies
-						mergeTile(body, shape, x*tileSize, y*tileSize);
-					} else {
-						// create new body
-						BodyDef bodyDef = new BodyDef();
-						bodyDef.position.x = x*tileSize;
-						bodyDef.position.y = y*tileSize;
-						bodyDef.type = BodyDef.BodyType.StaticBody;
-						
-						body = GameWorld.ctx.box2dWorld.createBody(bodyDef);
-						body.setUserData(material);
-						fix = body.createFixture(fixtureDef);
-					}
-					
-					// set filter data
-					// TODO: allow custom filter
-					fix.setFilterData(filterData);
-					
-					// add to body register to keep track of all bodies
-					createdBodies.put(key(x,y), body);
-					
-					// physics tile image
-					createTile(orientation, physicsLayer, x, y);
-					
-					fixtureDef = null;
-					shape.dispose();
 				}
 				
-				// fg tile image
-				if (fgLayer != null && fgLayer.getCell(x, y) != null) {
-					createTile(orientation, fgLayer, x, y);
+				if (!field.isEmpty()) {
+					gameMap.addField(field, key(x,y));
 				}
 			}
 		}
@@ -200,6 +198,8 @@ public class MapBuilder {
 				Gdx.app.log(LOG_TAG, "Found object layer but no ObjectMapper defined! Use addObjectMapper() to add one.");
 			}
 		}
+		
+		return gameMap;
 	}
 	
 	public void loadMaterialsFile(String materialsFile) {
@@ -245,7 +245,8 @@ public class MapBuilder {
 		}
 	}
 	
-	private void createTile(String orientation, TiledMapTileLayer layer, int x, int y) {
+	private Tile createTile(String orientation, TiledMapTileLayer layer, int x, int y) {
+		Tile tile = null;
 		if (orientation.equalsIgnoreCase("staggered")) {
 			try {
 				Constructor constructor = ClassReflection.getConstructor(isoTileClass, TextureRegion.class, int.class, int.class);
@@ -258,11 +259,10 @@ public class MapBuilder {
 			tile = new SquareTile(layer.getCell(x, y).getTile().getTextureRegion(), x, y);
 			addTileToLayer(tile, layer.getName());
 		}
-		// add to tile register to keep track of all tiles
-		createdTiles.put(key(x,y), tile);
-		tile = null;
+		return tile;
 	}
 	
+	//TODO: refactor this! make it generic
 	private void addTileToLayer(Tile tile, String layerName) {
 		if (layerName.equalsIgnoreCase("fg")) {
 			GameWorld.ctx.fg.addActor(tile);
@@ -275,14 +275,6 @@ public class MapBuilder {
 	
 	private String key(int x, int y) {
 		return x+"/"+y;
-	}
-	
-	public Tile getTile(Vector2 coord) {
-		return getTile((int)coord.x, (int)coord.y);
-	}
-	
-	public Tile getTile(int x, int y) {
-		return createdTiles.get( key(x, y) );
 	}
 	
 	/**
