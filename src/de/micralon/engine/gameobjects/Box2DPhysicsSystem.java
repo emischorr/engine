@@ -19,6 +19,8 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 	protected Filter filterData = new Filter();
 	protected Vector2 lastPos;
 	
+	protected float bodyWidth, bodyHeight;
+	
 	public Box2DPhysicsSystem() {
 		this(null, 0, 0);
 	}
@@ -50,6 +52,16 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 		if (force || body == null) { // create Body only once
 			initBody();
 		}
+	}
+	
+	@Override
+	public float getWidth() {
+		return bodyWidth;
+	}
+	
+	@Override
+	public float getHeight() {
+		return bodyHeight;
 	}
 	
 	@Override

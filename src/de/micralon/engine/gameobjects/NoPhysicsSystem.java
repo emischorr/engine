@@ -5,6 +5,18 @@ import com.badlogic.gdx.math.Vector2;
 import de.micralon.engine.utils.Log;
 
 public class NoPhysicsSystem implements PhysicsSystem {
+	
+	@Override
+	public float getWidth() {
+		Log.warn("NoPhysicsSystem in use!");
+		return 0;
+	}
+
+	@Override
+	public float getHeight() {
+		Log.warn("NoPhysicsSystem in use!");
+		return 0;
+	}
 
 	@Override
 	public Vector2 getPosition() {

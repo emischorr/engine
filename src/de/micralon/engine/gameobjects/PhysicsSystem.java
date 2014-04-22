@@ -4,6 +4,10 @@ import com.badlogic.gdx.math.Vector2;
 
 public interface PhysicsSystem {
 	
+	public float getWidth();
+	
+	public float getHeight();
+	
 	public Vector2 getPosition();
 	
 	public PhysicsSystem setPosition(float x, float y);

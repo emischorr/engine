@@ -12,12 +12,12 @@ public abstract class AnimatedGameObject extends GameObject {
 	private transient Animation currentAnimation;
 	private float stateTime = 0;
 	
-	protected AnimatedGameObject(PhysicsSystem physics, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
-		this(physics, bodyWidth, bodyHeight, linearDamping, angularDamping, Scaling.stretch);
+	protected AnimatedGameObject(PhysicsSystem physics) {
+		this(physics, Scaling.stretch);
 	}
 	
-	public AnimatedGameObject(PhysicsSystem physics, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
-		super(physics, bodyWidth, bodyHeight, linearDamping, angularDamping, scaling);
+	public AnimatedGameObject(PhysicsSystem physics, Scaling scaling) {
+		super(physics, scaling);
 	}
 	
 	protected void setAnimation(Animation animation) {
@@ -36,7 +36,7 @@ public abstract class AnimatedGameObject extends GameObject {
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		if (currentAnimation != null) {
-			batch.draw(currentAnimation.getKeyFrame(stateTime, true), getPos().x - bodyWidth/2 + textureOffsetX, getPos().y - bodyHeight/2 + textureOffsetY, bodyWidth, bodyHeight);
+			batch.draw(currentAnimation.getKeyFrame(stateTime, true), getPos().x - getBodyWidth()/2 + textureOffsetX, getPos().y - getBodyHeight()/2 + textureOffsetY, getBodyWidth(), getBodyHeight());
 		} else {
 			super.draw(batch, parentAlpha);
 		}

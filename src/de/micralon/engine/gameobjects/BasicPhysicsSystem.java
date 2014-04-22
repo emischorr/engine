@@ -3,8 +3,24 @@ package de.micralon.engine.gameobjects;
 import com.badlogic.gdx.math.Vector2;
 
 public class BasicPhysicsSystem implements PhysicsSystem {
+	protected float width, height;
 	protected final Vector2 position = new Vector2(0,0);
 	protected float degree;
+	
+	public BasicPhysicsSystem(float width, float height) {
+		this.width = width;
+		this.height = height;
+	}
+	
+	@Override
+	public float getWidth() {
+		return width;
+	}
+
+	@Override
+	public float getHeight() {
+		return height;
+	}
 
 	@Override
 	public Vector2 getPosition() {

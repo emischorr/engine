@@ -14,12 +14,12 @@ public abstract class DestructibleGameObject extends GameObject implements Destr
 		super();
 	}
 	
-	protected DestructibleGameObject(PhysicsSystem physics, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
-		super(physics, bodyWidth, bodyHeight, linearDamping, angularDamping);
+	protected DestructibleGameObject(PhysicsSystem physics) {
+		super(physics);
 	}
 	
-	protected DestructibleGameObject(PhysicsSystem physics, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
-		super(physics, bodyWidth, bodyHeight, linearDamping, angularDamping, scaling);
+	protected DestructibleGameObject(PhysicsSystem physics, Scaling scaling) {
+		super(physics, scaling);
 	}
 	
 	@Override

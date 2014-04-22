@@ -14,8 +14,8 @@ import de.micralon.engine.net.Network.ObjectData;
 import de.micralon.engine.utils.Reuseable;
 
 public abstract class GameObject extends Image implements Reuseable {
-	private final PhysicsSystem physics;
 	private final Scaling scaling;
+	private final PhysicsSystem physics;
 	protected float textureOffsetX = 0, textureOffsetY = 0;
 	
 	private long objectID;
@@ -23,26 +23,20 @@ public abstract class GameObject extends Image implements Reuseable {
 	
 	private Array<LastingEffect> lastingEffects = new Array<LastingEffect>();
 	
-	// set these characteristics in sub classes according to your needs
-	protected float bodyWidth;
-	protected float bodyHeight;
-	
 	// temp vars
 	private ObjectData data;
 	
 	public GameObject() {
-		this(new NoPhysicsSystem(), 1, 1, 0, 0, Scaling.stretch);
+		this(new NoPhysicsSystem(), Scaling.stretch);
 	}
 	
-	protected GameObject(PhysicsSystem physics, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
-		this(physics, bodyWidth, bodyHeight, linearDamping, angularDamping, Scaling.stretch);
+	protected GameObject(PhysicsSystem physics) {
+		this(physics, Scaling.stretch);
 	}
 	
-	protected GameObject(PhysicsSystem physics, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
+	protected GameObject(PhysicsSystem physics, Scaling scaling) {
 		super();
 		this.scaling = scaling;
-		this.bodyWidth = bodyWidth;
-		this.bodyHeight = bodyHeight;
 		this.physics = physics;
 		
 		// TODO: move it out and call it outside of the world step
@@ -82,11 +76,11 @@ public abstract class GameObject extends Image implements Reuseable {
 	}
 	
 	public float getBodyWidth() {
-		return bodyWidth;
+		return physics.getWidth();
 	}
 	
 	public float getBodyHeight() {
-		return bodyHeight;
+		return physics.getHeight();
 	}
 	
 	public void setDegree(float degree) {
@@ -178,10 +172,10 @@ public abstract class GameObject extends Image implements Reuseable {
 	}
 	
 	private final void updateImage() {
-		setOrigin(bodyWidth*0.5f, bodyHeight*0.5f);
+		setOrigin(physics.getWidth()*0.5f, physics.getHeight()*0.5f);
 		setRotation(physics.getDegree());
-		setPosition(physics.getPosition().x-bodyWidth*0.5f+textureOffsetX, physics.getPosition().y-bodyHeight*0.5f+textureOffsetY); // set the actor position at the box2d body position
-		setSize(bodyWidth, bodyHeight); // scale actor to body's size  
+		setPosition(physics.getPosition().x-physics.getWidth()*0.5f+textureOffsetX, physics.getPosition().y-physics.getHeight()*0.5f+textureOffsetY); // set the actor position at the box2d body position
+		setSize(physics.getWidth(), physics.getHeight()); // scale actor to body's size  
 		setScaling(scaling); // stretch the texture  
 		setAlign(Align.center);
 	}
