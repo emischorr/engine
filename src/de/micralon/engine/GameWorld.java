@@ -119,7 +119,7 @@ public abstract class GameWorld {
 	 * @return the actual game time in ms
 	 */
 	public long getGameTime() {
-		return gameTimer.getTime();
+		return gameTimer.getTimeInMs();
 	}
 	
 	public ObjectManager getObjectManager() {
