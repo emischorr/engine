@@ -12,10 +12,10 @@ import de.micralon.engine.gameobjects.GameObject;
 public class CameraHelper {
 	private Stage stage;
 	private OrthographicCamera camera;
-	private Vector2 camPos = new Vector2();
 	private int VIEW_WIDTH = 18;
 	private int VIEW_HEIGHT = 12;
-	private Rectangle cullingArea;
+	private int cullingOffset = 1;
+	private final Rectangle cullingArea;
 	private int lowerX, upperX, lowerY, upperY;
 	private int CAMERA_RIGHT_LIMIT;
     private int CAMERA_LEFT_LIMIT;
@@ -24,7 +24,7 @@ public class CameraHelper {
 	private GameObject target;
 	public boolean followTarget = true;
 	
-	private boolean culling = true;
+	private final boolean culling = true;
 	public float zoom;
 	
 	public CameraHelper(Stage stage) {
@@ -35,13 +35,21 @@ public class CameraHelper {
 	}
 	
 	public void setViewSize(int width, int height) {
+		setViewSize(width, height, cullingOffset);
+	}
+	
+	public void setViewSize(int width, int height, int cullingOffset) {
 		VIEW_WIDTH = width;
 		VIEW_HEIGHT = height;
 		
 		updateCameraBorders();
 		
 		stage.setViewport(VIEW_WIDTH, VIEW_HEIGHT, false);
-		cullingArea.set(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
+		cullingArea.set(0, 0, VIEW_WIDTH+cullingOffset, VIEW_HEIGHT+cullingOffset);
+	}
+	
+	public void setCullingOffset(int offset) {
+		this.cullingOffset = offset;
 	}
 	
 	public float getZoom() {
@@ -101,14 +109,15 @@ public class CameraHelper {
 			y = CAMERA_DOWN_LIMIT;
 		
 		camera.position.set(x, y, 0);
+		
+		// update cullingArea
+		if (culling) cullingArea.setPosition(camera.position.x - cullingArea.width/2, camera.position.y - cullingArea.height/2);
 	}
 	
 	public void updateCameraPosition() {
 		if (followTarget && target != null && target.getPos() != null) {
 			// update position
 			setPosition(target.getPos());
-			// update cullingArea
-			if (culling) cullingArea.setPosition(camPos.x - VIEW_WIDTH/2, camPos.y - VIEW_HEIGHT/2);
 		}
 	}
 	

@@ -97,6 +97,7 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 	}
 	
 	public void setFilterData(Filter filter) {
+		filterData = filter;
 		fix.setFilterData(filter);
 	}
 	

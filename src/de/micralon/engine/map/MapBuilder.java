@@ -91,6 +91,12 @@ public class MapBuilder {
 		return this;
 	}
 	
+	public MapBuilder setFilterData(short category, short mask) {
+		this.filterData.categoryBits = category;
+		this.filterData.maskBits = mask;
+		return this;
+	}
+	
 	public MapBuilder setIsoTileClass(Class<? extends IsoTile>isoTileClass) {
 		this.isoTileClass = isoTileClass;
 		return this;
@@ -165,7 +171,6 @@ public class MapBuilder {
 							}
 							
 							// set filter data
-							// TODO: allow custom filter
 							fix.setFilterData(filterData);
 							
 							// add to body register to keep track of all bodies
