@@ -22,7 +22,7 @@ public abstract class GameObject extends Image implements Reuseable {
 	private final Scaling scaling;
 	protected float textureOffsetX = 0, textureOffsetY = 0;
 	public Fixture fix;
-	private final Filter filterData = new Filter();
+	private Filter filterData = new Filter();
 	
 	private long objectID;
 	private boolean trackUpdates = true; // set this to false if you do not care synchronizing position data
@@ -163,6 +163,7 @@ public abstract class GameObject extends Image implements Reuseable {
 	}
 	
 	public void setFilterData(Filter filter) {
+		filterData = filter;
 		fix.setFilterData(filter);
 	}
 	
