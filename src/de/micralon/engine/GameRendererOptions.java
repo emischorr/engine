@@ -1,5 +1,7 @@
 package de.micralon.engine;
 
+import com.badlogic.gdx.Gdx;
+
 public class GameRendererOptions {
 	public boolean drawBackground = true;
     public boolean drawWorld = true;
@@ -40,7 +42,7 @@ public class GameRendererOptions {
 		drawLight = false;
 		drawDebug = true;
 		
-		mode = Mode.ONLY_DEBUG;
+		setMode(Mode.ONLY_DEBUG);
     }
     
     public void drawExceptBackground() {
@@ -49,7 +51,7 @@ public class GameRendererOptions {
 		drawLight = true;
 		drawDebug = true;
 		
-		mode = Mode.EXCEPT_BG;
+		setMode(Mode.EXCEPT_BG);
     }
     
     public void drawExceptDebug() {
@@ -58,7 +60,7 @@ public class GameRendererOptions {
 		drawLight = true;
 		drawDebug = false;
 		
-		mode = Mode.ONLY_DEBUG;
+		setMode(Mode.EXCEPT_DEBUG);
     }
     
     public void drawAll() {
@@ -67,6 +69,11 @@ public class GameRendererOptions {
 		drawLight = true;
 		drawDebug = true;
 		
-		mode = Mode.ALL;
+		setMode(Mode.ALL);
+    }
+    
+    private void setMode(Mode mode) {
+    	this.mode = mode;
+		Gdx.app.log("GameRendererOptions", "switched render mode to "+mode.toString());
     }
 }

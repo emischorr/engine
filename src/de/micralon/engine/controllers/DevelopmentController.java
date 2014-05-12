@@ -1,7 +1,6 @@
 package de.micralon.engine.controllers;
 
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 
 import de.micralon.engine.CameraHelper;
@@ -53,7 +52,6 @@ public class DevelopmentController extends InputAdapter {
 		
 		if (keycode == Keys.M) {
 			renderOptions.switchMode();
-			Gdx.app.log("DevelopmentController", "switched render mode");
 		}
 		
 		return false;
