@@ -78,7 +78,7 @@ public class GameRenderer {
         
         rayHandler.setCombinedMatrix(camera.combined);
         
-        processor.capture();
+//        processor.capture();
         
         // background rendering
         if (options.drawBackground) {
@@ -98,7 +98,7 @@ public class GameRenderer {
         	rayHandler.render();
         }
         
-        processor.renderTo(batch);
+//        processor.renderTo(batch);
         
         
         // box2d debug rendering

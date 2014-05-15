@@ -48,8 +48,8 @@ public class Processor implements Disposable{
 	public Processor(Pixmap.Format fboFormat, int fboSize, boolean useDepth) {
 		this.useDepth = useDepth;
 		
-		fbo = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), useDepth);
-		fbo2 = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), useDepth);
+		fbo = new FrameBuffer(fboFormat, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), useDepth);
+		fbo2 = new FrameBuffer(fboFormat, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), useDepth);
 		createQuad();
 		
 		if (useDepth) {
@@ -103,7 +103,7 @@ public class Processor implements Disposable{
 	}
 
 	public void capture() {
-		if (shader != null) {
+//		if (shader != null) {
 			swapBuffers();
 			fbo.begin();
 			
@@ -113,7 +113,7 @@ public class Processor implements Disposable{
 	
 			Gdx.gl.glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 			Gdx.gl.glClear(clearBits);
-		}
+//		}
 	}
 	
 	public Texture endCapture() {
@@ -129,7 +129,7 @@ public class Processor implements Disposable{
 	}
 	
 	public void renderTo(SpriteBatch batch) {
-		if (shader != null) {
+//		if (shader != null) {
 			fboRegion = new TextureRegion(endCapture());
 			fboRegion.flip(false,  true);
 			
@@ -138,7 +138,7 @@ public class Processor implements Disposable{
 			batch.begin();
 			batch.draw(fboRegion, 0, 0);
 			batch.end();
-		}
+//		}
 	}
 	
 	public void render(FrameBuffer dest) {
