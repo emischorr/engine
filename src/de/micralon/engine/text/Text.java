@@ -1,5 +1,6 @@
 package de.micralon.engine.text;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,6 +16,10 @@ public class Text {
 	protected float stateTime;
 	
 	private float height, width;
+	
+	public Text(BitmapFont font, Color color, String text) {
+		this(font, color, text, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+	}
 	
 	public Text(BitmapFont font, Color color, String text, float x, float y) {
 		this.font = font;

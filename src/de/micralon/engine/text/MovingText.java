@@ -4,6 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 public class MovingText extends Text {
+	
+	public MovingText(BitmapFont font, Color color, String text) {
+		super(font, color, text);
+	}
 
 	public MovingText(BitmapFont font, Color color, String text, float x, float y) {
 		super(font, color, text, x, y);

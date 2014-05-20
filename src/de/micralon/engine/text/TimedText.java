@@ -7,6 +7,11 @@ import de.micralon.engine.GameWorld;
 
 public class TimedText extends Text {
 	private float duration;
+	
+	public TimedText(BitmapFont font, Color color, String text, float duration) {
+		super(font, color, text);
+		this.duration = duration;
+	}
 
 	public TimedText(BitmapFont font, Color color, String text, float duration, float x, float y) {
 		super(font, color, text, x, y);
