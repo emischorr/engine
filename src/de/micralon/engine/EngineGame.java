@@ -14,6 +14,7 @@ public class EngineGame extends Game {
     public static EngineGame ctx;
     public static boolean DEV, FPS;
     public static String assetRootFolder = "";
+    public static String levelPath = "";
     
     public GameAssets assets;
     

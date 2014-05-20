@@ -1,6 +1,5 @@
 package de.micralon.engine;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.World;
@@ -20,6 +19,7 @@ import de.micralon.engine.map.ObjectMapper;
 import de.micralon.engine.net.Network.ObjectsData;
 import de.micralon.engine.net.NetworkNode;
 import de.micralon.engine.text.Text;
+import de.micralon.engine.utils.Log;
 
 public abstract class GameWorld {
 	public LightManager lightManager;
@@ -99,12 +99,13 @@ public abstract class GameWorld {
 	
 	public boolean load(String levelName) {
 		try {
-			level = (Level)Class.forName(levelName).getConstructor().newInstance();
+			level = (Level)Class.forName(EngineGame.levelPath+levelName).getConstructor().newInstance();
 			level.load();
-			Gdx.app.log("GameWorld", "Loaded level "+level);
+			Log.info("Loaded level "+level);
 			return true;
 		} catch (Exception e) {
-			Gdx.app.log("GameWorld", "Error loading level "+level);
+			Log.error("Error loading level "+level);
+			Log.warn("EngineGame.levelPath is set to: "+EngineGame.levelPath);
 			e.printStackTrace();
 			return false;
 		}
