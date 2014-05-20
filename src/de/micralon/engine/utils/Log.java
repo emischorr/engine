@@ -22,4 +22,8 @@ public class Log {
 	public static void warn(String message) {
 		Gdx.app.log( log_topic, message );
 	}
+	
+	public static void error(String message) {
+		Gdx.app.log( log_topic, message );
+	}
 }
