@@ -3,6 +3,7 @@ package de.micralon.engine;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 
 import de.micralon.engine.services.MusicManager;
 import de.micralon.engine.services.PreferencesManager;
@@ -14,6 +15,9 @@ public class EngineGame extends Game {
     public static boolean DEV, FPS;
     public static String assetRootFolder = "";
     
+    public GameAssets assets;
+    
+    protected GameWorld world;
     protected Player player;
     
     // Services
@@ -47,6 +51,11 @@ public class EngineGame extends Game {
     	FPS = mode;
     }
     
+    protected Screen getStartScreen() {
+    	Log.warn("You should override getStartScreen() in your Game!");
+    	return null;
+    }
+    
     public Player getPlayer() {
     	if (player == null) {
     		player = new Player("Player");
@@ -68,7 +77,8 @@ public class EngineGame extends Game {
 			Gdx.app.setLogLevel(Application.LOG_NONE);
 		}
 		
-		GameAssets.loadAll();
+		if (assets == null) assets = new GameAssets();
+		assets.loadAll();
 	}
 	
 	protected void initServices() {
@@ -95,6 +105,15 @@ public class EngineGame extends Game {
     {
         super.resize( width, height );
         Log.info( "Resizing game to: " + width + " x " + height );
+        
+        if (getScreen() == null) {
+        	if (getStartScreen() != null) {
+        		setScreen( getStartScreen() );
+        	} else {
+        		Log.warn("No startScreen definied! Quit application...");
+        		Gdx.app.exit();
+        	}
+        }
     }
 
 	@Override
@@ -112,7 +131,7 @@ public class EngineGame extends Game {
     public void dispose()
     {
     	super.dispose();
-    	
+    	assets.dispose();
     	// dispose some services
         musicManager.dispose();
         soundManager.dispose();

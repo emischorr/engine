@@ -24,7 +24,6 @@ public class AbstractScreen<T extends EngineGame> implements Screen {
 	protected T game;
 	protected InputMultiplexer inputs;
 	
-	private BitmapFont font;
     private Table table;
     private Skin skin;
     protected Stage stage;
@@ -144,6 +143,7 @@ public class AbstractScreen<T extends EngineGame> implements Screen {
 			inputs.addProcessor( stage );
 		}
 		Gdx.input.setInputProcessor( inputs );
+		selectedEntry = 0; // reset selected entry
 	}
 
 	@Override
@@ -165,9 +165,6 @@ public class AbstractScreen<T extends EngineGame> implements Screen {
 	public void dispose() {
 		if (stage != null) {
 			stage.dispose();
-		}
-		if (font != null) {
-			font.dispose();
 		}
 	}
 
