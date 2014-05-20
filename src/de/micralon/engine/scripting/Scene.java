@@ -20,11 +20,11 @@ public class Scene {
 		}
 	}
 	
-	protected final void add(Command command) {
+	public final void add(Command command) {
 		commands.add(command);
 	}
 	
-	protected void add(GameObject object) {
+	public void add(GameObject object) {
         commands.add(new New(object));
 	}
 }
