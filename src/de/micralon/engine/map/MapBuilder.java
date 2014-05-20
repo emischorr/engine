@@ -120,8 +120,8 @@ public class MapBuilder {
 			if (l instanceof TiledMapTileLayer) gameMap.addLayer(l.getName());
 		}
 			
-		for (int y = mapHeight; y > 0 ; y--) {
-			for (int x = 0; x < mapWidth; x++) {
+		for (int y = mapHeight; y >= 0 ; y--) {
+			for (int x = 0; x <= mapWidth; x++) {
 				TileStack field = gameMap.createField();			
 				
 				for (String layerName : gameMap.getLayerNames()) {
