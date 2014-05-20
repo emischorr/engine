@@ -66,6 +66,19 @@ public class PlayerManager {
 		teams.put(team.ID, team);
 	}
 	
+	public Team getTeam(Integer key) {
+		return teams.get(key);
+	}
+	
+	public Team getTeam(String name) {
+		for (Team team : teams.values()) {
+			if (team.getName().equals(name)) {
+				return team;
+			}
+		}
+		return null;
+	}
+	
 	public Array<Team> getTeams() {
 		return teams.values().toArray();
 	}

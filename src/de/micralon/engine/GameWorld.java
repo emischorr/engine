@@ -1,5 +1,6 @@
 package de.micralon.engine;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.World;
@@ -50,6 +51,7 @@ public abstract class GameWorld {
 	public Group fg = new Group();
 	
 	public Player localPlayer;
+	public Team defaultTeam;
 	
 	protected ObjectMapper objectMapper;
 	
@@ -166,10 +168,17 @@ public abstract class GameWorld {
 		if (local) {
 			localPlayer = player;
 		}
+		if (defaultTeam != null) {
+			defaultTeam.addPlayer(player);
+		}
 	}
 	
-	public void removePlayer(int playerID) {
+	public synchronized void removePlayer(int playerID) {
 		playerManager.removePlayer(playerID);
+	}
+	
+	public synchronized void createTeam(String name, Color color) {
+		playerManager.addTeam(new Team(name, color));
 	}
 	
 	public void addObject(GameObject obj) {
