@@ -3,6 +3,8 @@ package de.micralon.engine;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 
+import de.micralon.engine.utils.Log;
+
 public class Team {
 	private final Array<Player> members = new Array<Player>();
 	private final String name;
@@ -15,8 +17,12 @@ public class Team {
 	}
 	
 	public void addPlayer(Player player) {
-		player.team = this;
-		members.add(player);
+		if (player != null) {
+			player.team = this;
+			members.add(player);
+		} else {
+			Log.warn("Can't add player to team "+name+". Player is null");
+		}
 	}
 	
 	public Color getColor() {
