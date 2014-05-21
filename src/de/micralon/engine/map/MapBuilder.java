@@ -161,8 +161,8 @@ public class MapBuilder {
 							} else {
 								// create new body
 								BodyDef bodyDef = new BodyDef();
-								bodyDef.position.x = x*tileSize;
-								bodyDef.position.y = y*tileSize;
+								bodyDef.position.x = x*tileSize+tileSize*0.5f;
+								bodyDef.position.y = y*tileSize+tileSize*0.5f;
 								bodyDef.type = BodyDef.BodyType.StaticBody;
 								
 								body = GameWorld.ctx.box2dWorld.createBody(bodyDef);

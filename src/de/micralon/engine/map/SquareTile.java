@@ -9,7 +9,8 @@ public class SquareTile extends Tile {
 	public SquareTile(TextureRegion textureRegion, int tileX, int tileY) {
 		super(textureRegion, tileX, tileY);
 		
-		this.setPosition(tileX*tileSize-tileSize*0.5f, tileY*tileSize-tileSize*0.5f);
+		//this.setPosition(tileX*tileSize-tileSize*0.5f, tileY*tileSize-tileSize*0.5f);
+		this.setPosition(tileX*tileSize, tileY*tileSize);
 		this.setScaling(Scaling.stretch); // stretch the texture
 	}
 	
