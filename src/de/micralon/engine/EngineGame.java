@@ -18,7 +18,6 @@ public class EngineGame extends Game {
     
     public GameAssets assets;
     
-    protected GameWorld world;
     protected Player player;
     
     // Services
