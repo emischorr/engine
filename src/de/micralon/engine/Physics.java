@@ -9,6 +9,12 @@ public class Physics {
 
 	static public float physicsTimeLeft;
 
+	/**
+	 * update the physics
+	 * @param world The world that should stepped over
+	 * @param deltaTime Time slot for physic update
+	 * @return number of physics steps executed
+	 */
 	static public int update(final GameWorld world, float deltaTime) {
 		physicsTimeLeft += deltaTime;
 		if (physicsTimeLeft > MAX_TIME_PER_FRAME) {

@@ -5,20 +5,29 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
+import de.micralon.engine.net.NetworkNode;
 import de.micralon.engine.services.MusicManager;
 import de.micralon.engine.services.PreferencesManager;
 import de.micralon.engine.services.SoundManager;
 import de.micralon.engine.utils.Log;
 
 public class EngineGame extends Game {
-    public static EngineGame ctx;
+    //public static EngineGame ctx;
     public static boolean DEV, FPS;
     public static String assetRootFolder = "";
     public static String levelPath = "";
     
     public GameAssets assets;
     
+    public boolean paused = false;
+    
+    private boolean stepped = false;
+	private long step;
+    
+	protected GameWorld world;
     protected Player player;
+	//networking
+	private NetworkNode node;
     
     // Services
     private PreferencesManager preferencesManager;
@@ -65,7 +74,7 @@ public class EngineGame extends Game {
     
 	@Override
 	public void create() {
-		ctx = this;
+		//ctx = this;
 		
 		Log.setTopic(EngineGame.class.getSimpleName());
 		Log.info( "Creating game on " + Gdx.app.getType() );
@@ -101,8 +110,7 @@ public class EngineGame extends Game {
 	}
 	
 	@Override
-    public void resize(int width, int height)
-    {
+    public void resize(int width, int height) {
         super.resize( width, height );
         Log.info( "Resizing game to: " + width + " x " + height );
         
@@ -117,8 +125,7 @@ public class EngineGame extends Game {
     }
 
 	@Override
-    public void render()
-    {
+    public void render() {
     	try {
 	        super.render();
     	} catch (Exception e) {
@@ -126,10 +133,28 @@ public class EngineGame extends Game {
     		dispose();
     	}
     }
-    
+	
+	public float updatePhysics(float deltaTime) {
+		int steps_taken = Physics.update(world, deltaTime);
+		if (steps_taken > 0) {
+			stepped = true;
+			step++;
+			// network sync
+			if (isHost() && stepped && step % 100 == 0) { // Every 100th step
+				world.sync(node);
+			}
+		}
+		return steps_taken;
+	}
+	
+	// Network
+	public boolean isHost() {
+		//TODO: implement
+		return false;
+	}
+	
     @Override
-    public void dispose()
-    {
+    public void dispose() {
     	super.dispose();
     	assets.dispose();
     	// dispose some services
