@@ -11,8 +11,8 @@ import de.micralon.engine.services.PreferencesManager;
 import de.micralon.engine.services.SoundManager;
 import de.micralon.engine.utils.Log;
 
-public class EngineGame extends Game {
-    //public static EngineGame ctx;
+public abstract class EngineGame extends Game {
+    public static EngineGame ctx;
     public static boolean DEV, FPS;
     public static String assetRootFolder = "";
     public static String levelPath = "";
@@ -24,10 +24,9 @@ public class EngineGame extends Game {
     private boolean stepped = false;
 	private long step;
     
-	protected GameWorld world;
     protected Player player;
 	//networking
-	private NetworkNode node;
+	protected NetworkNode node;
     
     // Services
     private PreferencesManager preferencesManager;
@@ -65,6 +64,8 @@ public class EngineGame extends Game {
     	return null;
     }
     
+    public abstract GameWorld getWorld();
+    
     public Player getPlayer() {
     	if (player == null) {
     		player = new Player("Player");
@@ -74,7 +75,7 @@ public class EngineGame extends Game {
     
 	@Override
 	public void create() {
-		//ctx = this;
+		ctx = this;
 		
 		Log.setTopic(EngineGame.class.getSimpleName());
 		Log.info( "Creating game on " + Gdx.app.getType() );
@@ -135,13 +136,13 @@ public class EngineGame extends Game {
     }
 	
 	public float updatePhysics(float deltaTime) {
-		int steps_taken = Physics.update(world, deltaTime);
+		int steps_taken = Physics.update(getWorld(), deltaTime);
 		if (steps_taken > 0) {
 			stepped = true;
 			step++;
 			// network sync
 			if (isHost() && stepped && step % 100 == 0) { // Every 100th step
-				world.sync(node);
+				getWorld().sync(node);
 			}
 		}
 		return steps_taken;
@@ -152,6 +153,10 @@ public class EngineGame extends Game {
 		//TODO: implement
 		return false;
 	}
+	
+    public NetworkNode getNode() {
+    	return node;
+    }
 	
     @Override
     public void dispose() {

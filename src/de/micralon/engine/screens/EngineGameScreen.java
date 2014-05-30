@@ -9,13 +9,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import de.micralon.engine.EngineGame;
 import de.micralon.engine.GameRenderer;
 import de.micralon.engine.GameRendererOptions;
-import de.micralon.engine.GameWorld;
 import de.micralon.engine.controllers.DevelopmentController;
 import de.micralon.engine.controllers.GameController;
 import de.micralon.engine.gui.Hud;
 import de.micralon.engine.postprocessing.ShaderManager;
 
-public class GameScreen<T extends EngineGame> extends AbstractScreen<T> {
+public abstract class EngineGameScreen<T extends EngineGame> extends AbstractScreen<T> {
 	private GameRenderer renderer;
 	private GameRendererOptions renderOptions = new GameRendererOptions();
 	private boolean continuousRendering = true; // render mode
@@ -23,21 +22,16 @@ public class GameScreen<T extends EngineGame> extends AbstractScreen<T> {
     private boolean screenshotTaken = false;
 	private TextureRegion fboRegion;
 	private ShaderManager shaders;
-	
-	private Hud gui;
-	private GameController gameController;
-	private GameWorld world;
 
-	public GameScreen(T game, Hud gui, GameController gameController) {
+	public EngineGameScreen(T game) {
 		super(game);
-		//TODO: get world from game instance
-		// world = game.world
-		this.gameController = gameController;
-		this.gui = gui;
-		gui.addToInputMultiplexer(inputs);
+		getGui().addToInputMultiplexer(inputs);
 		
 		shaders = new ShaderManager();
 	}
+	
+	public abstract GameController getGameController();
+	public abstract Hud getGui();
 
 	@Override
 	public void show() {
@@ -53,10 +47,10 @@ public class GameScreen<T extends EngineGame> extends AbstractScreen<T> {
 			renderOptions = new GameRendererOptions(true, true, true, false);
 		}
 		
-		renderer = new GameRenderer(world, getBatch(), renderOptions);
+		renderer = new GameRenderer(game.getWorld(), getBatch(), renderOptions);
 		
 		if (EngineGame.isDevelopment()) {
-			inputs.addProcessor(new DevelopmentController(world.cameraHelper, renderOptions));
+			inputs.addProcessor(new DevelopmentController(game.getWorld().cameraHelper, renderOptions));
 		}
 		
 		// TODO: shaders currently brake the lights... :-(
@@ -70,10 +64,10 @@ public class GameScreen<T extends EngineGame> extends AbstractScreen<T> {
 		if (!game.paused) {
 			screenshotTaken = false;
 			super.getTable().setVisible(false); // we do not want touch events on the table
-			gameController.processInput();
+			getGameController().processInput();
 	
 			if (game.updatePhysics(deltaTime) > 0) {
-				gui.update(deltaTime); // update GUI
+				getGui().update(deltaTime); // update GUI
 				stepped = true;
 			}
 			if (continuousRendering || stepped) {
@@ -81,7 +75,7 @@ public class GameScreen<T extends EngineGame> extends AbstractScreen<T> {
 				Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
 				
 				renderer.render(); // draw the box2d world
-				if (game.getPlayer().alive) gui.draw(); // draw the GUI
+				if (game.getPlayer().alive) getGui().draw(); // draw the GUI
 			}
 			if (!continuousRendering) Gdx.graphics.requestRendering();
 		} else { // Show pause menu
