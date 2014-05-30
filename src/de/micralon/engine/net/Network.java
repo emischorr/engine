@@ -18,6 +18,8 @@ import com.esotericsoftware.minlog.Log;
 import de.micralon.engine.Player;
 
 public class Network {
+	static public int port = 7373;
+    static public int portUdp = 7372;
 	
 	static public void register(EndPoint endPoint) {
 		Log.set(Log.LEVEL_DEBUG); // include debug jar for logging
