@@ -26,6 +26,8 @@ public abstract class EngineGame extends Game {
     
     protected Player player;
 	//networking
+    public enum NETWORK_STATES {none, client, server};
+    protected NETWORK_STATES networkState = NETWORK_STATES.none;
 	protected NetworkNode node;
     
     // Services
@@ -150,8 +152,7 @@ public abstract class EngineGame extends Game {
 	
 	// Network
 	public boolean isHost() {
-		//TODO: implement
-		return false;
+		return networkState == NETWORK_STATES.server;
 	}
 	
     public NetworkNode getNode() {
@@ -162,6 +163,8 @@ public abstract class EngineGame extends Game {
     public void dispose() {
     	super.dispose();
     	assets.dispose();
+    	if (getWorld() != null) getWorld().dispose();
+    	if (node != null) node.shutdown();
     	// dispose some services
         musicManager.dispose();
         soundManager.dispose();
