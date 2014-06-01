@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 import de.micralon.engine.EngineGame;
 //import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -36,7 +37,7 @@ public class AbstractScreen<T extends EngineGame> implements Screen {
 	
 	public AbstractScreen(T game) {
 		this.game = game;
-		this.stage = new Stage( Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true );
+		this.stage = new Stage( new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) );
 		inputs = new InputMultiplexer();
 	}
 	
@@ -134,7 +135,7 @@ public class AbstractScreen<T extends EngineGame> implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		stage.getViewport().update(width, height, false); // do not center camera
 	}
 
 	@Override

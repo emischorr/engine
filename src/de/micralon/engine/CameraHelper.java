@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Cullable;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class CameraHelper {
 	private Stage stage;
@@ -42,7 +43,7 @@ public class CameraHelper {
 		
 		updateCameraBorders();
 		
-		stage.setViewport(VIEW_WIDTH, VIEW_HEIGHT, false);
+		stage.setViewport(new StretchViewport(VIEW_WIDTH, VIEW_HEIGHT));
 		cullingArea.set(0, 0, VIEW_WIDTH+cullingOffset, VIEW_HEIGHT+cullingOffset);
 	}
 	
