@@ -2,7 +2,7 @@ package de.micralon.engine.scripting;
 
 import com.badlogic.gdx.utils.Array;
 
-import de.micralon.engine.GameObject;
+import de.micralon.engine.gameobjects.GameObject;
 import de.micralon.engine.scripting.commands.New;
 
 public class Scene {

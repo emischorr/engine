@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
 
 import de.micralon.engine.builder.BodyBuilder;
+import de.micralon.engine.gameobjects.GameObject;
 
 public class Trigger {
 	private Body body;

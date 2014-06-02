@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Values;
 
 import de.micralon.engine.Destructible;
-import de.micralon.engine.GameObject;
+import de.micralon.engine.gameobjects.GameObject;
 import de.micralon.engine.net.Network.ObjectData;
 import de.micralon.engine.net.Network.ObjectsData;
 
@@ -144,7 +144,7 @@ public class ObjectManager implements Disposable {
 					((Destructible) obj).setDestroyed();
 				}
 			} else {
-				// TODO: whats wrong here... why is obj == null?!
+				// TODO: what is wrong here... why is obj == null?!
 				Gdx.app.log("ObjectManager", "WARNING: obj is null!");
 				return;
 			}

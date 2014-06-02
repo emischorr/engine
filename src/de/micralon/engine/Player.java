@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
+import de.micralon.engine.gameobjects.GameObject;
+
 public class Player {
 	public int ID;
 	public String name = "Player";

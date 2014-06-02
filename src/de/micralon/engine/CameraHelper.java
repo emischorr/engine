@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Cullable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import de.micralon.engine.gameobjects.GameObject;
+
 public class CameraHelper {
 	private Stage stage;
 	private OrthographicCamera camera;

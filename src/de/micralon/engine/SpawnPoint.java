@@ -3,6 +3,8 @@ package de.micralon.engine;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import de.micralon.engine.gameobjects.GameObject;
+
 public class SpawnPoint implements SpawnPointInterface {
 	public float posX, posY;
 	private HashMap<GameObject, Long> spawnQueue;

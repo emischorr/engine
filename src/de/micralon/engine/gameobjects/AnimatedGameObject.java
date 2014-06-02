@@ -1,11 +1,10 @@
-package de.micralon.engine;
+package de.micralon.engine.gameobjects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 
@@ -13,12 +12,12 @@ public abstract class AnimatedGameObject extends GameObject {
 	private transient Animation currentAnimation;
 	private float stateTime = 0;
 	
-	protected AnimatedGameObject(BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping) {
-		this(type, bodyWidth, bodyHeight, linearDamping, angularDamping, Scaling.stretch);
+	protected AnimatedGameObject(PhysicsSystem physics) {
+		this(physics, Scaling.stretch);
 	}
 	
-	public AnimatedGameObject(BodyType type, float bodyWidth, float bodyHeight, float linearDamping, float angularDamping, Scaling scaling) {
-		super(type, bodyWidth, bodyHeight, linearDamping, angularDamping, scaling);
+	public AnimatedGameObject(PhysicsSystem physics, Scaling scaling) {
+		super(physics, scaling);
 	}
 	
 	protected void setAnimation(Animation animation) {
@@ -37,7 +36,7 @@ public abstract class AnimatedGameObject extends GameObject {
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		if (currentAnimation != null) {
-			batch.draw(currentAnimation.getKeyFrame(stateTime, true), getPos().x - bodyWidth/2 + textureOffsetX, getPos().y - bodyHeight/2 + textureOffsetY, bodyWidth, bodyHeight);
+			batch.draw(currentAnimation.getKeyFrame(stateTime, true), getPos().x - getBodyWidth()/2 + textureOffsetX, getPos().y - getBodyHeight()/2 + textureOffsetY, getBodyWidth(), getBodyHeight());
 		} else {
 			super.draw(batch, parentAlpha);
 		}
