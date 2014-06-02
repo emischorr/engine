@@ -7,6 +7,10 @@ public class BasicPhysicsSystem implements PhysicsSystem {
 	protected final Vector2 position = new Vector2(0,0);
 	protected float degree;
 	
+	public BasicPhysicsSystem() {
+		this(1, 1);
+	}
+	
 	public BasicPhysicsSystem(float width, float height) {
 		this.width = width;
 		this.height = height;
