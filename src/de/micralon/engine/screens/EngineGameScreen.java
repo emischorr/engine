@@ -22,10 +22,16 @@ public abstract class EngineGameScreen<T extends EngineGame> extends AbstractScr
     private boolean screenshotTaken = false;
 	private TextureRegion fboRegion;
 	private ShaderManager shaders;
+	
+	private final GameController controller;
+	private final Hud gui;
 
 	public EngineGameScreen(T game) {
 		super(game);
-		getGui().addToInputMultiplexer(inputs);
+		controller = getGameController();
+		gui = getGui(); 
+			
+		if (gui != null) gui.addToInputMultiplexer(inputs);
 		
 		shaders = new ShaderManager();
 	}
@@ -64,10 +70,10 @@ public abstract class EngineGameScreen<T extends EngineGame> extends AbstractScr
 		if (!game.paused) {
 			screenshotTaken = false;
 			super.getTable().setVisible(false); // we do not want touch events on the table
-			getGameController().processInput();
+			if (controller != null) controller.processInput();
 	
 			if (game.updatePhysics(deltaTime) > 0) {
-				getGui().update(deltaTime); // update GUI
+				if (gui != null) gui.update(deltaTime); // update GUI
 				stepped = true;
 			}
 			if (continuousRendering || stepped) {
@@ -75,7 +81,7 @@ public abstract class EngineGameScreen<T extends EngineGame> extends AbstractScr
 				Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
 				
 				renderer.render(); // draw the box2d world
-				if (game.getPlayer().alive) getGui().draw(); // draw the GUI
+				if (gui != null && game.getPlayer().alive) gui.draw(); // draw the GUI
 			}
 			if (!continuousRendering) Gdx.graphics.requestRendering();
 		} else { // Show pause menu
