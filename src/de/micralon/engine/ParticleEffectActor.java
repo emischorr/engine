@@ -48,7 +48,7 @@ public class ParticleEffectActor extends Actor {
 	}
 	
 	public void rotate(float degrees) {
-		super.rotate(degrees);
+		super.rotateBy(degrees);
 		ScaledNumericValue angle;
 		for (ParticleEmitter emitter : effect.getEmitters()) {
 			angle = emitter.getAngle();

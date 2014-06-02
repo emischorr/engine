@@ -3,7 +3,7 @@ package de.micralon.engine.text;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 import de.micralon.engine.GameWorld;
 
@@ -44,7 +44,7 @@ public class Text {
 		stateTime += deltaTime;
 	}
 
-	public void draw (SpriteBatch batch) {
+	public void draw (Batch batch) {
         font.setColor(color.r, color.g, color.b, alpha);
         font.draw(batch, text, x - (int)(width / 2), y + (int)(height / 2));
 	}

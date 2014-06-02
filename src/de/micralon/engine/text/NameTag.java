@@ -2,7 +2,7 @@ package de.micralon.engine.text;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
@@ -47,7 +47,7 @@ public class NameTag extends Text {
 	}
 	
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void draw(Batch batch) {
 		if (pointer) {
 			// TODO: if true show tag also if out of view at the border of viewport to indicate to the user the direction of this tagged object
 		}

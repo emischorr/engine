@@ -1,7 +1,7 @@
 package de.micralon.engine.background;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
@@ -30,11 +30,11 @@ public class ParallaxLayer extends Actor {
 	}
 	
 	public void move(float x, float y) {
-		translate(x*ratioX, y*ratioY);
+		moveBy(x*ratioX, y*ratioY);
 	}
 	
 	@Override
-	public void draw(SpriteBatch batch, float parentAlpha) {
+	public void draw(Batch batch, float parentAlpha) {
 //		super.draw(batch, parentAlpha);
 		drawable.draw(batch, getX(), getY(), drawable.getMinWidth(), drawable.getMinHeight());
 		// draw the same on the left and right

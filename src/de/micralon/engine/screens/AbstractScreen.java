@@ -7,8 +7,8 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -47,8 +47,8 @@ public class AbstractScreen<T extends EngineGame> implements Screen {
         return GameAssets.font;
     }
 
-    public SpriteBatch getBatch() {
-        return stage.getSpriteBatch();
+    public Batch getBatch() {
+        return stage.getBatch();
     }
     
     protected Skin getSkin() {
