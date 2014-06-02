@@ -168,7 +168,7 @@ public abstract class GameObject extends Image implements Reuseable {
 	
 	private final void needUpdate() {
 		if (trackUpdates) GameWorld.ctx.getObjectManager().needUpdate(this); // notify manager about update
-		updateImage(); // make the actor follow the box2d body
+		updateImage(); // make the actor follow the physic body
 	}
 	
 	private final void updateImage() {
