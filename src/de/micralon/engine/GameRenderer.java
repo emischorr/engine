@@ -103,7 +103,7 @@ public class GameRenderer {
         
         // box2d debug rendering
         if (options.drawDebug) {
-        	debugRenderer.render(world.box2dWorld, camera.combined);
+        	debugRenderer.render(world.physicsWorld, camera.combined);
         }
         
         // TODO: optimize -> use separate flag

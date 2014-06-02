@@ -34,7 +34,7 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 	}
 	
 	protected final void initBody() {
-		BodyBuilder bodyBuilder = new BodyBuilder(GameWorld.ctx.box2dWorld);
+		BodyBuilder bodyBuilder = new BodyBuilder(GameWorld.ctx.physicsWorld);
 		body = bodyBuilder
 				.type(bodyType)
 				.linearDamping(linearDamping)
@@ -118,7 +118,7 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 	@Override
 	public void destroy() {
 		lastPos = body.getPosition();
-		GameWorld.ctx.box2dWorld.destroyBody(body);
+		GameWorld.ctx.physicsWorld.destroyBody(body);
 		body = null;
 	}
 }

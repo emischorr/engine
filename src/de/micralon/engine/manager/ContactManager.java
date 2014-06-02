@@ -19,7 +19,7 @@ public class ContactManager implements ContactListener {
 	GameObject b;
 	
 	public ContactManager(GameWorld world) {
-		world.box2dWorld.setContactListener(this);
+		world.physicsWorld.setContactListener(this);
 	}
 	
 	@Override

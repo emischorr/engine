@@ -25,7 +25,7 @@ import de.micralon.engine.utils.Log;
 
 public abstract class GameWorld {
 	public LightManager lightManager;
-	public World box2dWorld;
+	public World physicsWorld;
 	public GameMap map;
 	public Stage stage;
 	public CameraHelper cameraHelper;
@@ -76,8 +76,8 @@ public abstract class GameWorld {
 	 * @param trackUpdates
 	 */
 	protected final void init(boolean trackUpdates) {
-		box2dWorld = new World(getGravity(), true);
-		lightManager = new LightManager(box2dWorld);
+		physicsWorld = new World(getGravity(), true);
+		lightManager = new LightManager(physicsWorld);
 		new ContactManager(this);
 		
 		stage = new Stage(); // create the game stage
@@ -206,8 +206,8 @@ public abstract class GameWorld {
 		background.update();
 		
 		// since Box2D 2.2 we need to reset the friction of any existing contacts
-		contacts = box2dWorld.getContactList();
-		for (int i = 0; i < box2dWorld.getContactCount(); i++) {
+		contacts = physicsWorld.getContactList();
+		for (int i = 0; i < physicsWorld.getContactCount(); i++) {
 			Contact contact = contacts.get(i);
 			contact.resetFriction();
 		}
@@ -217,7 +217,7 @@ public abstract class GameWorld {
 		
 		// TODO: try to move this at the end of the method
 		// update box2d world
-		box2dWorld.step(deltaTime, VELOCITY_ITERS, POSITION_ITERS);
+		physicsWorld.step(deltaTime, VELOCITY_ITERS, POSITION_ITERS);
 		
 		stage.act(deltaTime); // update game stage
 		objectManager.update(); // delete objects and update state
@@ -245,7 +245,7 @@ public abstract class GameWorld {
 		lightManager.dispose();
 		objectManager.dispose();
 		effectManager.dispose();
-		box2dWorld.dispose();
+		physicsWorld.dispose();
 		stage.dispose();
 	}
 	

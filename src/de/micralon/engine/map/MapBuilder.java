@@ -165,7 +165,7 @@ public class MapBuilder {
 								bodyDef.position.y = y*tileSize+tileSize*0.5f;
 								bodyDef.type = BodyDef.BodyType.StaticBody;
 								
-								body = GameWorld.ctx.box2dWorld.createBody(bodyDef);
+								body = GameWorld.ctx.physicsWorld.createBody(bodyDef);
 								body.setUserData(material);
 								fix = body.createFixture(fixtureDef);
 							}

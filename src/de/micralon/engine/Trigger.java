@@ -15,7 +15,7 @@ public class Trigger {
 	private boolean active = true;
 
 	public Trigger(GameWorld world, float posX, float posY) {
-		BodyBuilder bodyBuilder = new BodyBuilder(world.box2dWorld);
+		BodyBuilder bodyBuilder = new BodyBuilder(world.physicsWorld);
 		body = bodyBuilder
 				.type(BodyType.StaticBody)
 				.position(posX, posY)
