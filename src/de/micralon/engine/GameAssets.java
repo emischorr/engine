@@ -31,6 +31,14 @@ public class GameAssets implements Disposable {
 		manager.load(EngineGame.assetRootFolder+assetFile, type);
 	}
 	
+	public <T> T get (String fileName) {
+		return manager.get(EngineGame.assetRootFolder+fileName);
+	}
+	
+	public <T> T get (String fileName, Class<T> type) {
+		return manager.get(EngineGame.assetRootFolder+fileName, type);
+	}
+	
 	@Override
 	public void dispose() {
 		manager.dispose();
