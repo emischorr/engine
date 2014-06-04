@@ -7,6 +7,9 @@ import de.micralon.engine.utils.Log;
 public class NoPhysicsSystem implements PhysicsSystem {
 	
 	@Override
+	public void init() {}
+	
+	@Override
 	public float getWidth() {
 		Log.warn("NoPhysicsSystem in use!");
 		return 0;
@@ -50,5 +53,16 @@ public class NoPhysicsSystem implements PhysicsSystem {
 
 	@Override
 	public void destroy() {}
+
+	@Override
+	public Vector2 getVelocity() {
+		Log.warn("NoPhysicsSystem in use!");
+		return null;
+	}
+
+	@Override
+	public void setVelocity(Vector2 velocity) {
+		Log.warn("NoPhysicsSystem in use!");
+	}
 
 }

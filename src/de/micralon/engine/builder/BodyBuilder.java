@@ -68,9 +68,13 @@ public class BodyBuilder {
 		bodyDef.bullet = true;
 		return this;
 	}
-
+	
 	public BodyBuilder fixedRotation() {
-		bodyDef.fixedRotation = true;
+		return fixedRotation(true);
+	}
+
+	public BodyBuilder fixedRotation(boolean fixedRotation) {
+		bodyDef.fixedRotation = fixedRotation;
 		return this;
 	}
 

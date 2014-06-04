@@ -15,7 +15,7 @@ import de.micralon.engine.utils.Reuseable;
 
 public abstract class GameObject extends Image implements Reuseable {
 	private final Scaling scaling;
-	private final PhysicsSystem physics;
+	protected final PhysicsSystem physics;
 	protected float textureOffsetX = 0, textureOffsetY = 0;
 	
 	private long objectID;
@@ -40,10 +40,11 @@ public abstract class GameObject extends Image implements Reuseable {
 		this.physics = physics;
 		
 		// TODO: move it out and call it outside of the world step
-		init();
+		//init();
 	}
 	
 	protected final void init() {
+		physics.init();
 		initShape();
 	}
 	
@@ -105,6 +106,14 @@ public abstract class GameObject extends Image implements Reuseable {
 		needUpdate();
 	}
 	
+	public Vector2 getVelocity() {
+		return physics.getVelocity();
+	}
+
+	public void setVelocity(Vector2 velocity) {
+		physics.setVelocity(velocity);
+	}
+	
 	public void setTextureOffset(float x, float y) {
 		textureOffsetX = x;
 		textureOffsetY = y;
@@ -120,9 +129,14 @@ public abstract class GameObject extends Image implements Reuseable {
 	 * WARNING: this destroys the body
 	 */
 	public final void destroy() {
+		beforeDestroy();
 		physics.destroy();
-		remove();
+		remove(); // remove actor
+		afterDestroy();
 	}
+	
+	public void beforeDestroy() {}
+	public void afterDestroy() {}
 	
 	@Override
 	public void reuse() {

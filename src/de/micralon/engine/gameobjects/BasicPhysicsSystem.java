@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 public class BasicPhysicsSystem implements PhysicsSystem {
 	protected float width, height;
 	protected final Vector2 position = new Vector2(0,0);
+	protected Vector2 velocity = new Vector2(0,0);
 	protected float degree;
 	
 	public BasicPhysicsSystem() {
@@ -15,6 +16,9 @@ public class BasicPhysicsSystem implements PhysicsSystem {
 		this.width = width;
 		this.height = height;
 	}
+	
+	@Override
+	public void init() {}
 	
 	@Override
 	public float getWidth() {
@@ -62,6 +66,16 @@ public class BasicPhysicsSystem implements PhysicsSystem {
 	@Override
 	public void destroy() {
 		// no implementation
+	}
+
+	@Override
+	public Vector2 getVelocity() {
+		return velocity;
+	}
+
+	@Override
+	public void setVelocity(Vector2 velocity) {
+		this.velocity = velocity;
 	}
 
 }

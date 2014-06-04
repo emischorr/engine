@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public interface PhysicsSystem {
 	
+	public void init();
+	
 	public float getWidth();
 	
 	public float getHeight();
@@ -15,6 +17,10 @@ public interface PhysicsSystem {
 	public PhysicsSystem setDegree(float degree);
 	
 	public float getDegree();
+	
+	public Vector2 getVelocity();
+	
+	public void setVelocity(Vector2 velocity);
 	
 	public void resetMass();
 	

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
@@ -16,20 +17,32 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 	protected BodyType bodyType = BodyType.StaticBody;
 	protected float linearDamping = 0;
 	protected float angularDamping = 0;
+	protected boolean fixedRotation = false;
 	protected Filter filterData = new Filter();
 	protected Vector2 lastPos;
 	
 	protected float bodyWidth, bodyHeight;
 	
 	public Box2DPhysicsSystem() {
-		this(null, 0, 0);
+		this(null);
+	}
+	
+	public Box2DPhysicsSystem(BodyType bodyType) {
+		this(bodyType, 0, 0);
 	}
 	
 	public Box2DPhysicsSystem(BodyType bodyType, float linearDamping, float angularDamping) {
+		this(bodyType, linearDamping, angularDamping, false);
+	}
+	
+	public Box2DPhysicsSystem(BodyType bodyType, float linearDamping, float angularDamping, boolean fixedRotation) {
 		if (bodyType != null) this.bodyType = bodyType;
 		this.linearDamping = linearDamping;
 		this.angularDamping = angularDamping;
-		
+	}
+	
+	@Override
+	public void init() {
 		initBody();
 	}
 	
@@ -40,6 +53,7 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 				.linearDamping(linearDamping)
 				.angularDamping(angularDamping)
 				.position(0, 0)
+				.fixedRotation(fixedRotation)
 				.userData(this)
 				.build();
 	}
@@ -52,6 +66,25 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 		if (force || body == null) { // create Body only once
 			initBody();
 		}
+	}
+	
+	public final Fixture createFixture(Shape shape, float density) {
+		fix = body.createFixture(shape, density);
+		fix.setFilterData(filterData); // set filter again
+		return fix;
+	}
+	
+	public Fixture getFixture() {
+		return fix;
+	}
+	
+	public Body getBody() {
+		return body;
+	}
+	
+	public void setSize(float width, float height) {
+		bodyWidth = width;
+		bodyHeight = height;
 	}
 	
 	@Override
@@ -93,12 +126,12 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 	public final void setFilterData(short category, short mask) {
 		filterData.categoryBits = category;
 		filterData.maskBits = mask;
-		fix.setFilterData(filterData);
+		if (fix != null) fix.setFilterData(filterData);
 	}
 	
 	public void setFilterData(Filter filter) {
 		filterData = filter;
-		fix.setFilterData(filter);
+		if (fix != null) fix.setFilterData(filterData);
 	}
 	
 	public Filter getFilterData() {
@@ -120,5 +153,15 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 		lastPos = body.getPosition();
 		GameWorld.ctx.physicsWorld.destroyBody(body);
 		body = null;
+	}
+
+	@Override
+	public Vector2 getVelocity() {
+		return body.getLinearVelocity();
+	}
+
+	@Override
+	public void setVelocity(Vector2 velocity) {
+		body.setLinearVelocity(velocity);
 	}
 }
