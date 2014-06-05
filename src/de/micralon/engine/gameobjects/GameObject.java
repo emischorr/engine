@@ -38,6 +38,7 @@ public abstract class GameObject extends Image implements Reuseable {
 		super();
 		this.scaling = scaling;
 		this.physics = physics;
+		physics.setGameObject(this);
 		
 		// TODO: move it out and call it outside of the world step
 		//init();

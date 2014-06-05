@@ -18,8 +18,9 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 	protected float linearDamping = 0;
 	protected float angularDamping = 0;
 	protected boolean fixedRotation = false;
-	protected Filter filterData = new Filter();
+	protected final Filter filterData = new Filter();
 	protected Vector2 lastPos;
+	protected GameObject gameObject;
 	
 	protected float bodyWidth, bodyHeight;
 	
@@ -54,7 +55,7 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 				.angularDamping(angularDamping)
 				.position(0, 0)
 				.fixedRotation(fixedRotation)
-				.userData(this)
+				.userData(gameObject)
 				.build();
 	}
 
@@ -85,6 +86,11 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 	public void setSize(float width, float height) {
 		bodyWidth = width;
 		bodyHeight = height;
+	}
+	
+	@Override
+	public void setGameObject(GameObject gameObject) {
+		this.gameObject = gameObject;
 	}
 	
 	@Override
@@ -130,8 +136,7 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 	}
 	
 	public void setFilterData(Filter filter) {
-		filterData = filter;
-		if (fix != null) fix.setFilterData(filterData);
+		setFilterData(filter.categoryBits, filter.maskBits);
 	}
 	
 	public Filter getFilterData() {

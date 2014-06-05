@@ -65,4 +65,9 @@ public class NoPhysicsSystem implements PhysicsSystem {
 		Log.warn("NoPhysicsSystem in use!");
 	}
 
+	@Override
+	public void setGameObject(GameObject gameObject) {
+		Log.warn("NoPhysicsSystem in use!");
+	}
+
 }

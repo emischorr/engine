@@ -5,7 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
  * Represents the gaming interface for the player
@@ -20,8 +20,8 @@ public class Hud implements Disposable {
 	private int SCREEN_HEIGHT = Gdx.graphics.getHeight();
 	
 	public Hud() {
-		stage = new Stage();
-		stage.setViewport(new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
+		stage = new Stage(new ScreenViewport());
+		//stage.setViewport(new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
 		
 		cam = (OrthographicCamera) stage.getCamera();
 		cam.position.set(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 0);

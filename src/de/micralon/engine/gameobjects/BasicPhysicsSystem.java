@@ -7,6 +7,7 @@ public class BasicPhysicsSystem implements PhysicsSystem {
 	protected final Vector2 position = new Vector2(0,0);
 	protected Vector2 velocity = new Vector2(0,0);
 	protected float degree;
+	protected GameObject gameObject;
 	
 	public BasicPhysicsSystem() {
 		this(1, 1);
@@ -76,6 +77,11 @@ public class BasicPhysicsSystem implements PhysicsSystem {
 	@Override
 	public void setVelocity(Vector2 velocity) {
 		this.velocity = velocity;
+	}
+
+	@Override
+	public void setGameObject(GameObject gameObject) {
+		this.gameObject = gameObject;
 	}
 
 }

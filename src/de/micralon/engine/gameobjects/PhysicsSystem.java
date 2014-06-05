@@ -28,4 +28,6 @@ public interface PhysicsSystem {
 
 	public void destroy();
 
+	public void setGameObject(GameObject gameObject);
+
 }

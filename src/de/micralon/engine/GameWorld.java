@@ -24,6 +24,11 @@ import de.micralon.engine.net.NetworkNode;
 import de.micralon.engine.text.Text;
 import de.micralon.engine.utils.Log;
 
+/**
+ * The game world
+ * @author Enrico Mischorr
+ *
+ */
 public abstract class GameWorld {
 	public LightManager lightManager;
 	public World physicsWorld;
