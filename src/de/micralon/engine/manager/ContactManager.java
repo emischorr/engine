@@ -27,14 +27,14 @@ public class ContactManager implements ContactListener {
 		userDataA = contact.getFixtureA().getBody().getUserData();
 		userDataB = contact.getFixtureB().getBody().getUserData();
 		
-		if (userDataA instanceof Trigger) {
+		if (userDataA instanceof Trigger && userDataB instanceof GameObject) {
 			((Trigger)userDataA).triggerIn((GameObject)userDataB);
-		} else if (userDataB instanceof Trigger) {
+		} else if (userDataB instanceof Trigger && userDataA instanceof GameObject) {
 			((Trigger)userDataB).triggerIn((GameObject)userDataA);
 		} else {		
-			if (userDataA != null && userDataB != null && userDataA instanceof GameObject && userDataB instanceof GameObject) {
-				((GameObject)userDataA).contactWith((GameObject)userDataB);
-				((GameObject)userDataB).contactWith((GameObject)userDataA);
+			if (userDataA != null && userDataB != null) { 
+				if (userDataA instanceof GameObject) ((GameObject)userDataA).contactWith(userDataB);
+				if (userDataB instanceof GameObject) ((GameObject)userDataB).contactWith(userDataA);
 			}
 		}
 	}

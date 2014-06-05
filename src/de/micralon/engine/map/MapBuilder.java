@@ -40,7 +40,9 @@ public class MapBuilder {
 	// shared temp vars
 	private Body body;
 	private Fixture fix;
+	
 	private Filter filterData = new Filter();
+	private Object bodyUserData = "WORLD";
 	
 //	private final float STOP_GAP = 0f;
 	private final String LOG_TAG = "MapBuilder";
@@ -97,6 +99,11 @@ public class MapBuilder {
 		return this;
 	}
 	
+	public MapBuilder setBodyUserData(Object bodyUserData) {
+		this.bodyUserData = bodyUserData;
+		return this;
+	}
+	
 	public MapBuilder setIsoTileClass(Class<? extends IsoTile>isoTileClass) {
 		this.isoTileClass = isoTileClass;
 		return this;
@@ -149,7 +156,8 @@ public class MapBuilder {
 							if (mergeBodies) {
 								// check if there are already adjacent bodies with same material
 								for (Body neighbour : getAdjacentBodies(x, y)) {
-									if (neighbour != null && material.equalsIgnoreCase((String) neighbour.getUserData())) {
+									String neighbourMaterial = (String) neighbour.getFixtureList().first().getUserData();
+									if (neighbour != null && material.equalsIgnoreCase(neighbourMaterial)) {
 										mergingBodies.add(neighbour);
 									}
 								}
@@ -166,15 +174,16 @@ public class MapBuilder {
 								bodyDef.type = BodyDef.BodyType.StaticBody;
 								
 								body = GameWorld.ctx.physicsWorld.createBody(bodyDef);
-								body.setUserData(material);
+								body.setUserData(bodyUserData);
 								fix = body.createFixture(fixtureDef);
+								fix.setUserData(material);
+								
+								// set filter data
+								fix.setFilterData(filterData);
+								
+								// add to body register to keep track of all bodies
+								createdBodies.put(key(x,y), body);
 							}
-							
-							// set filter data
-							fix.setFilterData(filterData);
-							
-							// add to body register to keep track of all bodies
-							createdBodies.put(key(x,y), body);
 							
 							// physics tile image
 							field.addTile( createTile(orientation, layer, x, y), layerName );

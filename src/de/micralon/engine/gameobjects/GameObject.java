@@ -122,8 +122,8 @@ public abstract class GameObject extends Image implements Reuseable {
 	
 	public void update() {}
 	
-	public void contactWith(GameObject obj) {}
-	public void endContactWith(GameObject obj) {}
+	public void contactWith(Object obj) {}
+	public void endContactWith(Object obj) {}
 	
 	/**
 	 * Don't call this directly from inside the physics step
