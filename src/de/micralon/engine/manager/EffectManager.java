@@ -1,9 +1,9 @@
 package de.micralon.engine.manager;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -114,7 +114,7 @@ public class EffectManager implements Disposable {
 		}
 	}
 	
-	public void draw(SpriteBatch batch) {
+	public void draw(Batch batch) {
 		for (PooledEffect effect : effects) {
 			effect.draw(batch);
 		}

@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -128,7 +128,7 @@ public class Processor implements Disposable{
 		return fboRegion;
 	}
 	
-	public void renderTo(SpriteBatch batch) {
+	public void renderTo(Batch batch) {
 //		if (shader != null) {
 			fboRegion = new TextureRegion(endCapture());
 			fboRegion.flip(false,  true);

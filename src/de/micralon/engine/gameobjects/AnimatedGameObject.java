@@ -2,7 +2,7 @@ package de.micralon.engine.gameobjects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
@@ -34,7 +34,7 @@ public abstract class AnimatedGameObject extends GameObject {
 	}
 	
 	@Override
-	public void draw(SpriteBatch batch, float parentAlpha) {
+	public void draw(Batch batch, float parentAlpha) {
 		if (currentAnimation != null) {
 			batch.draw(currentAnimation.getKeyFrame(stateTime, true), getPos().x - getBodyWidth()/2 + textureOffsetX, getPos().y - getBodyHeight()/2 + textureOffsetY, getBodyWidth(), getBodyHeight());
 		} else {

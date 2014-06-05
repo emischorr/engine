@@ -90,7 +90,7 @@ public class GameRenderer {
         	world.stage.draw();
         }
         
-//        world.effectManager.draw(world.stage.getSpriteBatch());
+//        world.effectManager.draw(world.stage.getBatch());
         
         // draw the light
         if (options.drawLight) {

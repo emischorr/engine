@@ -1,6 +1,6 @@
 package de.micralon.engine.gameobjects;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -156,7 +156,8 @@ public abstract class GameObject extends Image implements Reuseable {
         updateLastingEffects(delta);
     }
 	
-	public void draw(SpriteBatch batch, float parentAlpha) {
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
 	}
 	

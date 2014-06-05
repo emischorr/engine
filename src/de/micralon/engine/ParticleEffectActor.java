@@ -1,11 +1,11 @@
 package de.micralon.engine;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter.ScaledNumericValue;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class ParticleEffectActor extends Actor {
@@ -58,7 +58,8 @@ public class ParticleEffectActor extends Actor {
 		rotation = degrees;
 	}
 
-	public void draw(SpriteBatch batch, float parentAlpha) {
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
 		effect.draw(batch);
 	}
 
