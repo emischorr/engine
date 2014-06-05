@@ -129,6 +129,13 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 		return body.getAngle() * MathUtils.radiansToDegrees;
 	}
 	
+	public final void setFilterData(short category, short groupIndex, short mask) {
+		filterData.categoryBits = category;
+		filterData.groupIndex = groupIndex;
+		filterData.maskBits = mask;
+		if (fix != null) fix.setFilterData(filterData);
+	}
+	
 	public final void setFilterData(short category, short mask) {
 		filterData.categoryBits = category;
 		filterData.maskBits = mask;
@@ -136,7 +143,7 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 	}
 	
 	public void setFilterData(Filter filter) {
-		setFilterData(filter.categoryBits, filter.maskBits);
+		setFilterData(filter.categoryBits, filter.groupIndex, filter.maskBits);
 	}
 	
 	public Filter getFilterData() {
