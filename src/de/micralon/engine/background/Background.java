@@ -1,12 +1,11 @@
 package de.micralon.engine.background;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class Background {
 	private Stage bgStage;
@@ -17,8 +16,7 @@ public class Background {
 	public Background(Camera movingCam) {
 		this.movingCam = movingCam;
 		lastPos = movingCam.position.cpy();
-		bgStage = new Stage();
-		bgStage.setViewport(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+		bgStage = new Stage(new ScreenViewport());
 	}
 	
 	public void addLayer(Drawable drawable, float ratio) {

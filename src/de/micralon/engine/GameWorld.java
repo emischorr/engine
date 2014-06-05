@@ -1,6 +1,5 @@
 package de.micralon.engine;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -8,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import de.micralon.engine.background.Background;
 import de.micralon.engine.gameobjects.GameObject;
@@ -82,7 +81,7 @@ public abstract class GameWorld {
 		lightManager = new LightManager(physicsWorld);
 		new ContactManager(this);
 		
-		stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight())); // create the game stage
+		stage = new Stage(new ScreenViewport()); // create the game stage
         
         cameraHelper = new CameraHelper(stage);
         cameraHelper.setViewSize(18, 12); // view in meters

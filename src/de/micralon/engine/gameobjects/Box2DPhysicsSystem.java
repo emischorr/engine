@@ -150,8 +150,10 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 
 	@Override
 	public void destroy() {
-		lastPos = body.getPosition();
-		GameWorld.ctx.physicsWorld.destroyBody(body);
+		if (body != null) {
+			lastPos = body.getPosition();
+			GameWorld.ctx.physicsWorld.destroyBody(body);
+		}
 		body = null;
 	}
 
