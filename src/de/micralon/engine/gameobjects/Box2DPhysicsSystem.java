@@ -21,6 +21,7 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 	protected final Filter filterData = new Filter();
 	protected Vector2 lastPos;
 	protected GameObject gameObject;
+	protected final BodyBuilder bodyBuilder;
 	
 	protected float bodyWidth, bodyHeight;
 	
@@ -40,6 +41,8 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 		if (bodyType != null) this.bodyType = bodyType;
 		this.linearDamping = linearDamping;
 		this.angularDamping = angularDamping;
+		
+		bodyBuilder = new BodyBuilder(GameWorld.ctx.physicsWorld);
 	}
 	
 	@Override
@@ -47,8 +50,7 @@ public class Box2DPhysicsSystem implements PhysicsSystem {
 		initBody();
 	}
 	
-	protected final void initBody() {
-		BodyBuilder bodyBuilder = new BodyBuilder(GameWorld.ctx.physicsWorld);
+	protected void initBody() {
 		body = bodyBuilder
 				.type(bodyType)
 				.linearDamping(linearDamping)
