@@ -3,6 +3,7 @@ package de.micralon.engine.gameobjects;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -122,8 +123,8 @@ public abstract class GameObject extends Image implements Reuseable {
 	
 	public void update() {}
 	
-	public void contactWith(Object obj) {}
-	public void endContactWith(Object obj) {}
+	public void contactWith(Object obj, Contact contact) {}
+	public void endContactWith(Object obj, Contact contact) {}
 	
 	/**
 	 * Don't call this directly from inside the physics step
