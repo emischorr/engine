@@ -122,7 +122,7 @@ public class MapBuilder {
 //		tileSize = (Float) map.getProperties().get("tilewidth");
 		Tile.tileSize = tileSize;
 		
-		GameMap gameMap = new GameMap();
+		GameMap gameMap = new GameMap(mapWidth, mapHeight);
 		for (MapLayer l : map.getLayers()) {
 			if (l instanceof TiledMapTileLayer) gameMap.addLayer(l.getName());
 		}
