@@ -1,13 +1,13 @@
 package de.micralon.engine.pathfinding;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * A single node in the search graph
  */
 public class Node implements Comparable<Node> {
-	/** The x coordinate of the node */
-	public float x;
-	/** The y coordinate of the node */
-	public float y;
+	/** The position of the node */
+	public final Vector2 pos;
 	/** The path cost for this node */
 	public float cost;
 	/** The parent of this node, how we reached it in the search */
@@ -24,8 +24,11 @@ public class Node implements Comparable<Node> {
 	 * @param y The y coordinate of the node
 	 */
 	public Node(float x, float y) {
-		this.x = x;
-		this.y = y;
+		this(new Vector2(x, y));
+	}
+	
+	public Node(Vector2 pos) {
+		this.pos = pos;
 	}
 	
 	/**
@@ -67,13 +70,13 @@ public class Node implements Comparable<Node> {
 		if (other instanceof Node) {
 			Node o = (Node) other;
 			
-			return (o.x == x) && (o.y == y);
+			return (o.pos.x == pos.x) && (o.pos.y == pos.y);
 		}
 		
 		return false;
 	}
 	
 	public String toString() {
-		return "("+x+","+y+")";
+		return "("+pos.x+","+pos.y+")";
 	}
 }
