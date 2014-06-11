@@ -33,8 +33,8 @@ public class AStarPathFinder implements Pathfinder {
 	 * @param gameMap The map to be searched
 	 * @param maxSearchDistance The maximum depth we'll search before giving up
 	 */
-	public AStarPathFinder(Pathfindable rules, GameMap gameMap, int maxSearchDistance) {
-		this(rules, nodeSetFromMap(gameMap), maxSearchDistance);
+	public AStarPathFinder(GameMap gameMap, int maxSearchDistance) {
+		this(gameMap, nodeSetFromMap(gameMap), maxSearchDistance);
 	}
 	
 	public AStarPathFinder(Pathfindable rules, NodeSet nodes, int maxSearchDistance) {
@@ -47,7 +47,7 @@ public class AStarPathFinder implements Pathfinder {
 		NodeSet nodes = new NodeSet(gameMap.getWidth()*gameMap.getHeight());
 		for (int x=0; x < gameMap.getWidth(); x++) {
 			for (int y=0; y < gameMap.getHeight(); y++) {
-				nodes.add(x, y, new Node(x,y));
+				nodes.add(new Node(x,y));
 			}
 		}
 		return nodes;
@@ -83,10 +83,11 @@ public class AStarPathFinder implements Pathfinder {
 			removeFromOpen(current);
 			addToClosed(current);
 			
-			Array<Node> neighbors = rules.reachableNodes(current);
+			Array<Vector2> neighborsPos = rules.reachablePositions(current.pos);
 			// search through all the neighbors of the current node evaluating
 			// them as next steps
-			for (Node n : neighbors) {
+			for (Vector2 npos : neighborsPos) {
+				Node n = nodes.get(npos);
 				float nextStepCost = current.cost + rules.getMovementCost(current.pos, n.pos, mover);
 				
 				// If this step exceeds the movers energy, don't even bother with it

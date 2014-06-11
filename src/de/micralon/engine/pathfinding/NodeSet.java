@@ -4,21 +4,25 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public class NodeSet {
-	private ObjectMap<Vector2, Node> nodes;
+	private ObjectMap<String, Node> nodes;
 	
 	public NodeSet(int initialCapacity) {
-		nodes = new ObjectMap<Vector2, Node>(initialCapacity, 1);
+		nodes = new ObjectMap<String, Node>(initialCapacity, 1);
 	}
 	
-	public Node get(Vector2 index) {
-		return nodes.get(index);
+	public Node get(Vector2 pos) {
+		return nodes.get(key(pos));
 	}
 	
-	public void add(float x, float y, Node node) {
-		add(new Vector2(x,y), node);
+	public void add(Node node) {
+		nodes.put(key(node), node);
 	}
 	
-	public void add(Vector2 index, Node node) {
-		nodes.put(index, node);
+	private static String key(Node node) {
+		return key(node.pos);
+	}
+	
+	private static String key(Vector2 pos) {
+		return pos.x+"/"+pos.y;
 	}
 }

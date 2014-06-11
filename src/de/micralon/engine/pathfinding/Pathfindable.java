@@ -11,7 +11,7 @@ public interface Pathfindable {
 	 * @param mover
 	 * @return
 	 */
-	public float getMovementCost(Vector2 source, Vector2 target, Object mover);
+	public float getMovementCost(Vector2 source, Vector2 target, Movable mover);
 	
 	/**
 	 * Check if tile is blocked for mover object
@@ -19,9 +19,9 @@ public interface Pathfindable {
 	 * @param mover
 	 * @return
 	 */
-	public boolean isBlocked(Vector2 target, Object mover);
+	public boolean isBlocked(Vector2 target, Movable mover);
 	
-	public Array<Node> reachableNodes(Node node);
+	public Array<Vector2> reachablePositions(Vector2 nodePos);
 
 	public boolean toExpensive(Movable mover, float nextStepCost);
 }
