@@ -1,7 +1,5 @@
 package de.micralon.engine.manager;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
@@ -10,7 +8,7 @@ import de.micralon.engine.Player;
 import de.micralon.engine.Team;
 
 public class PlayerManager {
-	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
+	private ObjectMap<Integer, Player> players = new ObjectMap<Integer, Player>();
 	private ObjectMap<Integer, Team> teams = new ObjectMap<Integer, Team>();
 	private int nextPlayerID;
 	private int nextTeamID;
@@ -31,6 +29,10 @@ public class PlayerManager {
 		return players.get(id);
 	}
 	
+	public Array<Player> getPlayers() {
+		return players.values().toArray();
+	}
+	
 	public void removePlayer(int id) {
 		players.remove(id);
 	}
@@ -40,7 +42,7 @@ public class PlayerManager {
 	}
 	
 	public int playerCount() {
-		return players.size();
+		return players.size;
 	}
 	
 	public void killPlayer(int id) {
@@ -83,12 +85,12 @@ public class PlayerManager {
 		return teams.values().toArray();
 	}
 	
-	public HashMap<Integer, Player> getData() {
+	public ObjectMap<Integer, Player> getData() {
 		//TODO: include teams here
 		return players;
 	}
 	
-	public void setData(HashMap<Integer, Player> players) {
+	public void setData(ObjectMap<Integer, Player> players) {
 		this.players = players;
 		for (Player player : players.values()) {
 			if (nextPlayerID < player.ID) nextPlayerID = player.ID;
