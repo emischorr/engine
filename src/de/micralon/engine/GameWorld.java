@@ -21,6 +21,8 @@ import de.micralon.engine.map.GameMap;
 import de.micralon.engine.map.ObjectMapper;
 import de.micralon.engine.net.Network.ObjectsData;
 import de.micralon.engine.net.NetworkNode;
+import de.micralon.engine.pathfinding.Movable;
+import de.micralon.engine.pathfinding.Pathfindable;
 import de.micralon.engine.text.Text;
 import de.micralon.engine.utils.Log;
 
@@ -29,7 +31,7 @@ import de.micralon.engine.utils.Log;
  * @author Enrico Mischorr
  *
  */
-public abstract class GameWorld {
+public abstract class GameWorld implements Pathfindable {
 	public LightManager lightManager;
 	public World physicsWorld;
 	public GameMap map;
@@ -245,6 +247,31 @@ public abstract class GameWorld {
 	
 	public Vector2 getGravity() {
 		return DEFAULT_GRAVITY;
+	}
+	
+	@Override
+	public float getMovementCost(Vector2 source, Vector2 target, Movable mover) {
+		return source.dst(target);
+	}
+
+	@Override
+	public boolean isBlocked(Vector2 target, Movable mover) {
+		return false;
+	}
+
+	@Override
+	public Array<Vector2> reachablePositions(Vector2 pos) {
+		Array<Vector2> reachable = new Array<Vector2>();
+		reachable.add(pos.cpy().add(1, 0));
+		reachable.add(pos.cpy().add(-1, 0));
+		reachable.add(pos.cpy().add(0, 1));
+		reachable.add(pos.cpy().add(0, -1));
+		return reachable;
+	}
+
+	@Override
+	public boolean toExpensive(Movable mover, float nextStepCost) {
+		return false;
 	}
 	
 	public void dispose() {

@@ -4,10 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
-import de.micralon.engine.pathfinding.Movable;
-import de.micralon.engine.pathfinding.Pathfindable;
-
-public class GameMap implements Pathfindable {
+public class GameMap {
 	private final ObjectMap<String, Integer> layers = new ObjectMap<String, Integer>();
 	private final ObjectMap<String, TileStack> fields = new ObjectMap<String, TileStack>();
 	
@@ -78,30 +75,5 @@ public class GameMap implements Pathfindable {
 	
 	private String key(float x, float y) {
 		return x+"/"+y;
-	}
-
-	@Override
-	public float getMovementCost(Vector2 source, Vector2 target, Movable mover) {
-		return source.dst(target);
-	}
-
-	@Override
-	public boolean isBlocked(Vector2 target, Movable mover) {
-		return false;
-	}
-
-	@Override
-	public Array<Vector2> reachablePositions(Vector2 pos) {
-		Array<Vector2> reachable = new Array<Vector2>();
-		reachable.add(pos.cpy().add(1, 0));
-		reachable.add(pos.cpy().add(-1, 0));
-		reachable.add(pos.cpy().add(0, 1));
-		reachable.add(pos.cpy().add(0, -1));
-		return reachable;
-	}
-
-	@Override
-	public boolean toExpensive(Movable mover, float nextStepCost) {
-		return false;
 	}
 }

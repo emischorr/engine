@@ -3,6 +3,7 @@ package de.micralon.engine.pathfinding;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import de.micralon.engine.GameWorld;
 import de.micralon.engine.map.GameMap;
 
 /**
@@ -33,8 +34,8 @@ public class AStarPathFinder implements Pathfinder {
 	 * @param gameMap The map to be searched
 	 * @param maxSearchDistance The maximum depth we'll search before giving up
 	 */
-	public AStarPathFinder(GameMap gameMap, int maxSearchDistance) {
-		this(gameMap, nodeSetFromMap(gameMap), maxSearchDistance);
+	public AStarPathFinder(GameWorld gameWorld, int maxSearchDistance) {
+		this(gameWorld, nodeSetFromMap(gameWorld.map), maxSearchDistance);
 	}
 	
 	public AStarPathFinder(Pathfindable rules, NodeSet nodes, int maxSearchDistance) {
