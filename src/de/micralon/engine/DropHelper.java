@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 public class DropHelper {
 	public static final int DROP_BASE_VALUE = 100;
 	private static float chance;
+	private static Random random = new Random();
 	
 	public static Array<Dropable> drop() {
 		return drop(DROP_BASE_VALUE, drops, false);
@@ -20,7 +21,6 @@ public class DropHelper {
 	public static Array<Dropable> drop(int dropValue, Array<Drop> drops, boolean multipleDrop) {
 		Array<Dropable> items = new Array<Dropable>();
 		if (drops != null) {
-			Random random = new Random();
 			for (Drop drop : drops) {
 				calcChance(dropValue, drop);
 				// do we have luck?
@@ -43,6 +43,10 @@ public class DropHelper {
 	}
 	
 	public static Array<Drop> drops = new Array<Drop>();
+	
+	public static void newRandom() {
+		random = new Random();
+	}
 	
 	static {
 //		drops.add(new Drop());
