@@ -41,6 +41,15 @@ public class SpawnPoint implements SpawnPointInterface {
 		spawn(obj);
 	}
 	
+	public void respawnIn(int playerID, float time) {
+		respawnIn(GameWorld.ctx.playerManager.getPlayer(playerID).character, time);
+	}
+	
+	public void respawnIn(GameObject obj, float time) {
+		obj.reuse();
+		spawnIn(obj, time);
+	}
+	
 	public void update() {
 		if (spawnQueue != null) {
 			for (Entry<GameObject, Long> entry : spawnQueue.entrySet()) {
