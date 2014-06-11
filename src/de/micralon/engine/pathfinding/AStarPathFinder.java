@@ -1,4 +1,4 @@
-package de.micralon.engine.ai;
+package de.micralon.engine.pathfinding;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,9 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
-import de.micralon.engine.ai.Path.Step;
 import de.micralon.engine.gameobjects.GameObject;
 import de.micralon.engine.map.GameMap;
+import de.micralon.engine.pathfinding.Path.Step;
 import de.micralon.engine.utils.EngineQueue;
 
 /**
@@ -38,14 +38,7 @@ public class AStarPathFinder {
 	 * @param maxSearchDistance The maximum depth we'll search before giving up
 	 */
 	public AStarPathFinder(GameMap gameMap, int maxSearchDistance) {
-		this.maxSearchDistance = maxSearchDistance;
-		
-		nodes = new NodeSet(gameMap.width*gameMap.height);
-		for (int x=0; x < gameMap.width; x++) {
-			for (int y=0; y < gameMap.height; y++) {
-				nodes.add(x, y, new Node(x,y));
-			}
-		}
+		this(nodeSetFromMap(gameMap), maxSearchDistance);
 	}
 	
 	public AStarPathFinder(NodeSet nodes, int maxSearchDistance) {
@@ -53,9 +46,19 @@ public class AStarPathFinder {
 		this.nodes = nodes;
 	}
 	
-	public Path findPath(Unit mover, int tx, int ty, boolean ignoreRange) {
-		return findPath(mover.getX(), mover.getY(), tx, ty, mover, ignoreRange);
+	private static NodeSet nodeSetFromMap(GameMap gameMap) {
+		NodeSet nodes = new NodeSet(gameMap.getWidth()*gameMap.getHeight());
+		for (int x=0; x < gameMap.getWidth(); x++) {
+			for (int y=0; y < gameMap.getHeight(); y++) {
+				nodes.add(x, y, new Node(x,y));
+			}
+		}
+		return nodes;
 	}
+	
+//	public Path findPath(Unit mover, int tx, int ty, boolean ignoreRange) {
+//		return findPath(mover.getX(), mover.getY(), tx, ty, mover, ignoreRange);
+//	}
 	
 	/**
 	 * @see PathFinder#findPath(Vector2, Vector2, Movable)
@@ -398,101 +401,4 @@ public class AStarPathFinder {
 		}
 	}
 	
-	private class NodeSet {
-		private ObjectMap<Vector2, Node> nodes;
-		
-		public NodeSet(int initialCapacity) {
-			nodes = new ObjectMap<Vector2, Node>(initialCapacity, 1);
-		}
-		
-		public Node get(Vector2 index) {
-			return nodes.get(index);
-		}
-		
-		public void add(float x, float y, Node node) {
-			add(new Vector2(x,y), node);
-		}
-		
-		public void add(Vector2 index, Node node) {
-			nodes.put(index, node);
-		}
-	}
-	
-	/**
-	 * A single node in the search graph
-	 */
-	private class Node implements Comparable<Node> {
-		/** The x coordinate of the node */
-		private float x;
-		/** The y coordinate of the node */
-		private float y;
-		/** The path cost for this node */
-		private float cost;
-		/** The parent of this node, how we reached it in the search */
-		private Node parent;
-		/** The heuristic cost of this node */
-		private float heuristic;
-		/** The search depth of this node */
-		private int depth;
-		
-		/**
-		 * Create a new node
-		 * 
-		 * @param x The x coordinate of the node
-		 * @param y The y coordinate of the node
-		 */
-		public Node(float x, float y) {
-			this.x = x;
-			this.y = y;
-		}
-		
-		/**
-		 * Set the parent of this node
-		 * 
-		 * @param parent The parent node which lead us to this node
-		 * @return The depth we have no reached in searching
-		 */
-		public int setParent(Node parent) {
-			depth = parent.depth + 1;
-			this.parent = parent;
-			
-			return depth;
-		}
-		
-		/**
-		 * @see Comparable#compareTo(Object)
-		 */
-		@Override
-		public int compareTo(Node o) {
-			//Node o = (Node) other;
-			
-			float f = heuristic + cost;
-			float of = o.heuristic + o.cost;
-			
-			if (f < of) {
-				return -1;
-			} else if (f > of) {
-				return 1;
-			} else {
-				return 0;
-			}
-		}
-		
-		/**
-		 * @see Object#equals(Object)
-		 */
-		public boolean equals(Object other) {
-			if (other instanceof Node) {
-				Node o = (Node) other;
-				
-				return (o.x == x) && (o.y == y);
-			}
-			
-			return false;
-		}
-		
-		public String toString() {
-			return "("+x+","+y+")";
-		}
-	}
 }

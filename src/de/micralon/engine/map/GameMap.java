@@ -8,8 +8,20 @@ public class GameMap {
 	private final ObjectMap<String, Integer> layers = new ObjectMap<String, Integer>();
 	private final ObjectMap<String, TileStack> fields = new ObjectMap<String, TileStack>();
 	
-	public GameMap() {
+	private int mapWidth, mapHeight;
+	
+	public GameMap(int width, int height) {
+		this.mapWidth = width;
+		this.mapHeight = height;
 		layers.put("bg", 0);
+	}
+	
+	public int getWidth() {
+		return mapWidth;
+	}
+	
+	public int getHeight() {
+		return mapHeight;
 	}
 	
 	public TileStack getField(String key) {

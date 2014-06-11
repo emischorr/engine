@@ -1,4 +1,4 @@
-package de.micralon.engine.ai;
+package de.micralon.engine.pathfinding;
 
 import com.badlogic.gdx.utils.Array;
 
