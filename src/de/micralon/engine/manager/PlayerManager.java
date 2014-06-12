@@ -85,6 +85,15 @@ public class PlayerManager {
 		return teams.values().toArray();
 	}
 	
+	public Team getOppositeTeam(Team team) {
+		if (teams.size == 2) {
+			for (Team aTeam : teams.values()) {
+				if (!aTeam.equals(team)) return aTeam;
+			}
+		}
+		return null;
+	}
+	
 	public ObjectMap<Integer, Player> getData() {
 		//TODO: include teams here
 		return players;
