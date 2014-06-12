@@ -106,11 +106,12 @@ public class ObjectManager implements Disposable {
 	 * @param klass
 	 * @return
 	 */
-	public Array<?> getObjectsByClass(Class<?> klass) {
-		Array<GameObject> result = new Array<GameObject>();
+	@SuppressWarnings("unchecked")
+	public <T> Array<T> getObjectsByClass(Class<T> klass) {
+		Array<T> result = new Array<T>();
 		for (GameObject obj : objectMap.values()) {
 			if (klass.isInstance(obj)) {
-				result.add(obj);
+				result.add((T) obj);
 			}
 		}
 		return result;

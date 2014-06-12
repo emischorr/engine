@@ -23,7 +23,7 @@ public class AStarPathFinder implements Pathfinder {
 	private int maxSearchDistance;
 	
 	/** The complete set of nodes across the map */
-	private NodeSet nodes;
+	private final NodeSet nodes;
 	
 	private Pathfindable rules;
 	private Heuristic heuristic = new ClosestHeuristic();
@@ -38,18 +38,30 @@ public class AStarPathFinder implements Pathfinder {
 		this(gameWorld, nodeSetFromMap(gameWorld.map), maxSearchDistance);
 	}
 	
+	public AStarPathFinder(Pathfindable rules, Array<Vector2> points, int maxSearchDistance) {
+		this(rules, nodeSetFromPoints(points), maxSearchDistance);
+	}
+	
 	public AStarPathFinder(Pathfindable rules, NodeSet nodes, int maxSearchDistance) {
 		this.rules = rules;
 		this.nodes = nodes;
 		this.maxSearchDistance = maxSearchDistance;
 	}
 	
-	private static NodeSet nodeSetFromMap(GameMap gameMap) {
+	public static NodeSet nodeSetFromMap(GameMap gameMap) {
 		NodeSet nodes = new NodeSet(gameMap.getWidth()*gameMap.getHeight());
 		for (int x=0; x < gameMap.getWidth(); x++) {
 			for (int y=0; y < gameMap.getHeight(); y++) {
 				nodes.add(new Node(x,y));
 			}
+		}
+		return nodes;
+	}
+	
+	public static NodeSet nodeSetFromPoints(Array<Vector2> points) {
+		NodeSet nodes = new NodeSet(points.size);
+		for (Vector2 point : points) {
+			nodes.add(new Node(point));
 		}
 		return nodes;
 	}
@@ -60,16 +72,26 @@ public class AStarPathFinder implements Pathfinder {
 		if (rules.isBlocked(target, mover)) {
 			return null;
 		}
+		
+		Node sourceNode = nodes.get(source);
+		Node targetNode = nodes.get(target);
+		// set source and target if not in node set (if node set consists of waypoints)
+		if (sourceNode == null) {
+			sourceNode = new Node(source);
+		}
+		if (targetNode == null) {
+			targetNode = new Node(target);
+		}
 				
 		// initial state for A*. The closed group is empty. Only the starting
 		// tile is in the open list and it's cost is zero, i.e. we're already there
-		nodes.get(source).cost = 0;
-		nodes.get(source).depth = 0;
+		sourceNode.cost = 0;
+		sourceNode.depth = 0;
 		closed.clear();
 		open.clear();
-		open.add(nodes.get(source));
+		open.add(sourceNode);
 		
-		nodes.get(target).parent = null;
+		targetNode.parent = null;
 		
 		// While we still have more nodes to search and haven't exceeded our max search depth
 		int maxDepth = 0;
@@ -77,7 +99,7 @@ public class AStarPathFinder implements Pathfinder {
 			// pull out the first node in our open list, this is determined to 
 			// be the most likely to be the next step based on our heuristic
 			Node current = getFirstInOpen();
-			if (current == nodes.get(target)) {
+			if (current == targetNode) {
 				break;
 			}
 			
@@ -113,7 +135,7 @@ public class AStarPathFinder implements Pathfinder {
 
 		// since we've got an empty open list or we've run out of search 
 		// there was no path. Just return null
-		if (nodes.get(target).parent == null) {
+		if (targetNode.parent == null) {
 			return null;
 		}
 		
@@ -121,9 +143,9 @@ public class AStarPathFinder implements Pathfinder {
 		// references of the nodes to find out way from the target location back
 		// to the start recording the nodes on the way.
 		Path path = new Path();
-		Node destination = nodes.get(target);
+		Node destination = targetNode;
 		path.setCost((int) destination.cost);
-		while (destination != nodes.get(source)) {
+		while (destination != sourceNode) {
 			path.prependStep(destination.pos.x, destination.pos.y);
 			destination = destination.parent;
 		}

@@ -23,8 +23,10 @@ import de.micralon.engine.net.Network.ObjectsData;
 import de.micralon.engine.net.NetworkNode;
 import de.micralon.engine.pathfinding.Movable;
 import de.micralon.engine.pathfinding.Pathfindable;
+import de.micralon.engine.systems.GameSystem;
 import de.micralon.engine.text.Text;
 import de.micralon.engine.utils.Log;
+import de.micralon.engine.utils.VisibilityCallback;
 
 /**
  * The game world
@@ -69,6 +71,7 @@ public abstract class GameWorld implements Pathfindable {
 	public EffectManager effectManager;
 	public PlayerManager playerManager;
 //	public HashMap<Integer, Player> players = new HashMap<Integer, Player>();
+	protected Array<GameSystem> systems = new Array<GameSystem>();
 
 	// temp vars
 	Array<Contact> contacts;
@@ -208,6 +211,10 @@ public abstract class GameWorld implements Pathfindable {
 		group.addActor(decalsManager.addDecal(decal));
 	}
 	
+	public void addSystem(GameSystem system) {
+		systems.add(system);
+	}
+	
 	public void update(float deltaTime) {
 		gameTimer.update(deltaTime);
 		cameraHelper.updateCameraPosition();
@@ -222,6 +229,10 @@ public abstract class GameWorld implements Pathfindable {
 		
 		// update level script
 		if (level != null) level.update(deltaTime);
+		
+		for (GameSystem system : systems) {
+			system.update(deltaTime);
+		}
 		
 		// TODO: try to move this at the end of the method
 		// update box2d world
@@ -261,11 +272,33 @@ public abstract class GameWorld implements Pathfindable {
 
 	@Override
 	public Array<Vector2> reachablePositions(Vector2 pos) {
+		// Alternatives: reachableWaypoints(pos)
+		return neighbourCells(pos);
+	}
+	
+	protected final Array<Vector2> neighbourCells(Vector2 pos) {
 		Array<Vector2> reachable = new Array<Vector2>();
 		reachable.add(pos.cpy().add(1, 0));
 		reachable.add(pos.cpy().add(-1, 0));
 		reachable.add(pos.cpy().add(0, 1));
 		reachable.add(pos.cpy().add(0, -1));
+		return reachable;
+	}
+	
+	protected final Array<Vector2> reachableWaypoints(Vector2 pos) {
+		Array<Vector2> reachable = new Array<Vector2>();
+		VisibilityCallback callback = new VisibilityCallback();
+		
+		for (Vector2 waypoint : map.getWaypoints()) {
+			if (pos.dst(waypoint) > 0) {
+				callback.reset();
+				physicsWorld.rayCast(callback, pos, waypoint);
+				if (callback.isVisible()) {
+					reachable.add(waypoint);
+				}
+			}
+		}
+		
 		return reachable;
 	}
 

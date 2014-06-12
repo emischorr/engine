@@ -1,5 +1,6 @@
 package de.micralon.engine.pathfinding;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 /**
@@ -52,7 +53,7 @@ public class Path {
 	 * @return The x coordinate at the step
 	 */
 	public float getX(int index) {
-		return getStep(index).x;
+		return getStep(index).getX();
 	}
 
 	/**
@@ -62,7 +63,7 @@ public class Path {
 	 * @return The y coordinate at the step
 	 */
 	public float getY(int index) {
-		return getStep(index).y;
+		return getStep(index).getY();
 	}
 	
 	/**
@@ -110,10 +111,7 @@ public class Path {
 	 * @author Kevin Glass
 	 */
 	public class Step {
-		/** The x coordinate at the given step */
-		private float x;
-		/** The y coordinate at the given step */
-		private float y;
+		private final Vector2 position = new Vector2();
 		
 		/**
 		 * Create a new step
@@ -122,8 +120,16 @@ public class Path {
 		 * @param y The y coordinate of the new step
 		 */
 		public Step(float x, float y) {
-			this.x = x;
-			this.y = y;
+			this.position.x = x;
+			this.position.y = y;
+		}
+		
+		public Step(Vector2 pos) {
+			this(pos.x, pos.y);
+		}
+		
+		public Vector2 getPos() {
+			return position;
 		}
 		
 		/**
@@ -132,7 +138,7 @@ public class Path {
 		 * @return The x coodindate of the new step
 		 */
 		public float getX() {
-			return x;
+			return position.x;
 		}
 
 		/**
@@ -141,7 +147,7 @@ public class Path {
 		 * @return The y coodindate of the new step
 		 */
 		public float getY() {
-			return y;
+			return position.y;
 		}
 		
 		/**
@@ -149,7 +155,7 @@ public class Path {
 		 */
 		@Override
 		public int hashCode() {
-			return (int) (x*y);
+			return position.hashCode();
 		}
 
 		/**
@@ -158,8 +164,7 @@ public class Path {
 		public boolean equals(Object other) {
 			if (other instanceof Step) {
 				Step o = (Step) other;
-				
-				return (o.x == x) && (o.y == y);
+				return position.equals(o.getPos());
 			}
 			
 			return false;
