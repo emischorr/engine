@@ -8,7 +8,7 @@ import de.micralon.engine.gameobjects.GameObject;
 
 public class SpawnPointCluster implements SpawnPointInterface {
 	private Random random = new Random();
-	private Array<SpawnPoint> spawnpoints;
+	private Array<SpawnPoint> spawnpoints = new Array<SpawnPoint>();
 	
 	public void addSpawnPoint(SpawnPoint spawnpoint) {
 		spawnpoints.add(spawnpoint);
