@@ -5,12 +5,17 @@ import com.badlogic.gdx.maps.MapProperties;
 
 public abstract class ObjectMapper {
 	protected float tileSize;
+	protected int pixelPerTile;
 	
 	// temp vars
 	private Object value;
 	
 	public void setTileSize(float tileSize) {
 		this.tileSize = tileSize;
+	}
+	
+	public void setTileSize(int pixelPerTile) {
+		this.pixelPerTile = pixelPerTile;
 	}
 	
 	public abstract void map(MapObject obj);

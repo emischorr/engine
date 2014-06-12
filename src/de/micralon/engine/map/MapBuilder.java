@@ -31,6 +31,7 @@ public class MapBuilder {
 	private static MapBuilder INSTANCE;
 	private final ObjectMap<String, FixtureDef> m_materials = new ObjectMap<String, FixtureDef>();
 	private float tileSize = 1; // the size of a tile in world units (2m)
+	private int pixelPerTile;
 	
 	private final ObjectMap<String, Body> createdBodies = new ObjectMap<String, Body>();
 	private ObjectMapper objectMapper;
@@ -112,6 +113,7 @@ public class MapBuilder {
 	public GameMap build(TiledMap map) {
 		TiledMapTileLayer layer;
 		MapLayer objectsLayer = map.getLayers().get("objects");
+		MapLayer waypointsLayer = map.getLayers().get("waypoints");
 		FixtureDef fixtureDef;
 		Array<Body> mergingBodies = new Array<Body>();
 		
@@ -119,7 +121,7 @@ public class MapBuilder {
 		String orientation = (String) map.getProperties().get("orientation");
 		int mapWidth = (Integer) map.getProperties().get("width");
 		int mapHeight = (Integer) map.getProperties().get("height");
-//		tileSize = (Float) map.getProperties().get("tilewidth");
+		pixelPerTile = (Integer) map.getProperties().get("tilewidth");
 		Tile.tileSize = tileSize;
 		
 		GameMap gameMap = new GameMap(mapWidth, mapHeight);
@@ -210,6 +212,14 @@ public class MapBuilder {
 				}
 			} else {
 				Gdx.app.log(LOG_TAG, "Found object layer but no ObjectMapper defined! Use addObjectMapper() to add one.");
+			}
+		}
+		
+		if (waypointsLayer != null) {
+			for (MapObject obj : waypointsLayer.getObjects()) {
+				float x = Float.valueOf(obj.getProperties().get("x").toString())/Float.valueOf(pixelPerTile);
+				float y = Float.valueOf(obj.getProperties().get("y").toString())/Float.valueOf(pixelPerTile);
+				gameMap.addWaypoint(x, y);
 			}
 		}
 		

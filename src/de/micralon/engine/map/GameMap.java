@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 public class GameMap {
 	private final ObjectMap<String, Integer> layers = new ObjectMap<String, Integer>();
 	private final ObjectMap<String, TileStack> fields = new ObjectMap<String, TileStack>();
+	private final Array<Vector2> waypoints = new Array<Vector2>();
 	
 	private int mapWidth, mapHeight;
 	
@@ -71,6 +72,18 @@ public class GameMap {
 
 	public Array<String> getLayerNames() {
 		return layers.keys().toArray();
+	}
+	
+	public void addWaypoint(float x, float y) {
+		addWaypoint(new Vector2(x, y));
+	}
+	
+	public void addWaypoint(Vector2 pos) {
+		waypoints.add(pos);
+	}
+	
+	public Array<Vector2> getWaypoints() {
+		return waypoints;
 	}
 	
 	private String key(float x, float y) {

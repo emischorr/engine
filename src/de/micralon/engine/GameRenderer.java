@@ -3,6 +3,7 @@ package de.micralon.engine;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -38,6 +40,9 @@ public class GameRenderer {
 	private Processor processor;
 	
 	public GameRendererOptions options;
+	
+	// temp
+	private Color oldColor; 
 	
 	public GameRenderer(GameWorld world, Batch batch) {
 		this(world, batch, new GameRendererOptions());
@@ -117,6 +122,20 @@ public class GameRenderer {
 				}
 			}
 			shapeRenderer.end();
+        }
+        
+        // TODO: optimize -> use separate flag
+        if (options.drawDebug) {
+        	shapeRenderer.setProjectionMatrix(camera.combined);
+	        shapeRenderer.identity();
+	        oldColor = shapeRenderer.getColor();
+	        shapeRenderer.setColor(Color.MAGENTA);
+			shapeRenderer.begin(ShapeType.Filled);
+        	for (Vector2 waypoint : world.map.getWaypoints()) {
+        		shapeRenderer.circle(waypoint.x, waypoint.y, 0.1f);
+        	}
+        	shapeRenderer.end();
+        	shapeRenderer.setColor(oldColor);
         }
         
         if (drawText) {
