@@ -125,17 +125,18 @@ public class GameRenderer {
         }
         
         // TODO: optimize -> use separate flag
+        // waypoint debug
         if (options.drawDebug) {
         	shapeRenderer.setProjectionMatrix(camera.combined);
 	        shapeRenderer.identity();
-	        oldColor = shapeRenderer.getColor();
-	        shapeRenderer.setColor(Color.MAGENTA);
 			shapeRenderer.begin(ShapeType.Filled);
+			oldColor = shapeRenderer.getColor().cpy();
+	        shapeRenderer.setColor(1, 0, 1, 0.5f);
         	for (Vector2 waypoint : world.map.getWaypoints()) {
-        		shapeRenderer.circle(waypoint.x, waypoint.y, 0.1f);
+        		shapeRenderer.circle(waypoint.x, waypoint.y, 0.3f);
         	}
-        	shapeRenderer.end();
         	shapeRenderer.setColor(oldColor);
+        	shapeRenderer.end();
         }
         
         if (drawText) {
