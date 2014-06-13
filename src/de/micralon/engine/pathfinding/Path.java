@@ -46,6 +46,11 @@ public class Path {
 		return getStep(this.getLength()-1);
 	}
 	
+	public boolean removeLastStep() {
+		steps.removeIndex(this.getLength()-1);
+		return steps.size > 0;
+	}
+	
 	/**
 	 * Get the x coordinate for the step at the given index
 	 * 
