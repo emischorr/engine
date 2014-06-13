@@ -12,7 +12,7 @@ public class Node implements Comparable<Node> {
 	public float cost;
 	/** The parent of this node, how we reached it in the search */
 	public Node parent;
-	/** The heuristic cost of this node */
+	/** The heuristic cost of this node, controls the sorting of multiple nodes */
 	public float heuristic;
 	/** The search depth of this node */
 	public int depth;

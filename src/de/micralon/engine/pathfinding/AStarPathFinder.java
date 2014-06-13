@@ -1,5 +1,8 @@
 package de.micralon.engine.pathfinding;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -17,7 +20,7 @@ public class AStarPathFinder implements Pathfinder {
 	/** The set of nodes that have been searched through */
 	private Array<Node> closed = new Array<Node>();
 	/** The set of nodes that we do not yet consider fully searched */
-	private Array<Node> open = new Array<Node>(true, 16);
+	private SortedList open = new SortedList();
 	
 	/** The maximum depth of search we're willing to accept before giving up */
 	private int maxSearchDistance;
@@ -66,6 +69,10 @@ public class AStarPathFinder implements Pathfinder {
 		return nodes;
 	}
 	
+	public void setHeuristic(Heuristic heuristic) {
+		this.heuristic = heuristic;
+	}
+	
 	@Override
 	public Path findPath(Movable mover, Vector2 source, Vector2 target) {
 		// easy first check, if the destination is blocked, we can't get there
@@ -95,7 +102,7 @@ public class AStarPathFinder implements Pathfinder {
 		
 		// While we still have more nodes to search and haven't exceeded our max search depth
 		int maxDepth = 0;
-		while ((maxDepth < maxSearchDistance) && (open.size != 0)) {
+		while ((maxDepth < maxSearchDistance) && (open.size() != 0)) {
 			// pull out the first node in our open list, this is determined to 
 			// be the most likely to be the next step based on our heuristic
 			Node current = getFirstInOpen();
@@ -106,11 +113,14 @@ public class AStarPathFinder implements Pathfinder {
 			removeFromOpen(current);
 			addToClosed(current);
 			
-			Array<Vector2> neighborsPos = rules.reachablePositions(current.pos);
+			Array<Vector2> neighborsPos = rules.reachablePositions(current.pos, target);
 			// search through all the neighbors of the current node evaluating
 			// them as next steps
 			for (Vector2 npos : neighborsPos) {
 				Node n = nodes.get(npos);
+				if (n == null && npos.equals(target)) { // node was not found among the node set because it's the target (waypoint)
+					n = targetNode;
+				}
 				float nextStepCost = current.cost + rules.getMovementCost(current.pos, n.pos, mover);
 				
 				// If this step exceeds the movers energy, don't even bother with it
@@ -149,7 +159,8 @@ public class AStarPathFinder implements Pathfinder {
 			path.prependStep(destination.pos.x, destination.pos.y);
 			destination = destination.parent;
 		}
-		path.prependStep(source.x, source.y);
+		// prepend the source to the path
+		//path.prependStep(source.x, source.y);
 		
 		// thats it, we have our path 
 		return path;
@@ -273,7 +284,7 @@ public class AStarPathFinder implements Pathfinder {
 	 * @return True if the node given is in the open list
 	 */
 	protected boolean inOpenList(Node node) {
-		return open.contains(node, true);
+		return open.contains(node);
 	}
 	
 	/**
@@ -282,7 +293,7 @@ public class AStarPathFinder implements Pathfinder {
 	 * @param node The node to remove from the open list
 	 */
 	protected void removeFromOpen(Node node) {
-		open.removeValue(node, true);
+		open.remove(node);
 	}
 	
 	/**
@@ -313,4 +324,62 @@ public class AStarPathFinder implements Pathfinder {
 		closed.removeValue(node,false);
 	}
 	
+	private class SortedList {
+		/** The list of elements */
+		private ArrayList<Node> list = new ArrayList<Node>();
+		
+		/**
+		 * Retrieve the first element from the list
+		 *  
+		 * @return The first element from the list
+		 */
+		public Object first() {
+			return list.get(0);
+		}
+		
+		/**
+		 * Empty the list
+		 */
+		public void clear() {
+			list.clear();
+		}
+		
+		/**
+		 * Add an element to the list - causes sorting
+		 * 
+		 * @param o The element to add
+		 */
+		public void add(Node o) {
+			list.add(o);
+			Collections.sort(list);
+		}
+		
+		/**
+		 * Remove an element from the list
+		 * 
+		 * @param o The element to remove
+		 */
+		public void remove(Object o) {
+			list.remove(o);
+		}
+	
+		/**
+		 * Get the number of elements in the list
+		 * 
+		 * @return The number of element in the list
+ 		 */
+		public int size() {
+			return list.size();
+		}
+		
+		/**
+		 * Check if an element is in the list
+		 * 
+		 * @param o The element to search for
+		 * @return True if the element is in the list
+		 */
+		public boolean contains(Object o) {
+			return list.contains(o);
+		}
+	}
 }

@@ -271,8 +271,8 @@ public abstract class GameWorld implements Pathfindable {
 	}
 
 	@Override
-	public Array<Vector2> reachablePositions(Vector2 pos) {
-		// Alternatives: reachableWaypoints(pos)
+	public Array<Vector2> reachablePositions(Vector2 pos, Vector2 targetPos) {
+		// Alternatives: reachableWaypoints(pos, targetPos)
 		return neighbourCells(pos);
 	}
 	
@@ -285,21 +285,26 @@ public abstract class GameWorld implements Pathfindable {
 		return reachable;
 	}
 	
-	protected final Array<Vector2> reachableWaypoints(Vector2 pos) {
+	protected final Array<Vector2> reachableWaypoints(Vector2 pos, Vector2 targetPos) {
 		Array<Vector2> reachable = new Array<Vector2>();
 		VisibilityCallback callback = new VisibilityCallback();
 		
+		if (pointReachable(pos, targetPos, callback)) {
+			reachable.add(targetPos);
+			return reachable; // shortcut since target is already directly reachable
+		}
+		
 		for (Vector2 waypoint : map.getWaypoints()) {
-			if (pos.dst(waypoint) > 0) {
-				callback.reset();
-				physicsWorld.rayCast(callback, pos, waypoint);
-				if (callback.isVisible()) {
-					reachable.add(waypoint);
-				}
-			}
+			if (pointReachable(pos, waypoint, callback)) reachable.add(waypoint);
 		}
 		
 		return reachable;
+	}
+	
+	private final boolean pointReachable(Vector2 pos, Vector2 targetPos, VisibilityCallback callback) {
+		callback.reset();
+		if (pos.dst(targetPos) > 0) physicsWorld.rayCast(callback, pos, targetPos);
+		return callback.isVisible();
 	}
 
 	@Override

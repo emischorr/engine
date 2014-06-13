@@ -21,7 +21,7 @@ public interface Pathfindable {
 	 */
 	public boolean isBlocked(Vector2 target, Movable mover);
 	
-	public Array<Vector2> reachablePositions(Vector2 nodePos);
+	public Array<Vector2> reachablePositions(Vector2 nodePos, Vector2 targetPos);
 
 	public boolean toExpensive(Movable mover, float nextStepCost);
 }
