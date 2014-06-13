@@ -46,6 +46,10 @@ public class Path {
 		return getStep(this.getLength()-1);
 	}
 	
+	/**
+	 * removes the last step from this path
+	 * @return false if the path is empty after removing. true otherwise.
+	 */
 	public boolean removeLastStep() {
 		steps.removeIndex(this.getLength()-1);
 		return steps.size > 0;
