@@ -43,11 +43,6 @@ public abstract class GameWorld implements Pathfindable {
 	
 	public static GameWorld ctx;
 	
-	private static final Vector2 DEFAULT_GRAVITY = new Vector2(0, -9.8f);
-	
-    private final static int VELOCITY_ITERS = 6;
-    private final static int POSITION_ITERS = 2;
-	
 	private static int WORLD_WIDTH = 50;
 	private static int WORLD_HEIGHT = 50;
 	
@@ -87,7 +82,7 @@ public abstract class GameWorld implements Pathfindable {
 	 * @param trackUpdates
 	 */
 	protected final void init(boolean trackUpdates) {
-		physicsWorld = new World(getGravity(), true);
+		physicsWorld = new World(Env.gravity, true);
 		lightManager = new LightManager(physicsWorld);
 		new ContactManager(this);
 		
@@ -236,7 +231,7 @@ public abstract class GameWorld implements Pathfindable {
 		
 		// TODO: try to move this at the end of the method
 		// update box2d world
-		physicsWorld.step(deltaTime, VELOCITY_ITERS, POSITION_ITERS);
+		physicsWorld.step(deltaTime, Env.velocityIterations, Env.positionIterations);
 		
 		stage.act(deltaTime); // update game stage
 		objectManager.update(); // delete objects and update state
@@ -254,10 +249,6 @@ public abstract class GameWorld implements Pathfindable {
 	
 	public void updateObjects(ObjectsData data) {
 		objectManager.syncObjects(data);
-	}
-	
-	public Vector2 getGravity() {
-		return DEFAULT_GRAVITY;
 	}
 	
 	@Override
