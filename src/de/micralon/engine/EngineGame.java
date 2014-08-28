@@ -16,8 +16,6 @@ import de.micralon.engine.services.SoundManager;
 import de.micralon.engine.utils.Log;
 
 public abstract class EngineGame extends Game {
-	@Deprecated
-    public static EngineGame ctx;
     public static boolean DEV, FPS;
     public static String assetRootFolder = "";
     public static String levelPath = "";
@@ -86,8 +84,6 @@ public abstract class EngineGame extends Game {
 	@Override
 	public void create() {
 		Env.init(this);
-		// deprecated
-		ctx = this;
 		
 		Log.setTopic(EngineGame.class.getSimpleName());
 		Log.info( "Creating game on " + Gdx.app.getType() );

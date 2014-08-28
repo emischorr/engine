@@ -1,6 +1,6 @@
 package de.micralon.engine.scripting.commands;
 
-import de.micralon.engine.EngineGame;
+import de.micralon.engine.Env;
 import de.micralon.engine.scripting.Command;
 import de.micralon.engine.services.MusicManager.GameMusic;
 
@@ -13,7 +13,7 @@ public class PlayMusic implements Command {
 
 	@Override
 	public void update(float delta) {
-		EngineGame.ctx.getMusicManager().play(music);
+		Env.game.getMusicManager().play(music);
 	}
 
 	@Override

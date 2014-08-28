@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Input.Keys;
 
-import de.micralon.engine.EngineGame;
+import de.micralon.engine.Env;
 
 public abstract class GameController extends InputMultiplexer {
     private long pausedTime;
@@ -12,10 +12,10 @@ public abstract class GameController extends InputMultiplexer {
 
 	public void processInput() {
 		if ((Gdx.input.isKeyPressed(Keys.ESCAPE) || Gdx.input.isKeyPressed(Keys.BACK)) && pausedTime + pauseCooldown <= System.currentTimeMillis()) {
-			if (EngineGame.ctx.paused) {
-				EngineGame.ctx.paused = false;
+			if (Env.game.paused) {
+				Env.game.paused = false;
 			} else {
-				EngineGame.ctx.paused = true;
+				Env.game.paused = true;
 			}
 			pausedTime = System.currentTimeMillis();
 		}
