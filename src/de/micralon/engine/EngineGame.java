@@ -1,10 +1,14 @@
 package de.micralon.engine;
 
+import ashley.core.Engine;
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
+import de.micralon.engine.entity.factory.EntityFactory;
+import de.micralon.engine.entity.factory.ComponentReaders.*;
 import de.micralon.engine.net.NetworkNode;
 import de.micralon.engine.services.MusicManager;
 import de.micralon.engine.services.PreferencesManager;
@@ -24,6 +28,9 @@ public abstract class EngineGame extends Game {
     
     private boolean stepped = false;
 	private long step;
+	
+	private Engine engine;
+    private EntityFactory entityFactory;
     
     protected Player player;
 	//networking
@@ -94,6 +101,13 @@ public abstract class EngineGame extends Game {
 		
 		if (assets == null) assets = new GameAssets();
 		assets.loadAll();
+		
+		engine = new Engine();
+
+        entityFactory = new EntityFactory();
+        entityFactory.registerReader(new ColorComponentReader());
+        entityFactory.registerReader(new PhysicsComponentReader());
+        entityFactory.registerReader(new TransformComponentReader());
 	}
 	
 	protected void initServices() {
@@ -172,4 +186,8 @@ public abstract class EngineGame extends Game {
         musicManager.dispose();
         soundManager.dispose();
     }
+
+	public Engine getEngine() {
+		return engine;
+	}
 }
