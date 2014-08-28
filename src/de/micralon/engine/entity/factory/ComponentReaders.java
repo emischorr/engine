@@ -1,6 +1,9 @@
 package de.micralon.engine.entity.factory;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 
@@ -41,6 +44,27 @@ public class ComponentReaders {
 			component.position.y = value.getFloat("y", 0.0f);
 			component.scale = value.getFloat("scale", 1.0f);
 			component.angle = value.getFloat("angle", 0.0f);
+			return component;
+		}
+	}
+	
+	public static class TextureComponentReader implements ComponentReader {
+		@Override
+		public Class<? extends Component> getComponentClass() {
+			return TextureComponent.class;
+		}
+
+		@Override
+		public Component read(JsonValue value) {
+			TextureComponent component = new TextureComponent();
+			if (value.has("atlas") && value.has("region")) {
+				TextureAtlas atlas = Env.game.assets.get(value.getString("atlas"), TextureAtlas.class);
+				component.region = atlas.findRegion(value.getString("region"));	
+			}
+			else if (value.has("texture")) {
+				component.region = new TextureRegion(Env.game.assets.get(value.getString("texture"), Texture.class));
+			}
+			
 			return component;
 		}
 	}
