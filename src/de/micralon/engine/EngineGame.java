@@ -1,7 +1,5 @@
 package de.micralon.engine;
 
-import ashley.core.Engine;
-
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
